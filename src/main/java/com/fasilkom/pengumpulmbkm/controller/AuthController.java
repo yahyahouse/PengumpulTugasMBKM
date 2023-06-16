@@ -1,14 +1,15 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
 
-import com.fasilkom.skripsi.config.JwtUtils;
-import com.fasilkom.skripsi.model.*;
-import com.fasilkom.skripsi.repository.RoleRepository;
-import com.fasilkom.skripsi.repository.UsersRepository;
-import com.fasilkom.skripsi.service.UsersService;
+import com.fasilkom.pengumpulmbkm.config.JwtUtils;
+import com.fasilkom.pengumpulmbkm.model.*;
+import com.fasilkom.pengumpulmbkm.model.Enum.ERole;
+import com.fasilkom.pengumpulmbkm.model.User.Users;
+import com.fasilkom.pengumpulmbkm.repository.RoleRepository;
+import com.fasilkom.pengumpulmbkm.repository.UsersRepository;
+import com.fasilkom.pengumpulmbkm.service.UsersService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.fasilkom.skripsi.model.Info.*;
+import static com.fasilkom.pengumpulmbkm.model.Info.*;
 
 @Tag(name = "Auth", description = "API for processing various operations with Auth entity")
 @CrossOrigin(origins = "*", maxAge = 3600)

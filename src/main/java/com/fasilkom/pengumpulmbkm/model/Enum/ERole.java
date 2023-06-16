@@ -1,4 +1,4 @@
-package com.fasilkom.pengumpulmbkm.model;
+package com.fasilkom.pengumpulmbkm.model.Enum;
 
 public enum ERole {
 

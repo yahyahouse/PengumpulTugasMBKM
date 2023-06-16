@@ -2,8 +2,8 @@ package com.fasilkom.pengumpulmbkm.repository;
 
 
 
-import com.fasilkom.skripsi.model.ERole;
-import com.fasilkom.skripsi.model.Roles;
+import com.fasilkom.pengumpulmbkm.model.Enum.ERole;
+import com.fasilkom.pengumpulmbkm.model.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

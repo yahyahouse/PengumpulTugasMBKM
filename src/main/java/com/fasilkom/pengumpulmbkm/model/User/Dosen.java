@@ -1,4 +1,4 @@
-package com.fasilkom.pengumpulmbkm.model;
+package com.fasilkom.pengumpulmbkm.model.User;
 
 
 import lombok.Data;

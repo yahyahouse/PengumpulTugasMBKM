@@ -1,6 +1,8 @@
 package com.fasilkom.pengumpulmbkm.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+
+import com.fasilkom.pengumpulmbkm.model.Enum.ERole;
 import lombok.Data;
 
 

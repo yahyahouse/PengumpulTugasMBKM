@@ -1,9 +1,9 @@
 package com.fasilkom.pengumpulmbkm.service;
 
 
-import com.fasilkom.skripsi.model.UserDetailsImpl;
-import com.fasilkom.skripsi.model.Users;
-import com.fasilkom.skripsi.repository.UsersRepository;
+import com.fasilkom.pengumpulmbkm.model.UserDetailsImpl;
+import com.fasilkom.pengumpulmbkm.model.User.Users;
+import com.fasilkom.pengumpulmbkm.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

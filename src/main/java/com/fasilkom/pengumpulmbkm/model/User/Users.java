@@ -1,6 +1,7 @@
-package com.fasilkom.pengumpulmbkm.model;
+package com.fasilkom.pengumpulmbkm.model.User;
 
 
+import com.fasilkom.pengumpulmbkm.model.Roles;
 import lombok.Data;
 
 import javax.persistence.*;

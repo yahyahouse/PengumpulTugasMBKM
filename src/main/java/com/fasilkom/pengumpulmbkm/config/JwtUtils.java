@@ -1,7 +1,7 @@
 package com.fasilkom.pengumpulmbkm.config;
 
 
-import com.fasilkom.skripsi.model.UserDetailsImpl;
+import com.fasilkom.pengumpulmbkm.model.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

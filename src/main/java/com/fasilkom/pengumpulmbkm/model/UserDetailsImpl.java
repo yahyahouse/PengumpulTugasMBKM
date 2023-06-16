@@ -1,5 +1,6 @@
 package com.fasilkom.pengumpulmbkm.model;
 
+import com.fasilkom.pengumpulmbkm.model.User.Users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
