@@ -1,7 +1,9 @@
 package com.fasilkom.pengumpulmbkm.model.User;
 
 
-import com.fasilkom.pengumpulmbkm.model.Roles;
+import com.fasilkom.pengumpulmbkm.model.Roles.Prodi;
+import com.fasilkom.pengumpulmbkm.model.Roles.Program;
+import com.fasilkom.pengumpulmbkm.model.Roles.Roles;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -36,11 +38,13 @@ public class Users implements Serializable {
     @Column(name = "no_hp")
     private String noHp;
 
+    @ManyToMany(fetch = FetchType.EAGER)
     @Column(name = "program_studi")
-    private String programStudi;
+    private Set<Prodi> programStudi = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
     @Column(name = "program_mbkm")
-    private String programMBKM;
+    private Set<Program> programMBKM = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",

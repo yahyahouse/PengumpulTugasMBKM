@@ -38,5 +38,5 @@ public class TugasAkhir implements Serializable {
     private String laporan;
 
     @Column(name = "verifikasi")
-    private Integer verifikasi;
+    private String verifikasi;
 }

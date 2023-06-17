@@ -3,8 +3,15 @@ package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.config.JwtUtils;
 import com.fasilkom.pengumpulmbkm.model.*;
+import com.fasilkom.pengumpulmbkm.model.Enum.EProdi;
+import com.fasilkom.pengumpulmbkm.model.Enum.EProgram;
 import com.fasilkom.pengumpulmbkm.model.Enum.ERole;
+import com.fasilkom.pengumpulmbkm.model.Roles.Program;
+import com.fasilkom.pengumpulmbkm.model.Roles.Roles;
+import com.fasilkom.pengumpulmbkm.model.Roles.Prodi;
 import com.fasilkom.pengumpulmbkm.model.User.Users;
+import com.fasilkom.pengumpulmbkm.repository.ProdiRepository;
+import com.fasilkom.pengumpulmbkm.repository.ProgramRepository;
 import com.fasilkom.pengumpulmbkm.repository.RoleRepository;
 import com.fasilkom.pengumpulmbkm.repository.UsersRepository;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
@@ -48,6 +55,12 @@ public class AuthController {
     RoleRepository roleRepository;
 
     @Autowired
+    ProdiRepository prodiRepository;
+
+    @Autowired
+    ProgramRepository programRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -87,7 +100,9 @@ public class AuthController {
                     "\"username\":\"userTest\"," +
                     "\"email\":\"userTest@gmail.com\"," +
                     "\"password\":\"userTest\"," +
-                    "\"role\":[\"DOSEN\", \"MAHASISWA\", \"ADMIN\"]" +
+                    "\"role\":[\"DOSEN\", \"MAHASISWA\", \"ADMIN\"]," +
+                    "\"prodi\":[\"TI\"]," +
+                    "\"program\":[\"BANGKIT\"]" +
                     "}")
             @RequestBody SignupRequest signupRequest) {
         Boolean usernameExist = usersRepository.existsByUsername(signupRequest.getUsername());
@@ -105,6 +120,7 @@ public class AuthController {
         Users users = new Users(signupRequest.getUsername(), signupRequest.getEmail(),
                 passwordEncoder.encode(signupRequest.getPassword()));
 
+        //untuk roles
         Set<String> strRoles = signupRequest.getRole();
         Set<Roles> roles = new HashSet<>();
 
@@ -119,7 +135,41 @@ public class AuthController {
                 roles.add(roles1);
             });
         }
+
+        //untuk prodi
+        Set<String> strProdi = signupRequest.getProdi();
+        Set<Prodi> enumProdi = new HashSet<>();
+
+        if(strProdi == null) {
+            Prodi prodi = prodiRepository.findByName(EProdi.TI)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+            enumProdi.add(prodi);
+        } else {
+            strProdi.forEach(prodi -> {
+                Prodi prodi1 = prodiRepository.findByName(EProdi.valueOf(prodi))
+                        .orElseThrow(() -> new RuntimeException("Error: Role " + prodi + " is not found"));
+                enumProdi.add(prodi1);
+            });
+        }
+
+        //untuk program
+        Set<String> strProgram = signupRequest.getProgram();
+        Set<Program> enumProgram = new HashSet<>();
+
+        if(strProgram == null) {
+            Program program = programRepository.findByName(EProgram.BANGKIT)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+            enumProgram.add(program);
+        } else {
+            strProgram.forEach(program -> {
+                Program program1 = programRepository.findByName(EProgram.valueOf(program))
+                        .orElseThrow(() -> new RuntimeException("Error: Role " + program + " is not found"));
+                enumProgram.add(program1);
+            });
+        }
         users.setRoles(roles);
+        users.setProgramStudi(enumProdi);
+        users.setProgramMBKM(enumProgram);
         usersRepository.save(users);
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
 
