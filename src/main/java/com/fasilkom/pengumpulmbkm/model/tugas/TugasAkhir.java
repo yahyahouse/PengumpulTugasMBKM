@@ -1,8 +1,8 @@
-package com.fasilkom.pengumpulmbkm.model.Tugas;
+package com.fasilkom.pengumpulmbkm.model.tugas;
 
 
-import com.fasilkom.pengumpulmbkm.model.User.Dosen;
-import com.fasilkom.pengumpulmbkm.model.User.Users;
+import com.fasilkom.pengumpulmbkm.model.users.Dosen;
+import com.fasilkom.pengumpulmbkm.model.users.Users;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,8 +14,8 @@ public class TugasAkhir implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "laporan_id")
-    private Integer laporanId;
+    @Column(name = "tugas_akhir_id")
+    private Integer tugasAkhirId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -34,9 +34,9 @@ public class TugasAkhir implements Serializable {
     @Column(name = "nilai")
     private String nilai;
 
-    @Column(name = "laporan")
-    private String laporan;
+    @Column(name = "laporan_tugas_akhir")
+    private String laporanTugasAkhir;
 
     @Column(name = "verifikasi")
-    private String verifikasi;
+    private Boolean verifikasi;
 }

@@ -1,4 +1,4 @@
-package com.fasilkom.pengumpulmbkm.model.Enum;
+package com.fasilkom.pengumpulmbkm.model.enumeration;
 
 public enum EProgram {
 

@@ -1,22 +1,15 @@
-package com.fasilkom.pengumpulmbkm.config.Enum;
+package com.fasilkom.pengumpulmbkm.config.enumConfig;
 
 
 
-import com.fasilkom.pengumpulmbkm.model.Enum.*;
-import com.fasilkom.pengumpulmbkm.model.Roles.*;
-import com.fasilkom.pengumpulmbkm.model.SignupRequest;
-import com.fasilkom.pengumpulmbkm.model.User.Users;
+import com.fasilkom.pengumpulmbkm.model.enumeration.*;
+import com.fasilkom.pengumpulmbkm.model.roles.*;
 import com.fasilkom.pengumpulmbkm.repository.RoleRepository;
-import com.fasilkom.pengumpulmbkm.repository.UsersRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+
 
 @Configuration
 public class EnumConfig {

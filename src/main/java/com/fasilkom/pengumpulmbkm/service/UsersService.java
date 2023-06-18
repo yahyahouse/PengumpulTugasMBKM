@@ -1,7 +1,7 @@
 package com.fasilkom.pengumpulmbkm.service;
 
 
-import com.fasilkom.pengumpulmbkm.model.User.Users;
+import com.fasilkom.pengumpulmbkm.model.users.Users;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,8 +1,8 @@
-package com.fasilkom.pengumpulmbkm.config.Enum;
+package com.fasilkom.pengumpulmbkm.config.enumConfig;
 
 
-import com.fasilkom.pengumpulmbkm.model.Enum.EProgram;
-import com.fasilkom.pengumpulmbkm.model.Roles.Program;
+import com.fasilkom.pengumpulmbkm.model.enumeration.EProgram;
+import com.fasilkom.pengumpulmbkm.model.roles.Program;
 import com.fasilkom.pengumpulmbkm.repository.ProgramRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ public class EnumProgramConfig {
 
     EnumProgramConfig(ProgramRepository programRepository) {
 
-        LOG.info("Test Role Prodi run");
+        LOG.info("Test Program MBKM run");
         for (EProgram o: EProgram.values()) {
             try {
                 Program program = programRepository.findByName(o)

@@ -1,8 +1,8 @@
-package com.fasilkom.pengumpulmbkm.model.Roles;
+package com.fasilkom.pengumpulmbkm.model.roles;
 
 import javax.persistence.*;
 
-import com.fasilkom.pengumpulmbkm.model.Enum.ERole;
+import com.fasilkom.pengumpulmbkm.model.enumeration.ERole;
 import lombok.Data;
 
 
