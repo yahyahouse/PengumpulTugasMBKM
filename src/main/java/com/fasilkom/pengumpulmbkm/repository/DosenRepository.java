@@ -15,8 +15,8 @@ import java.util.List;
 @Transactional
 public interface DosenRepository extends JpaRepository<Dosen,Integer> {
 
-    @Modifying
+
     @Query(value = "SELECT d.dosen_id, u.user_id, u.nama_lengkap, u.email, u.no_hp " +
-            "from dosen d join users u on u.user-id=d.user_id where d.dosen_id=:dosen_id", nativeQuery = true)
-    List<Dosen> findDosenByDosenId(@Param("dosen_id") Integer dosenId);
+            "from dosen d join users u on u.user_id=d.user_id where d.dosen_id=:dosen_id", nativeQuery = true)
+    Dosen findDosenByDosenId(@Param("dosen_id") Integer dosenId);
 }

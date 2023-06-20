@@ -13,10 +13,10 @@ public class TugasAkhirResponse {
     private Integer tugasAkhirId;
     private Users userId;
     private Dosen dosenId;
-    private String sertifikat;
-    private String lembarPengesahan;
-    private String nilai;
-    private String laporan;
+    private byte[] sertifikat;
+    private byte[] lembarPengesahan;
+    private byte[] nilai;
+    private byte[] laporan;
     private Boolean verifikasi;
 
     public TugasAkhirResponse(TugasAkhir tugasAkhir) {

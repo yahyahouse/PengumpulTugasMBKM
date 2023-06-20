@@ -14,5 +14,5 @@ public interface DosenService {
 
     void saveDosen(Dosen dosen);
 
-    List<Dosen> getDosenByUserId (Integer dosenId);
+    Dosen getDosenByUserId (Integer dosenId);
 }

@@ -4,6 +4,7 @@ import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
+import com.fasilkom.pengumpulmbkm.service.DosenService;
 import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,7 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Tag(name = "Tugas AKhir", description = "API for processing various operations with Tugas Akhir entity")
+import java.io.IOException;
+
+@Tag(name = "Tugas AKhir MBKM", description = "API for processing various operations with Tugas Akhir entity")
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/tugas-akhir")
@@ -23,32 +26,38 @@ public class TugasAkhirController {
 
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private DosenService dosenService;
 
     @Autowired
     private TugasAkhirService tugasAkhirService;
 
-    @Operation(summary = "Add a new product by seller")
+    @Operation(summary = "Upload Tugas Akhir")
     @PostMapping("/mahasiswa/upload-tugas-akhir/{userId}")
     public ResponseEntity<TugasAkhirResponse> uploadTugasAkhir(
             @PathVariable("userId") Integer userId,
-            @RequestParam("dosenId") Dosen dosenId,
-            @RequestParam("sertifikat") String sertifikat,
-            @RequestParam("lembarPengesahan") String lembarPengesahan,
-            @RequestParam("nilai") String nilai,
-            @RequestParam("laporanTugasAkhir") String laporanTugasAkhir,
-            @RequestParam("verifikasi") Boolean verifikasi){
-        TugasAkhir TA = new TugasAkhir();
-        Users users = usersService.findByUserId(userId);
-        TA.setUserId(users);
-        TA.setDosenId(dosenId);
-        TA.setSertifikat(sertifikat);
-        TA.setLembarPengesahan(lembarPengesahan);
-        TA.setNilai(nilai);
-        TA.setLaporanTugasAkhir(laporanTugasAkhir);
-        TA.setVerifikasi(verifikasi);
-        tugasAkhirService.saveTugasAkhir(TA);
+            @RequestParam("dosenId") Integer dosenId,
+            @RequestParam("sertifikat") MultipartFile sertifikat,
+            @RequestParam("lembarPengesahan") MultipartFile lembarPengesahan,
+            @RequestParam("nilai") MultipartFile nilai,
+            @RequestParam("laporanTugasAkhir") MultipartFile laporanTugasAkhir) throws IOException {
+        try {
+            TugasAkhir TA = new TugasAkhir();
+            Users users = usersService.findByUserId(userId);
+            Dosen dosen = dosenService.getDosenByUserId(dosenId);
+            TA.setUserId(users);
+            TA.setDosenId(dosen);
+            TA.setSertifikat(sertifikat.getBytes());
+            TA.setLembarPengesahan(lembarPengesahan.getBytes());
+            TA.setNilai(nilai.getBytes());
+            TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
+            TA.setVerifikasi(false);
+            tugasAkhirService.saveTugasAkhir(TA);
 
-        return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+            return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

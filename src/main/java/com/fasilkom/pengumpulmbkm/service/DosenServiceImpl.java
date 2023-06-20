@@ -18,7 +18,7 @@ public class DosenServiceImpl implements DosenService{
     }
 
     @Override
-    public List<Dosen> getDosenByUserId(Integer dosenId) {
+    public Dosen getDosenByUserId(Integer dosenId) {
         return dosenRepository.findDosenByDosenId(dosenId);
     }
 }

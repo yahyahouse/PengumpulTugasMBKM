@@ -26,7 +26,7 @@ public class DosenController {
 
     @Operation(summary = "Get detail dosen")
     @GetMapping(value = "/detail-profil/{dosenId}")
-    public ResponseEntity<List<Dosen>> getProductByUserId(@PathVariable("dosenId") Integer userId) {
+    public ResponseEntity<Dosen> getProductByUserId(@PathVariable("dosenId") Integer userId) {
         dosenService.getDosenByUserId(userId);
         return ResponseEntity.accepted().body(dosenService.getDosenByUserId(userId));
     }

@@ -25,17 +25,21 @@ public class TugasAkhir implements Serializable {
     @JoinColumn(name = "dosen_id")
     private Dosen dosenId;
 
+    @Lob
     @Column(name = "sertifikat")
-    private String sertifikat;
+    private byte[] sertifikat;
 
+    @Lob
     @Column(name = "lembar_pengesahan")
-    private String lembarPengesahan;
+    private byte[] lembarPengesahan;
 
+    @Lob
     @Column(name = "nilai")
-    private String nilai;
+    private byte[] nilai;
 
+    @Lob
     @Column(name = "laporan_tugas_akhir")
-    private String laporanTugasAkhir;
+    private byte[] laporanTugasAkhir;
 
     @Column(name = "verifikasi")
     private Boolean verifikasi;
