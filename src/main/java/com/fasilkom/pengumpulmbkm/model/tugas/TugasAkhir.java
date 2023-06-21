@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class TugasAkhir implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "tugas_akhir_id")
     private Integer tugasAkhirId;
 

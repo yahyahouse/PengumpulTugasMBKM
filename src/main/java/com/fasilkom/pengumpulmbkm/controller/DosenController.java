@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class DosenController {
 
     @Operation(summary = "Get detail dosen")
     @GetMapping(value = "/detail-profil/{dosenId}")
-    public ResponseEntity<Dosen> getProductByUserId(@PathVariable("dosenId") Integer userId) {
+    public ResponseEntity<Dosen> getDosenByUserId(@PathVariable("dosenId") Integer userId) {
         dosenService.getDosenByUserId(userId);
         return ResponseEntity.accepted().body(dosenService.getDosenByUserId(userId));
     }
@@ -34,7 +33,7 @@ public class DosenController {
     @Operation(summary = "add dosen")
     @PostMapping(value = "/add-dosen")
     public ResponseEntity<MessageResponse> addDosen(
-            @RequestParam("user_id") Integer userId){
+            @RequestParam("userId") Integer userId){
         Dosen dosen = new Dosen();
         Users users = usersService.findByUserId(userId);
         dosen.setUserId(users);
