@@ -11,8 +11,8 @@ import javax.persistence.*;
 public class TugasAkhirResponse {
 
     private Integer tugasAkhirId;
-    private Users userId;
-    private Dosen dosenId;
+    private Integer userId;
+    private Integer dosenId;
     private byte[] sertifikat;
     private byte[] lembarPengesahan;
     private byte[] nilai;
@@ -21,8 +21,8 @@ public class TugasAkhirResponse {
 
     public TugasAkhirResponse(TugasAkhir tugasAkhir) {
         this.tugasAkhirId = tugasAkhir.getTugasAkhirId();
-        this.userId = tugasAkhir.getUserId();
-        this.dosenId = tugasAkhir.getDosenId();
+        this.userId = tugasAkhir.getUserId().getUserId();
+        this.dosenId = tugasAkhir.getDosenId().getDosenId();
         this.sertifikat = tugasAkhir.getSertifikat();
         this.lembarPengesahan = tugasAkhir.getLembarPengesahan();
         this.nilai = tugasAkhir.getNilai();

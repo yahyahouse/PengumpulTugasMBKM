@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Entity(name = "laporan")
 public class Laporan implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "laporan_id")
     private Integer laporanId;
 

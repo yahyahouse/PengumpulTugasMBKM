@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class Dosen implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dosen_id")
     private Integer dosenId;
 

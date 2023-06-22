@@ -5,6 +5,8 @@ import com.fasilkom.pengumpulmbkm.repository.TugasAkhirRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TugasAkhirServiceImpl implements TugasAkhirService{
     @Autowired
@@ -18,5 +20,15 @@ public class TugasAkhirServiceImpl implements TugasAkhirService{
     public void saveTugasAkhir(TugasAkhir tugasAkhir) {
         tugasAkhirRepository.save(tugasAkhir);
 
+    }
+
+    @Override
+    public void updateTugasAkhir(TugasAkhir tugasAkhir) {
+        tugasAkhirRepository.save(tugasAkhir);
+    }
+
+    @Override
+    public List<TugasAkhir> getTugasAkhirByUserId(Integer tugasAkhirId) {
+        return tugasAkhirRepository.getTugasAkhirByUserId(tugasAkhirId);
     }
 }

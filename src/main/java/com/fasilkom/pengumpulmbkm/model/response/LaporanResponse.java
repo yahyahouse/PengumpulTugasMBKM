@@ -10,14 +10,14 @@ import lombok.Data;
 public class LaporanResponse {
 
     private Integer laporanId;
-    private Users userId;
-    private Dosen dosenId;
+    private Integer userId;
+    private Integer dosenId;
     private String laporan;
     private Boolean verifikasi;
 
     public LaporanResponse(Laporan laporan) {
-        this.userId = laporan.getUserId();
-        this.dosenId = laporan.getDosenId();
+        this.userId = laporan.getUserId().getUserId();
+        this.dosenId = laporan.getDosenId().getDosenId();
         this.laporan = laporan.getLaporan();
         this.verifikasi = laporan.getVerifikasi();
     }

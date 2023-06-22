@@ -16,7 +16,7 @@ import java.util.Set;
 public class Users implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Integer userId;
 

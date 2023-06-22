@@ -16,15 +16,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+
 import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Tag(name = "Tugas AKhir MBKM", description = "API for processing various operations with Tugas Akhir entity")
 @RestController
@@ -68,6 +68,48 @@ public class TugasAkhirController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    @Operation(summary = "Update Laporan Tugas Akhir")
+    @PostMapping("/mahasiswa/update-tugas-akhri/{tugasAkhirId}")
+    public ResponseEntity<TugasAkhirResponse> updateStatusTiket(
+            @PathVariable("tugasAkhirId") Integer tugasAkhirtId,
+            @RequestParam("sertifikat") MultipartFile sertifikat,
+            @RequestParam("lembarPengesahan") MultipartFile lembarPengesahan,
+            @RequestParam("nilai") MultipartFile nilai,
+            @RequestParam("laporanTugasAkhir") MultipartFile laporanTugasAkhir
+    ){
+        try {
+            TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirtId);
+            TA.setSertifikat(sertifikat.getBytes());
+            TA.setLembarPengesahan(lembarPengesahan.getBytes());
+            TA.setNilai(nilai.getBytes());
+            TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
+            tugasAkhirService.updateTugasAkhir(TA);
+
+            return new ResponseEntity(new TugasAkhirResponse(TA),HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @Operation(summary = "menampilkan detail Laporan Tugas Akhir")
+    @GetMapping("/mahasiswa/detail-tugas-akhir/{tugasAkhirId}")
+    public ResponseEntity<TugasAkhirResponse> getTugasAkhirByid(
+            @PathVariable("tugasAkhirId") Integer tugasAkhirId) {
+        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+
+        return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+    }
+
+    @GetMapping("/mahasiswa/list-tugas-akhir/{userId}")
+    public ResponseEntity<TugasAkhirResponse> getTiketByUserId(
+            @PathVariable("userId") Integer userId) {
+        List<TugasAkhir> tiket = tugasAkhirService.getTugasAkhirByUserId(userId);
+        List<TugasAkhirResponse> TAGetResponse =
+                tiket.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
+
+        return new ResponseEntity(TAGetResponse, HttpStatus.OK);
+    }
 
     @Operation(summary = "menampilkan file sertifikat")
     @GetMapping("/mahasiswa/sertifikat/{tugasAkhirId}")
@@ -79,7 +121,7 @@ public class TugasAkhirController {
 
             ByteArrayResource resource = new ByteArrayResource(fileBytes);
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=file.pdf");
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=sertifikat.pdf");
 
             return ResponseEntity.ok()
                     .headers(headers)
@@ -90,6 +132,72 @@ public class TugasAkhirController {
             return ResponseEntity.notFound().build();
         }
     }
- }
+
+    @Operation(summary = "menampilkan file nilai")
+    @GetMapping("/mahasiswa/nilai/{tugasAkhirId}")
+    public ResponseEntity<Resource> displayFileNilai(@PathVariable Integer tugasAkhirId) {
+        Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
+        if (optionalDocument.isPresent()) {
+            TugasAkhir tugasAkhir = optionalDocument.get();
+            byte[] fileBytes = tugasAkhir.getNilai();
+
+            ByteArrayResource resource = new ByteArrayResource(fileBytes);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=nilai.pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(fileBytes.length)
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(resource);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Operation(summary = "menampilkan file Lembar Pengesahan")
+    @GetMapping("/mahasiswa/lembar-pengesahan/{tugasAkhirId}")
+    public ResponseEntity<Resource> displayFileLembarPengesahan(@PathVariable Integer tugasAkhirId) {
+        Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
+        if (optionalDocument.isPresent()) {
+            TugasAkhir tugasAkhir = optionalDocument.get();
+            byte[] fileBytes = tugasAkhir.getLembarPengesahan();
+
+            ByteArrayResource resource = new ByteArrayResource(fileBytes);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=lembarPengesahan.pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(fileBytes.length)
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(resource);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Operation(summary = "menampilkan file Laporan Tugas Akhir")
+    @GetMapping("/mahasiswa/laporan-tugas-akhir/{tugasAkhirId}")
+    public ResponseEntity<Resource> displayFileTugasAkhir(@PathVariable Integer tugasAkhirId) {
+        Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
+        if (optionalDocument.isPresent()) {
+            TugasAkhir tugasAkhir = optionalDocument.get();
+            byte[] fileBytes = tugasAkhir.getLaporanTugasAkhir();
+
+            ByteArrayResource resource = new ByteArrayResource(fileBytes);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=TugasAkhir.pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(fileBytes.length)
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(resource);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}
 
 
