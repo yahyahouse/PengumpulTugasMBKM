@@ -22,11 +22,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Tag(name = "Tugas AKhir MBKM", description = "API for processing various operations with Tugas Akhir entity")
+@Tag(name = "Tugas Akhir MBKM", description = "API for processing various operations with Tugas Akhir entity")
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/tugas-akhir")
@@ -53,6 +55,7 @@ public class TugasAkhirController {
             TugasAkhir TA = new TugasAkhir();
             Users users = usersService.findByUserId(userId);
             Dosen dosen = dosenService.getDosenByUserId(dosenId);
+            LocalDateTime currentTime = LocalDateTime.now();
             TA.setUserId(users);
             TA.setDosenId(dosen);
             TA.setSertifikat(sertifikat.getBytes());
@@ -60,6 +63,7 @@ public class TugasAkhirController {
             TA.setNilai(nilai.getBytes());
             TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
             TA.setVerifikasi(false);
+            TA.setWaktuPengumpulan(Timestamp.valueOf(currentTime));
             tugasAkhirService.saveTugasAkhir(TA);
 
 
@@ -69,8 +73,8 @@ public class TugasAkhirController {
         }
     }
     @Operation(summary = "Update Laporan Tugas Akhir")
-    @PostMapping("/mahasiswa/update-tugas-akhri/{tugasAkhirId}")
-    public ResponseEntity<TugasAkhirResponse> updateStatusTiket(
+    @PostMapping("/mahasiswa/update-tugas-akhir/{tugasAkhirId}")
+    public ResponseEntity<TugasAkhirResponse> updateTugasAkhir(
             @PathVariable("tugasAkhirId") Integer tugasAkhirtId,
             @RequestParam("sertifikat") MultipartFile sertifikat,
             @RequestParam("lembarPengesahan") MultipartFile lembarPengesahan,
@@ -78,11 +82,13 @@ public class TugasAkhirController {
             @RequestParam("laporanTugasAkhir") MultipartFile laporanTugasAkhir
     ){
         try {
+            LocalDateTime currentTime = LocalDateTime.now();
             TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirtId);
             TA.setSertifikat(sertifikat.getBytes());
             TA.setLembarPengesahan(lembarPengesahan.getBytes());
             TA.setNilai(nilai.getBytes());
             TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
+            TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
             tugasAkhirService.updateTugasAkhir(TA);
 
             return new ResponseEntity(new TugasAkhirResponse(TA),HttpStatus.OK);
@@ -102,11 +108,11 @@ public class TugasAkhirController {
     }
 
     @GetMapping("/mahasiswa/list-tugas-akhir/{userId}")
-    public ResponseEntity<TugasAkhirResponse> getTiketByUserId(
+    public ResponseEntity<TugasAkhirResponse> getTugasAkhirByUserId(
             @PathVariable("userId") Integer userId) {
-        List<TugasAkhir> tiket = tugasAkhirService.getTugasAkhirByUserId(userId);
+        List<TugasAkhir> TA = tugasAkhirService.getTugasAkhirByUserId(userId);
         List<TugasAkhirResponse> TAGetResponse =
-                tiket.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
+                TA.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
 
         return new ResponseEntity(TAGetResponse, HttpStatus.OK);
     }

@@ -6,6 +6,8 @@ import com.fasilkom.pengumpulmbkm.model.users.Users;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Time;
+import java.sql.Timestamp;
 
 @Data
 public class TugasAkhirResponse {
@@ -18,6 +20,7 @@ public class TugasAkhirResponse {
     private byte[] nilai;
     private byte[] laporan;
     private Boolean verifikasi;
+    private Timestamp waktuUpload;
 
     public TugasAkhirResponse(TugasAkhir tugasAkhir) {
         this.tugasAkhirId = tugasAkhir.getTugasAkhirId();
@@ -28,5 +31,6 @@ public class TugasAkhirResponse {
         this.nilai = tugasAkhir.getNilai();
         this.laporan = tugasAkhir.getLaporanTugasAkhir();
         this.verifikasi = tugasAkhir.getVerifikasi();
+        this.waktuUpload = tugasAkhir.getWaktuPengumpulan();
     }
 }

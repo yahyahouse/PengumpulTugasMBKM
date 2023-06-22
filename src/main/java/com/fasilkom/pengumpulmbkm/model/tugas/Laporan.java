@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
 @Entity(name = "laporan")
@@ -28,4 +29,7 @@ public class Laporan implements Serializable {
 
     @Column(name = "verifikasi")
     private Boolean verifikasi;
+
+    @Column(name = "waktu_pengumpulan")
+    private Timestamp waktuPengumpulan;
 }

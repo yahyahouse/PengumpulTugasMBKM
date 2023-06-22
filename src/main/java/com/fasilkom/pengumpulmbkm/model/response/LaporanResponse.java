@@ -6,6 +6,8 @@ import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import lombok.Data;
 
+import java.sql.Timestamp;
+
 @Data
 public class LaporanResponse {
 
@@ -14,11 +16,14 @@ public class LaporanResponse {
     private Integer dosenId;
     private String laporan;
     private Boolean verifikasi;
+    private Timestamp waktuPengumpulan;
 
     public LaporanResponse(Laporan laporan) {
+        this.laporanId = laporan.getLaporanId();
         this.userId = laporan.getUserId().getUserId();
         this.dosenId = laporan.getDosenId().getDosenId();
         this.laporan = laporan.getLaporan();
         this.verifikasi = laporan.getVerifikasi();
+        this.waktuPengumpulan = laporan.getWaktuPengumpulan();
     }
 }

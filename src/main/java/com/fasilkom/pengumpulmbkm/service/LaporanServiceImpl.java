@@ -7,6 +7,8 @@ import com.fasilkom.pengumpulmbkm.repository.TugasAkhirRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LaporanServiceImpl implements LaporanService{
     @Autowired
@@ -21,5 +23,10 @@ public class LaporanServiceImpl implements LaporanService{
     @Override
     public void saveLaporan(Laporan laporan) {
         laporanRepository.save(laporan);
+    }
+
+    @Override
+    public List<Laporan> findLaporanByUserId(Integer userId) {
+        return laporanRepository.getLaporanByUserId(userId);
     }
 }
