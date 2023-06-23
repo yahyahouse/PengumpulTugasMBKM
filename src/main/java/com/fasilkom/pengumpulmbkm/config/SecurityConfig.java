@@ -1,6 +1,7 @@
 package com.fasilkom.pengumpulmbkm.config;
 
 
+import com.fasilkom.pengumpulmbkm.model.enumeration.ERole;
 import com.fasilkom.pengumpulmbkm.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -70,6 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .permitAll()
                 .antMatchers("/api/auth/signup")
                 .permitAll()
+                .antMatchers("/tugas-akhir/**")
+                .hasAnyAuthority(ERole.MAHASISWA.name(),ERole.ADMIN.name())
+                .antMatchers("/laporan/**")
+                .hasAnyAuthority(ERole.MAHASISWA.name(),ERole.ADMIN.name())
+                .antMatchers("/dosen/**")
+                .hasAnyAuthority(ERole.DOSEN.name(),ERole.ADMIN.name())
+                .antMatchers("/admin/**")
+                .hasAuthority(ERole.ADMIN.name())
                 .anyRequest()
                 .authenticated();
 

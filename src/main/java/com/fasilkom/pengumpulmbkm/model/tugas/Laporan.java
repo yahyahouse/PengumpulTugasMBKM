@@ -32,4 +32,7 @@ public class Laporan implements Serializable {
 
     @Column(name = "waktu_pengumpulan")
     private Timestamp waktuPengumpulan;
+
+    @Column(name = "waktu_update")
+    private Timestamp waktuUpdate;
 }
