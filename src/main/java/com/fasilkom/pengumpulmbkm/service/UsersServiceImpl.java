@@ -31,4 +31,6 @@ public class UsersServiceImpl implements UsersService {
     public void updateUsersPassword(String password, Integer userId) {
         usersRepository.updatePassword(passwordEncoder.encode(password), userId);
     }
+
+
 }

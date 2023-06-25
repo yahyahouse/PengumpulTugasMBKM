@@ -1,5 +1,6 @@
 package com.fasilkom.pengumpulmbkm.repository;
 
+import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,4 +20,13 @@ public interface DosenRepository extends JpaRepository<Dosen,Integer> {
     @Query(value = "SELECT d.dosen_id, u.user_id, u.nama_lengkap, u.email, u.no_hp " +
             "from dosen d join users u on u.user_id=d.user_id where d.dosen_id=:dosen_id", nativeQuery = true)
     Dosen findDosenByDosenId(@Param("dosen_id") Integer dosenId);
+
+    @Query(value = "SELECT d.dosen_id, u.user_id, u.nama_lengkap " +
+            "FROM dosen d join users u on u.user_id=d.user_id", nativeQuery = true)
+    List<Dosen> getAllDosen ();
+
+    @Modifying
+    @Query(value = "DELETE FROM dosen WHERE dosen_id=:dosen_id",nativeQuery = true)
+    void deleteDosenByDosenId(
+            @Param("dosen_id") Integer dosenId);
 }

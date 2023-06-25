@@ -21,4 +21,14 @@ public class DosenServiceImpl implements DosenService{
     public Dosen getDosenByUserId(Integer dosenId) {
         return dosenRepository.findDosenByDosenId(dosenId);
     }
+
+    @Override
+    public void deletDosenByDosenId(Integer dosenId) {
+        dosenRepository.deleteDosenByDosenId(dosenId);
+    }
+
+    @Override
+    public List<Dosen> getAllDosen() {
+        return dosenRepository.getAllDosen();
+    }
 }

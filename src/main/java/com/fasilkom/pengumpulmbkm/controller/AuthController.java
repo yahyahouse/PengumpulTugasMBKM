@@ -6,6 +6,7 @@ import com.fasilkom.pengumpulmbkm.model.*;
 import com.fasilkom.pengumpulmbkm.model.enumeration.EProdi;
 import com.fasilkom.pengumpulmbkm.model.enumeration.EProgram;
 import com.fasilkom.pengumpulmbkm.model.enumeration.ERole;
+import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.roles.Program;
 import com.fasilkom.pengumpulmbkm.model.roles.Roles;
 import com.fasilkom.pengumpulmbkm.model.roles.Prodi;
@@ -99,6 +100,7 @@ public class AuthController {
             @Schema(example = "{" +
                     "\"username\":\"userTest\"," +
                     "\"email\":\"userTest@gmail.com\"," +
+                    "\"namaLengakap\":\"userTestLengkap\"," +
                     "\"password\":\"userTest\"," +
                     "\"role\":[\"DOSEN\", \"MAHASISWA\", \"ADMIN\"]," +
                     "\"prodi\":[\"TI\"]," +
@@ -169,6 +171,7 @@ public class AuthController {
         }
         users.setRoles(roles);
         users.setProgramStudi(enumProdi);
+        users.setNamaLengkap(signupRequest.getNamaLengkap());
         users.setProgramMBKM(enumProgram);
         usersRepository.save(users);
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));

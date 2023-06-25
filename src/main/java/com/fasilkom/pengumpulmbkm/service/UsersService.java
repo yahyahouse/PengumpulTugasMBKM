@@ -9,5 +9,5 @@ public interface UsersService {
 
     Users findByUserId (Integer userId);
     Users findByUsername (String username);
-    public void updateUsersPassword(String password, Integer userId);
+    void updateUsersPassword(String password, Integer userId);
 }

@@ -1,12 +1,9 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
-import com.fasilkom.pengumpulmbkm.model.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
-import com.fasilkom.pengumpulmbkm.model.users.Dosen;
-import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.service.DosenService;
 import com.fasilkom.pengumpulmbkm.service.LaporanService;
 import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Tag(name = "Dosen", description = "API for processing various operations with Dosen entity")
 @RestController

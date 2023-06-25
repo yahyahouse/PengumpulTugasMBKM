@@ -33,12 +33,6 @@ public class SignupRequest {
 
     @NotBlank
     @Size(min = 10, max =50)
-    private String namaLengakap;
-
-    @Size(max =999)
-    private String alamat;
-
-    @Size(min =11)
-    private String phone;
+    private String namaLengkap;
 
 }
