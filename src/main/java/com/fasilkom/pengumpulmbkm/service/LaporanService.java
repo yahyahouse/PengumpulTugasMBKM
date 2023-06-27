@@ -13,5 +13,6 @@ public interface LaporanService {
     void saveLaporan(Laporan laporan);
 
     List<Laporan> findLaporanByUserId (Integer userId);
+    List<Laporan> findLaporanByDosenId (Integer dosenId);
 
 }

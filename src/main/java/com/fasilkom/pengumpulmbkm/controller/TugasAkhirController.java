@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,17 +44,18 @@ public class TugasAkhirController {
     private TugasAkhirService tugasAkhirService;
 
     @Operation(summary = "Upload Tugas Akhir")
-    @PostMapping("/mahasiswa/upload-tugas-akhir/{userId}")
+    @PostMapping("/mahasiswa/upload-tugas-akhir")
     public ResponseEntity<TugasAkhirResponse> uploadTugasAkhir(
-            @PathVariable("userId") Integer userId,
             @RequestParam("dosenId") Integer dosenId,
             @RequestParam("sertifikat") MultipartFile sertifikat,
             @RequestParam("lembarPengesahan") MultipartFile lembarPengesahan,
             @RequestParam("nilai") MultipartFile nilai,
-            @RequestParam("laporanTugasAkhir") MultipartFile laporanTugasAkhir) throws IOException {
+            @RequestParam("laporanTugasAkhir") MultipartFile laporanTugasAkhir,
+            Authentication authentication) {
         try {
+            Users user = usersService.findByUsername(authentication.getName());
             TugasAkhir TA = new TugasAkhir();
-            Users users = usersService.findByUserId(userId);
+            Users users = usersService.findByUserId(user.getUserId());
             Dosen dosen = dosenService.getDosenByUserId(dosenId);
             LocalDateTime currentTime = LocalDateTime.now();
             TA.setUserId(users);
@@ -75,42 +77,53 @@ public class TugasAkhirController {
     @Operation(summary = "Update Laporan Tugas Akhir")
     @PostMapping("/mahasiswa/update-tugas-akhir/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> updateTugasAkhir(
-            @PathVariable("tugasAkhirId") Integer tugasAkhirtId,
+            @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             @RequestParam("sertifikat") MultipartFile sertifikat,
             @RequestParam("lembarPengesahan") MultipartFile lembarPengesahan,
             @RequestParam("nilai") MultipartFile nilai,
-            @RequestParam("laporanTugasAkhir") MultipartFile laporanTugasAkhir
+            @RequestParam("laporanTugasAkhir") MultipartFile laporanTugasAkhir,
+            Authentication authentication
     ){
         try {
             LocalDateTime currentTime = LocalDateTime.now();
-            TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirtId);
-            TA.setSertifikat(sertifikat.getBytes());
-            TA.setLembarPengesahan(lembarPengesahan.getBytes());
-            TA.setNilai(nilai.getBytes());
-            TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
-            TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
-            tugasAkhirService.updateTugasAkhir(TA);
-
-            return new ResponseEntity(new TugasAkhirResponse(TA),HttpStatus.OK);
+            TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+            Users users = usersService.findByUsername(authentication.getName());
+            if (TA.getUserId().getUserId().equals(users.getUserId())) {
+                TA.setSertifikat(sertifikat.getBytes());
+                TA.setLembarPengesahan(lembarPengesahan.getBytes());
+                TA.setNilai(nilai.getBytes());
+                TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
+                TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
+                tugasAkhirService.updateTugasAkhir(TA);
+                return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            }
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }
 
-    @Operation(summary = "menampilkan detail Laporan Tugas Akhir")
+    @Operation(summary = "menampilkan detail Laporan Tugas Akhir berdasarkan tugasAkhirId")
     @GetMapping("/mahasiswa/detail-tugas-akhir/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> getTugasAkhirByid(
-            @PathVariable("tugasAkhirId") Integer tugasAkhirId) {
+            @PathVariable("tugasAkhirId") Integer tugasAkhirId,
+            Authentication authentication) {
         TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
-
-        return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+        Users users = usersService.findByUsername(authentication.getName());
+        if (TA.getUserId().getUserId().equals(users.getUserId())) {
+            return new ResponseEntity<>(new TugasAkhirResponse(TA), HttpStatus.OK);
+        }else
+            return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
-    @GetMapping("/mahasiswa/list-tugas-akhir/{userId}")
+    @Operation(summary = "menampilkan daftar laporan sesuai season login ")
+    @GetMapping("/mahasiswa/list-tugas-akhir")
     public ResponseEntity<TugasAkhirResponse> getTugasAkhirByUserId(
-            @PathVariable("userId") Integer userId) {
-        List<TugasAkhir> TA = tugasAkhirService.getTugasAkhirByUserId(userId);
+            Authentication authentication) {
+        Users users = usersService.findByUsername(authentication.getName());
+        List<TugasAkhir> TA = tugasAkhirService.getTugasAkhirByUserId(users.getUserId());
         List<TugasAkhirResponse> TAGetResponse =
                 TA.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
 

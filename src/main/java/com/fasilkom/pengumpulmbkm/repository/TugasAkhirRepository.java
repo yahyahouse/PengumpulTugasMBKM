@@ -20,5 +20,8 @@ public interface TugasAkhirRepository extends JpaRepository<TugasAkhir, Integer>
     @Query(value = "SELECT * FROM tugas_akhir t WHERE t.user_id =:userId", nativeQuery = true)
     List<TugasAkhir> getTugasAkhirByUserId (Integer userId);
 
+    @Query(value = "SELECT * FROM tugas_akhir t WHERE t.dosen_id =:dosenId", nativeQuery = true)
+    List<TugasAkhir> getTugasAkhirByDosenId (Integer dosenId);
+
 }
 

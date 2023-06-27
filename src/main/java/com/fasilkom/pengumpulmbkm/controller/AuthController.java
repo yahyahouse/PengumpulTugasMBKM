@@ -177,24 +177,5 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
 
     }
-    @PostMapping("/user/update-users-password/{userId}")
-    public ResponseEntity<ResponseEntity> updateUsersPassword(
-            @PathVariable("userId") Integer userId,
-            @RequestParam("old_password") String oldPassword,
-            @RequestParam("password") String password,
-            @RequestParam("retype_password") String retypePassword,
-            Authentication authentication) {
-        Users user = usersService.findByUsername(authentication.getName());
-        user.setUserId(userId);
-        Users users = usersRepository.findByUserId(userId);
-        if (password.equals(retypePassword)) {
-            if (passwordEncoder.matches(oldPassword, users.getPassword())) {
-                usersService.updateUsersPassword(password, userId);
-                return new ResponseEntity(PASSWORD_TERGANTI, HttpStatus.OK);
-            } else
-                return new ResponseEntity(SALAH_PASSWORD, HttpStatus.BAD_REQUEST);
 
-        } else
-            return new ResponseEntity(PASSWORD_SAMA, HttpStatus.BAD_REQUEST);
-    }
 }

@@ -12,12 +12,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.fasilkom.pengumpulmbkm.model.Info.AKSES_DITOLAK;
 
 @Tag(name = "Laporan MBKM", description = "API for processing various operations with Laporan entity")
 @RestController
@@ -34,13 +37,14 @@ public class LaporanController {
     private LaporanService laporanService;
 
     @Operation(summary = "Upload Laporan")
-    @PostMapping("/mahasiswa/upload-laporan/{userId}")
+    @PostMapping("/mahasiswa/upload-laporan")
     public ResponseEntity<LaporanResponse> uploadLaporan(
-            @PathVariable("userId") Integer userId,
             @RequestParam("dosenId") Integer dosenId,
-            @RequestParam("laporan") String laporanMBKM) {
+            @RequestParam("laporan") String laporanMBKM,
+            Authentication authentication) {
+        Users user = usersService.findByUsername(authentication.getName());
         Laporan laporan = new Laporan();
-        Users users = usersService.findByUserId(userId);
+        Users users = usersService.findByUserId(user.getUserId());
         Dosen dosen = dosenService.getDosenByUserId(dosenId);
         LocalDateTime currentTime = LocalDateTime.now();
         laporan.setUserId(users);
@@ -53,10 +57,11 @@ public class LaporanController {
         return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
     }
     @Operation(summary = "menampilkan daftar Laporan berdasarkan userId")
-    @GetMapping("/mahasiswa/list-laporan/{userId}")
+    @GetMapping("/mahasiswa/list-laporan")
     public ResponseEntity<LaporanResponse> getLaporanByUserId(
-            @PathVariable("userId") Integer userId) {
-        List<Laporan> laporan = laporanService.findLaporanByUserId(userId);
+            Authentication authentication) {
+        Users users = usersService.findByUsername(authentication.getName());
+        List<Laporan> laporan = laporanService.findLaporanByUserId(users.getUserId());
         List<LaporanResponse> TAGetResponse =
                 laporan.stream().map(LaporanResponse::new).collect(Collectors.toList());
 
@@ -66,10 +71,14 @@ public class LaporanController {
     @Operation(summary = "menampilkan detail Laporan ")
     @GetMapping("/mahasiswa/detail-laporan/{laporanId}")
     public ResponseEntity<LaporanResponse> getLaporanByid(
-            @PathVariable("laporanId") Integer laporanId) {
+            @PathVariable("laporanId") Integer laporanId,
+            Authentication authentication) {
+        Users users = usersService.findByUsername(authentication.getName());
         Laporan laporan = laporanService.findByLaporanId(laporanId);
-
-        return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
+        if (laporan.getUserId().getUserId().equals(users.getUserId())) {
+            return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
+        }else
+            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
 }

@@ -60,7 +60,7 @@ public class AdminController {
 
     @Operation(summary = "Get all dosen")
     @GetMapping(value = "/all-dosen")
-    public ResponseEntity<List<DosenResponse>> getDetailDosenByDosenId() {
+    public ResponseEntity<List<DosenResponse>> getAllDosen() {
         List<Dosen> dosen =dosenService.getAllDosen();
         List<DosenResponse> allDosen =
                 dosen.stream().map(DosenResponse::new).collect(Collectors.toList());

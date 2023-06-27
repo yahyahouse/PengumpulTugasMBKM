@@ -29,4 +29,9 @@ public class LaporanServiceImpl implements LaporanService{
     public List<Laporan> findLaporanByUserId(Integer userId) {
         return laporanRepository.getLaporanByUserId(userId);
     }
+
+    @Override
+    public List<Laporan> findLaporanByDosenId(Integer dosenId) {
+        return laporanRepository.getLaporanByDosenId(dosenId);
+    }
 }

@@ -11,5 +11,6 @@ public interface TugasAkhirService {
     TugasAkhir findByTugasAkhirId (Integer tugasAkhirId);
     void saveTugasAkhir(TugasAkhir tugasAkhir);
     void updateTugasAkhir (TugasAkhir tugasAkhir);
-    List<TugasAkhir> getTugasAkhirByUserId (Integer tugasAkhirId);
+    List<TugasAkhir> getTugasAkhirByUserId (Integer dosenId);
+    List<TugasAkhir> getTugasAkhirByDosenId (Integer dosenId);
 }

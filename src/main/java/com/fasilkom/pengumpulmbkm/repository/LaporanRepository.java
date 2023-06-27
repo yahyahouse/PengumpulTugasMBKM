@@ -20,5 +20,8 @@ public interface LaporanRepository extends JpaRepository<Laporan, Integer> {
     @Query(value = "SELECT * FROM laporan l WHERE l.user_id =:userId", nativeQuery = true)
     List<Laporan> getLaporanByUserId (Integer userId);
 
+    @Query(value = "SELECT * FROM laporan l WHERE l.dosen_id =:dosenId", nativeQuery = true)
+    List<Laporan> getLaporanByDosenId (Integer dosenId);
+
 }
 

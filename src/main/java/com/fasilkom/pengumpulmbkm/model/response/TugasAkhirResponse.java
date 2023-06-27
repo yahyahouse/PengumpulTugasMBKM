@@ -20,7 +20,8 @@ public class TugasAkhirResponse {
     private byte[] nilai;
     private byte[] laporan;
     private Boolean verifikasi;
-    private Timestamp waktuUpload;
+    private Timestamp waktuPengumpulan;
+    private Timestamp waktuUpdate;
 
     public TugasAkhirResponse(TugasAkhir tugasAkhir) {
         this.tugasAkhirId = tugasAkhir.getTugasAkhirId();
@@ -31,6 +32,7 @@ public class TugasAkhirResponse {
         this.nilai = tugasAkhir.getNilai();
         this.laporan = tugasAkhir.getLaporanTugasAkhir();
         this.verifikasi = tugasAkhir.getVerifikasi();
-        this.waktuUpload = tugasAkhir.getWaktuPengumpulan();
+        this.waktuPengumpulan = tugasAkhir.getWaktuPengumpulan();
+        this.waktuUpdate = tugasAkhir.getWaktuUpdate();
     }
 }

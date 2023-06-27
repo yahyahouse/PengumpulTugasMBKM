@@ -28,7 +28,12 @@ public class TugasAkhirServiceImpl implements TugasAkhirService{
     }
 
     @Override
-    public List<TugasAkhir> getTugasAkhirByUserId(Integer tugasAkhirId) {
-        return tugasAkhirRepository.getTugasAkhirByUserId(tugasAkhirId);
+    public List<TugasAkhir> getTugasAkhirByUserId(Integer dosenId) {
+        return tugasAkhirRepository.getTugasAkhirByUserId(dosenId);
+    }
+
+    @Override
+    public List<TugasAkhir> getTugasAkhirByDosenId(Integer dosenId) {
+        return tugasAkhirRepository.getTugasAkhirByDosenId(dosenId);
     }
 }

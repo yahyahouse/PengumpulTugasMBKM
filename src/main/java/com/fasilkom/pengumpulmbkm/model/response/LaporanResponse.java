@@ -17,6 +17,7 @@ public class LaporanResponse {
     private String laporan;
     private Boolean verifikasi;
     private Timestamp waktuPengumpulan;
+    private Timestamp waktuUpdate;
 
     public LaporanResponse(Laporan laporan) {
         this.laporanId = laporan.getLaporanId();
@@ -25,5 +26,6 @@ public class LaporanResponse {
         this.laporan = laporan.getLaporan();
         this.verifikasi = laporan.getVerifikasi();
         this.waktuPengumpulan = laporan.getWaktuPengumpulan();
+        this.waktuUpdate = laporan.getWaktuUpdate();
     }
 }
