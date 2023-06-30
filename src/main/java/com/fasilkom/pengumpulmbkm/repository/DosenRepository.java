@@ -20,6 +20,9 @@ public interface DosenRepository extends JpaRepository<Dosen,Integer> {
     @Query(value = "SELECT d.dosen_id, u.user_id, u.nama_lengkap, u.email, u.no_hp " +
             "from dosen d join users u on u.user_id=d.user_id where d.dosen_id=:dosen_id", nativeQuery = true)
     Dosen findDosenByDosenId(@Param("dosen_id") Integer dosenId);
+    @Query(value = "SELECT d.dosen_id, u.user_id, u.nama_lengkap, u.email, u.no_hp " +
+            "from dosen d join users u on u.user_id=d.user_id where d.user_id=:user_id", nativeQuery = true)
+    Dosen findDosenByUserId(@Param("user_id") Integer userId);
 
     @Query(value = "SELECT d.dosen_id, u.user_id, u.nama_lengkap " +
             "FROM dosen d join users u on u.user_id=d.user_id", nativeQuery = true)
@@ -29,4 +32,6 @@ public interface DosenRepository extends JpaRepository<Dosen,Integer> {
     @Query(value = "DELETE FROM dosen WHERE dosen_id=:dosen_id",nativeQuery = true)
     void deleteDosenByDosenId(
             @Param("dosen_id") Integer dosenId);
+    boolean existsDosenByDosenId(Integer dosenId);
+    boolean existsDosenByUserId(Integer userId);
 }

@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.fasilkom.pengumpulmbkm.model.Info.AKSES_DITOLAK;
+
 @Tag(name = "Dosen", description = "API for processing various operations with Dosen entity")
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -41,14 +43,14 @@ public class DosenController {
     @Operation(summary = "Get all dosen")
     @GetMapping(value = "/all-dosen")
     public ResponseEntity<List<DosenResponse>> getAllDosen() {
-        List<Dosen> dosen =dosenService.getAllDosen();
+        List<Dosen> dosen = dosenService.getAllDosen();
         List<DosenResponse> allDosen =
                 dosen.stream().map(DosenResponse::new).collect(Collectors.toList());
         return new ResponseEntity<>(allDosen, HttpStatus.OK);
     }
 
     @Operation(summary = "Verifikasi Laporan MBKM menjadi diterima")
-    @PostMapping("/verifikasi-laporan/{laporanId}")
+    @PostMapping("/verifikasi-laporan-true/{laporanId}")
     public ResponseEntity<LaporanResponse> verifikasiLaporanTrue(
             @PathVariable("laporanId") Integer laporanId) {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
@@ -59,8 +61,9 @@ public class DosenController {
 
         return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
     }
+
     @Operation(summary = "Verifikasi Laporan MBKM menjadi ditolak")
-    @PostMapping("/verifikasi-laporan/{laporanId}")
+    @PostMapping("/verifikasi-laporan-false/{laporanId}")
     public ResponseEntity<LaporanResponse> verifikasiLaporanFalse(
             @PathVariable("laporanId") Integer laporanId) {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
@@ -73,7 +76,7 @@ public class DosenController {
     }
 
     @Operation(summary = "Verifikasi Tugas Akhir MBKM menjadi di terima")
-    @PostMapping("/verifikasi-tugas-akhir/{tugasAkhirId}")
+    @PostMapping("/verifikasi-tugas-akhir-true/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhirTrue(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId) {
         TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
@@ -86,7 +89,7 @@ public class DosenController {
     }
 
     @Operation(summary = "Verifikasi Tugas Akhir MBKM menjadi ditolak")
-    @PostMapping("/verifikasi-tugas-akhir/{tugasAkhirId}")
+    @PostMapping("/verifikasi-tugas-akhir-false/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhirFalse(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId) {
         TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
@@ -122,6 +125,20 @@ public class DosenController {
                 TA.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
 
         return new ResponseEntity(TAGetResponse, HttpStatus.OK);
+    }
+
+    @Operation(summary = "menampilkan detail Laporan Tugas Akhir berdasarkan tugasAkhirId")
+    @GetMapping("/detail-tugas-akhir/{tugasAkhirId}")
+    public ResponseEntity<TugasAkhirResponse> getDetailTugasAkhirByid(
+            @PathVariable("tugasAkhirId") Integer tugasAkhirId,
+            Authentication authentication) {
+        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        Users users = usersService.findByUsername(authentication.getName());
+        Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (TA.getDosenId().getDosenId().equals(dosen.getDosenId())) {
+            return new ResponseEntity<>(new TugasAkhirResponse(TA), HttpStatus.OK);
+        } else
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
 }

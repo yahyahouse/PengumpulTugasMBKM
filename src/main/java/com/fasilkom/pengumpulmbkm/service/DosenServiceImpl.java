@@ -18,7 +18,12 @@ public class DosenServiceImpl implements DosenService{
     }
 
     @Override
-    public Dosen getDosenByUserId(Integer dosenId) {
+    public Dosen getDosenByUserId(Integer userId) {
+        return dosenRepository.findDosenByUserId(userId);
+    }
+
+    @Override
+    public Dosen getDosenByDosenId(Integer dosenId) {
         return dosenRepository.findDosenByDosenId(dosenId);
     }
 
@@ -30,5 +35,15 @@ public class DosenServiceImpl implements DosenService{
     @Override
     public List<Dosen> getAllDosen() {
         return dosenRepository.getAllDosen();
+    }
+
+    @Override
+    public boolean existsDosenByDosenId(Integer dosenId) {
+        return dosenRepository.existsDosenByDosenId(dosenId);
+    }
+
+    @Override
+    public boolean existsDosenByUserId(Integer userId) {
+        return dosenRepository.existsDosenByUserId(userId);
     }
 }

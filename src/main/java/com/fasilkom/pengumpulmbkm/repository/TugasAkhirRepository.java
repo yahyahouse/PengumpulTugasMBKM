@@ -3,6 +3,7 @@ package com.fasilkom.pengumpulmbkm.repository;
 
 
 import com.fasilkom.pengumpulmbkm.model.roles.Prodi;
+import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,6 +23,9 @@ public interface TugasAkhirRepository extends JpaRepository<TugasAkhir, Integer>
 
     @Query(value = "SELECT * FROM tugas_akhir t WHERE t.dosen_id =:dosenId", nativeQuery = true)
     List<TugasAkhir> getTugasAkhirByDosenId (Integer dosenId);
+
+    @Query(value = "SELECT * FROM tugas_akhir", nativeQuery = true)
+    List<TugasAkhir> getAllTugasAkhir();
 
 }
 

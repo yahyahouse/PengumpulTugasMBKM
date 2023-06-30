@@ -56,7 +56,7 @@ public class TugasAkhirController {
             Users user = usersService.findByUsername(authentication.getName());
             TugasAkhir TA = new TugasAkhir();
             Users users = usersService.findByUserId(user.getUserId());
-            Dosen dosen = dosenService.getDosenByUserId(dosenId);
+            Dosen dosen = dosenService.getDosenByDosenId(dosenId);
             LocalDateTime currentTime = LocalDateTime.now();
             TA.setUserId(users);
             TA.setDosenId(dosen);

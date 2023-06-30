@@ -13,4 +13,5 @@ public interface TugasAkhirService {
     void updateTugasAkhir (TugasAkhir tugasAkhir);
     List<TugasAkhir> getTugasAkhirByUserId (Integer dosenId);
     List<TugasAkhir> getTugasAkhirByDosenId (Integer dosenId);
+    List<TugasAkhir> getAllTugasAkhir();
 }

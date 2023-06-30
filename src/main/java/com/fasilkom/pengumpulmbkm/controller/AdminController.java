@@ -3,9 +3,15 @@ package com.fasilkom.pengumpulmbkm.controller;
 import com.fasilkom.pengumpulmbkm.model.response.DosenResponse;
 import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
 import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
+import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
+import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
+import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
+import com.fasilkom.pengumpulmbkm.repository.TugasAkhirRepository;
 import com.fasilkom.pengumpulmbkm.service.DosenService;
+import com.fasilkom.pengumpulmbkm.service.LaporanService;
+import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,40 +32,45 @@ public class AdminController {
     private DosenService dosenService;
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private LaporanService laporanService;
+    @Autowired
+    private TugasAkhirService tugasAkhirService;
 
     @Operation(summary = "Get detail dosen")
     @GetMapping(value = "/detail-profil-dosen/{dosenId}")
     public ResponseEntity<DosenResponse> getDetailDosenByDosenId(@PathVariable("dosenId") Integer dosenId) {
-        Dosen dosen =dosenService.getDosenByUserId(dosenId);
+        Dosen dosen = dosenService.getDosenByDosenId(dosenId);
         return new ResponseEntity<>(new DosenResponse(dosen), HttpStatus.OK);
     }
 
     @Operation(summary = "add dosen")
     @PostMapping(value = "/add-dosen")
     public ResponseEntity<MessageResponse> addDosen(
-            @RequestParam("userId") Integer userId){
+            @RequestParam("userId") Integer userId) {
         Dosen dosen = dosenService.getDosenByUserId(userId);
-        if (dosen.getUserId().equals(userId)){
-            Dosen dosenAdd = new Dosen();
-            Users users = usersService.findByUserId(userId);
-            dosenAdd.setUserId(users);
-            dosenService.saveDosen(dosenAdd);
-            return ResponseEntity.ok(new MessageResponse("Successfully Added Lecturer"));
-        }else
+        if (dosen != null) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("the lecturer already exists in the database!!"));
+        }
+        Dosen dosenAdd = new Dosen();
+        Users users = usersService.findByUserId(userId);
+        dosenAdd.setUserId(users);
+        dosenService.saveDosen(dosenAdd);
+        return ResponseEntity.ok(new MessageResponse("Successfully Added Lecturer"));
+
 
     }
 
     @Operation(summary = "delete dosen")
     @DeleteMapping(value = "/delete-dosen")
     public ResponseEntity<MessageResponse> deleteDosen(
-            @RequestParam("dosenId") Integer dosenId){
+            @RequestParam("dosenId") Integer dosenId) {
         try {
             dosenService.deletDosenByDosenId(dosenId);
             return ResponseEntity.ok(new MessageResponse("Successfully delete Lecturer"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Cannot delete lecturer with id"+dosenId));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Cannot delete lecturer with id" + dosenId));
         }
 
     }
@@ -67,10 +78,28 @@ public class AdminController {
     @Operation(summary = "Get all dosen")
     @GetMapping(value = "/all-dosen")
     public ResponseEntity<List<DosenResponse>> getAllDosen() {
-        List<Dosen> dosen =dosenService.getAllDosen();
+        List<Dosen> dosen = dosenService.getAllDosen();
         List<DosenResponse> allDosen =
                 dosen.stream().map(DosenResponse::new).collect(Collectors.toList());
         return new ResponseEntity<>(allDosen, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get all laporan")
+    @GetMapping(value = "/all-laporan")
+    public ResponseEntity<List<LaporanResponse>> getAllLaporan() {
+        List<Laporan> laporans = laporanService.getAllLaporan();
+        List<LaporanResponse> laporan =
+                laporans.stream().map(LaporanResponse::new).collect(Collectors.toList());
+        return new ResponseEntity<>(laporan, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get all Tugas Akhir")
+    @GetMapping(value = "/all-tugas-akhir")
+    public ResponseEntity<List<TugasAkhirResponse>> getAllTugasAkhir() {
+        List<TugasAkhir> TAs = tugasAkhirService.getAllTugasAkhir();
+        List<TugasAkhirResponse> TA =
+                TAs.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
+        return new ResponseEntity<>(TA, HttpStatus.OK);
     }
 
 }

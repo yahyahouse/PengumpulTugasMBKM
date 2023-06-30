@@ -20,12 +20,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.fasilkom.pengumpulmbkm.model.Info.AKSES_DITOLAK;
+import static com.fasilkom.pengumpulmbkm.model.Info.*;
 
 @Tag(name = "Laporan MBKM", description = "API for processing various operations with Laporan entity")
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/mahaiswa/laporan")
+@RequestMapping("/mahasiswa/laporan")
 public class LaporanController {
 
     @Autowired
@@ -45,7 +45,7 @@ public class LaporanController {
         Users user = usersService.findByUsername(authentication.getName());
         Laporan laporan = new Laporan();
         Users users = usersService.findByUserId(user.getUserId());
-        Dosen dosen = dosenService.getDosenByUserId(dosenId);
+        Dosen dosen = dosenService.getDosenByDosenId(dosenId);
         LocalDateTime currentTime = LocalDateTime.now();
         laporan.setUserId(users);
         laporan.setDosenId(dosen);

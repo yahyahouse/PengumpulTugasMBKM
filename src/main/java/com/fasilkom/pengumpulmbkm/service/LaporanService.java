@@ -14,5 +14,6 @@ public interface LaporanService {
 
     List<Laporan> findLaporanByUserId (Integer userId);
     List<Laporan> findLaporanByDosenId (Integer dosenId);
+    List<Laporan> getAllLaporan();
 
 }
