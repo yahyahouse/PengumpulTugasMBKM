@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Tag(name = "Tugas Akhir MBKM", description = "API for processing various operations with Tugas Akhir entity")
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/tugas-akhir")
+@RequestMapping("/mahasiswa/tugas-akhir")
 public class TugasAkhirController {
 
     @Autowired
@@ -44,7 +44,7 @@ public class TugasAkhirController {
     private TugasAkhirService tugasAkhirService;
 
     @Operation(summary = "Upload Tugas Akhir")
-    @PostMapping("/mahasiswa/upload-tugas-akhir")
+    @PostMapping("/upload-tugas-akhir")
     public ResponseEntity<TugasAkhirResponse> uploadTugasAkhir(
             @RequestParam("dosenId") Integer dosenId,
             @RequestParam("sertifikat") MultipartFile sertifikat,
@@ -74,8 +74,9 @@ public class TugasAkhirController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
     @Operation(summary = "Update Laporan Tugas Akhir")
-    @PostMapping("/mahasiswa/update-tugas-akhir/{tugasAkhirId}")
+    @PostMapping("/update-tugas-akhir/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> updateTugasAkhir(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             @RequestParam("sertifikat") MultipartFile sertifikat,
@@ -83,7 +84,7 @@ public class TugasAkhirController {
             @RequestParam("nilai") MultipartFile nilai,
             @RequestParam("laporanTugasAkhir") MultipartFile laporanTugasAkhir,
             Authentication authentication
-    ){
+    ) {
         try {
             LocalDateTime currentTime = LocalDateTime.now();
             TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
@@ -96,7 +97,7 @@ public class TugasAkhirController {
                 TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
                 tugasAkhirService.updateTugasAkhir(TA);
                 return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
-            }else {
+            } else {
                 return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
             }
         } catch (IOException e) {
@@ -106,7 +107,7 @@ public class TugasAkhirController {
     }
 
     @Operation(summary = "menampilkan detail Laporan Tugas Akhir berdasarkan tugasAkhirId")
-    @GetMapping("/mahasiswa/detail-tugas-akhir/{tugasAkhirId}")
+    @GetMapping("/detail-tugas-akhir/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> getTugasAkhirByid(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             Authentication authentication) {
@@ -114,12 +115,12 @@ public class TugasAkhirController {
         Users users = usersService.findByUsername(authentication.getName());
         if (TA.getUserId().getUserId().equals(users.getUserId())) {
             return new ResponseEntity<>(new TugasAkhirResponse(TA), HttpStatus.OK);
-        }else
+        } else
             return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
     @Operation(summary = "menampilkan daftar laporan sesuai season login ")
-    @GetMapping("/mahasiswa/list-tugas-akhir")
+    @GetMapping("/list-tugas-akhir")
     public ResponseEntity<TugasAkhirResponse> getTugasAkhirByUserId(
             Authentication authentication) {
         Users users = usersService.findByUsername(authentication.getName());
@@ -131,91 +132,128 @@ public class TugasAkhirController {
     }
 
     @Operation(summary = "menampilkan file sertifikat")
-    @GetMapping("/mahasiswa/sertifikat/{tugasAkhirId}")
-    public ResponseEntity<Resource> displayFileSertifikat(@PathVariable Integer tugasAkhirId) {
-        Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
-        if (optionalDocument.isPresent()) {
-            TugasAkhir tugasAkhir = optionalDocument.get();
-            byte[] fileBytes = tugasAkhir.getSertifikat();
+    @GetMapping("/sertifikat/{tugasAkhirId}")
+    public ResponseEntity<Resource> displayFileSertifikat(
+            @PathVariable Integer tugasAkhirId,
+            Authentication authentication) {
+        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        Users users = usersService.findByUsername(authentication.getName());
+        if (TA.getUserId().getUserId().equals(users.getUserId())) {
+            Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
+            if (optionalDocument.isPresent()) {
+                TugasAkhir tugasAkhir = optionalDocument.get();
+                byte[] fileBytes = tugasAkhir.getSertifikat();
 
-            ByteArrayResource resource = new ByteArrayResource(fileBytes);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=sertifikat.pdf");
+                ByteArrayResource resource = new ByteArrayResource(fileBytes);
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=sertifikat.pdf");
 
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentLength(fileBytes.length)
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .body(resource);
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .contentLength(fileBytes.length)
+                        .contentType(MediaType.APPLICATION_PDF)
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
+
     }
 
     @Operation(summary = "menampilkan file nilai")
-    @GetMapping("/mahasiswa/nilai/{tugasAkhirId}")
-    public ResponseEntity<Resource> displayFileNilai(@PathVariable Integer tugasAkhirId) {
-        Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
-        if (optionalDocument.isPresent()) {
-            TugasAkhir tugasAkhir = optionalDocument.get();
-            byte[] fileBytes = tugasAkhir.getNilai();
+    @GetMapping("/nilai/{tugasAkhirId}")
+    public ResponseEntity<Resource> displayFileNilai(
+            @PathVariable Integer tugasAkhirId,
+            Authentication authentication) {
+        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        Users users = usersService.findByUsername(authentication.getName());
+        if (TA.getUserId().getUserId().equals(users.getUserId())) {
+            Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
+            if (optionalDocument.isPresent()) {
+                TugasAkhir tugasAkhir = optionalDocument.get();
+                byte[] fileBytes = tugasAkhir.getNilai();
 
-            ByteArrayResource resource = new ByteArrayResource(fileBytes);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=nilai.pdf");
+                ByteArrayResource resource = new ByteArrayResource(fileBytes);
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=nilai.pdf");
 
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentLength(fileBytes.length)
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .body(resource);
-        } else {
-            return ResponseEntity.notFound().build();
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .contentLength(fileBytes.length)
+                        .contentType(MediaType.APPLICATION_PDF)
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }else {
+            return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
+
     }
 
     @Operation(summary = "menampilkan file Lembar Pengesahan")
-    @GetMapping("/mahasiswa/lembar-pengesahan/{tugasAkhirId}")
-    public ResponseEntity<Resource> displayFileLembarPengesahan(@PathVariable Integer tugasAkhirId) {
-        Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
-        if (optionalDocument.isPresent()) {
-            TugasAkhir tugasAkhir = optionalDocument.get();
-            byte[] fileBytes = tugasAkhir.getLembarPengesahan();
+    @GetMapping("/lembar-pengesahan/{tugasAkhirId}")
+    public ResponseEntity<Resource> displayFileLembarPengesahan(
+            @PathVariable Integer tugasAkhirId,
+            Authentication authentication) {
+        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        Users users = usersService.findByUsername(authentication.getName());
+        if (TA.getUserId().getUserId().equals(users.getUserId())) {
+            Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
+            if (optionalDocument.isPresent()) {
+                TugasAkhir tugasAkhir = optionalDocument.get();
+                byte[] fileBytes = tugasAkhir.getLembarPengesahan();
 
-            ByteArrayResource resource = new ByteArrayResource(fileBytes);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=lembarPengesahan.pdf");
+                ByteArrayResource resource = new ByteArrayResource(fileBytes);
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=lembarPengesahan.pdf");
 
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentLength(fileBytes.length)
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .body(resource);
-        } else {
-            return ResponseEntity.notFound().build();
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .contentLength(fileBytes.length)
+                        .contentType(MediaType.APPLICATION_PDF)
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }else {
+            return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
+
     }
 
     @Operation(summary = "menampilkan file Laporan Tugas Akhir")
-    @GetMapping("/mahasiswa/laporan-tugas-akhir/{tugasAkhirId}")
-    public ResponseEntity<Resource> displayFileTugasAkhir(@PathVariable Integer tugasAkhirId) {
-        Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
-        if (optionalDocument.isPresent()) {
-            TugasAkhir tugasAkhir = optionalDocument.get();
-            byte[] fileBytes = tugasAkhir.getLaporanTugasAkhir();
+    @GetMapping("/laporan-tugas-akhir/{tugasAkhirId}")
+    public ResponseEntity<Resource> displayFileTugasAkhir(
+            @PathVariable Integer tugasAkhirId,
+            Authentication authentication) {
+        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        Users users = usersService.findByUsername(authentication.getName());
+        if (TA.getUserId().getUserId().equals(users.getUserId())) {
+            Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
+            if (optionalDocument.isPresent()) {
+                TugasAkhir tugasAkhir = optionalDocument.get();
+                byte[] fileBytes = tugasAkhir.getLaporanTugasAkhir();
 
-            ByteArrayResource resource = new ByteArrayResource(fileBytes);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=TugasAkhir.pdf");
+                ByteArrayResource resource = new ByteArrayResource(fileBytes);
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=TugasAkhir.pdf");
 
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentLength(fileBytes.length)
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .body(resource);
-        } else {
-            return ResponseEntity.notFound().build();
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .contentLength(fileBytes.length)
+                        .contentType(MediaType.APPLICATION_PDF)
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }else {
+            return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
+
+
     }
 }
 

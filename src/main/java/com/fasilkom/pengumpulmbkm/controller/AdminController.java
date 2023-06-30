@@ -38,11 +38,17 @@ public class AdminController {
     @PostMapping(value = "/add-dosen")
     public ResponseEntity<MessageResponse> addDosen(
             @RequestParam("userId") Integer userId){
-        Dosen dosen = new Dosen();
-        Users users = usersService.findByUserId(userId);
-        dosen.setUserId(users);
-        dosenService.saveDosen(dosen);
-        return ResponseEntity.ok(new MessageResponse("Successfully Added Lecturer"));
+        Dosen dosen = dosenService.getDosenByUserId(userId);
+        if (dosen.getUserId().equals(userId)){
+            Dosen dosenAdd = new Dosen();
+            Users users = usersService.findByUserId(userId);
+            dosenAdd.setUserId(users);
+            dosenService.saveDosen(dosenAdd);
+            return ResponseEntity.ok(new MessageResponse("Successfully Added Lecturer"));
+        }else
+            return ResponseEntity.badRequest()
+                    .body(new MessageResponse("the lecturer already exists in the database!!"));
+
     }
 
     @Operation(summary = "delete dosen")

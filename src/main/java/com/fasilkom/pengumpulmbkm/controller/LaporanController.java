@@ -25,7 +25,7 @@ import static com.fasilkom.pengumpulmbkm.model.Info.AKSES_DITOLAK;
 @Tag(name = "Laporan MBKM", description = "API for processing various operations with Laporan entity")
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/laporan")
+@RequestMapping("/mahaiswa/laporan")
 public class LaporanController {
 
     @Autowired
@@ -37,7 +37,7 @@ public class LaporanController {
     private LaporanService laporanService;
 
     @Operation(summary = "Upload Laporan")
-    @PostMapping("/mahasiswa/upload-laporan")
+    @PostMapping("/upload-laporan")
     public ResponseEntity<LaporanResponse> uploadLaporan(
             @RequestParam("dosenId") Integer dosenId,
             @RequestParam("laporan") String laporanMBKM,
@@ -57,7 +57,7 @@ public class LaporanController {
         return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
     }
     @Operation(summary = "menampilkan daftar Laporan berdasarkan userId")
-    @GetMapping("/mahasiswa/list-laporan")
+    @GetMapping("/list-laporan")
     public ResponseEntity<LaporanResponse> getLaporanByUserId(
             Authentication authentication) {
         Users users = usersService.findByUsername(authentication.getName());
@@ -69,7 +69,7 @@ public class LaporanController {
     }
 
     @Operation(summary = "menampilkan detail Laporan ")
-    @GetMapping("/mahasiswa/detail-laporan/{laporanId}")
+    @GetMapping("/detail-laporan/{laporanId}")
     public ResponseEntity<LaporanResponse> getLaporanByid(
             @PathVariable("laporanId") Integer laporanId,
             Authentication authentication) {

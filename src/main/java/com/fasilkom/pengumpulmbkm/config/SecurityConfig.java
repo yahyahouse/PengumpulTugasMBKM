@@ -71,14 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .permitAll()
                 .antMatchers("/api/auth/signup")
                 .permitAll()
-                .antMatchers("/tugas-akhir/**")
-                .hasAnyAuthority(ERole.MAHASISWA.name(),ERole.ADMIN.name())
-                .antMatchers("/laporan/**")
+                .antMatchers("/mahasiswa/**")
                 .hasAnyAuthority(ERole.MAHASISWA.name(),ERole.ADMIN.name())
                 .antMatchers("/dosen/**")
                 .hasAnyAuthority(ERole.DOSEN.name(),ERole.ADMIN.name())
                 .antMatchers("/admin/**")
                 .hasAuthority(ERole.ADMIN.name())
+                .antMatchers("/users/**")
+                .hasAnyAuthority(ERole.ADMIN.name(),ERole.DOSEN.name(),ERole.MAHASISWA.name())
                 .anyRequest()
                 .authenticated();
 

@@ -111,6 +111,7 @@ public class DosenController {
         return new ResponseEntity(TAGetResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "menampilkan daftar Tugas AKhir berdasarkan userId dosen ")
     @GetMapping("/list-tugas-akhir")
     public ResponseEntity<TugasAkhirResponse> getTugasAkhirByUserId(
             Authentication authentication) {
