@@ -65,7 +65,7 @@ public class DosenController {
             @PathVariable("laporanId") Integer laporanId) {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         LocalDateTime currentTime = LocalDateTime.now();
-        laporan.setVerifikasi(true);
+        laporan.setVerifikasi(false);
         laporan.setWaktuUpdate(Timestamp.valueOf(currentTime));
         laporanService.saveLaporan(laporan);
 
@@ -74,11 +74,24 @@ public class DosenController {
 
     @Operation(summary = "Verifikasi Tugas Akhir MBKM menjadi di terima")
     @PostMapping("/verifikasi-tugas-akhir/{tugasAkhirId}")
-    public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhir(
+    public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhirTrue(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId) {
         TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         LocalDateTime currentTime = LocalDateTime.now();
         TA.setVerifikasi(true);
+        TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
+        tugasAkhirService.saveTugasAkhir(TA);
+
+        return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Verifikasi Tugas Akhir MBKM menjadi ditolak")
+    @PostMapping("/verifikasi-tugas-akhir/{tugasAkhirId}")
+    public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhirFalse(
+            @PathVariable("tugasAkhirId") Integer tugasAkhirId) {
+        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        LocalDateTime currentTime = LocalDateTime.now();
+        TA.setVerifikasi(false);
         TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
         tugasAkhirService.saveTugasAkhir(TA);
 
