@@ -20,6 +20,7 @@ public class TugasAkhirResponse {
     private byte[] nilai;
     private byte[] laporan;
     private Boolean verifikasi;
+    private String catatan;
     private Timestamp waktuPengumpulan;
     private Timestamp waktuUpdate;
 
@@ -32,6 +33,7 @@ public class TugasAkhirResponse {
         this.nilai = tugasAkhir.getNilai();
         this.laporan = tugasAkhir.getLaporanTugasAkhir();
         this.verifikasi = tugasAkhir.getVerifikasi();
+        this.catatan = tugasAkhir.getCatatan();
         this.waktuPengumpulan = tugasAkhir.getWaktuPengumpulan();
         this.waktuUpdate = tugasAkhir.getWaktuUpdate();
     }

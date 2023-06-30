@@ -27,8 +27,11 @@ public class Laporan implements Serializable {
     @Column(name = "laporan",columnDefinition = "TEXT")
     private String laporan;
 
-    @Column(name = "verifikasi")
+    @Column(name = "verifikasi",columnDefinition = "BOOLEAN DEFAULT NULL")
     private Boolean verifikasi;
+
+    @Column(name = "catatan")
+    private String catatan;
 
     @Column(name = "waktu_pengumpulan")
     private Timestamp waktuPengumpulan;

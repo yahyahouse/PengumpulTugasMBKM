@@ -6,6 +6,7 @@ import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
+import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.service.DosenService;
 import com.fasilkom.pengumpulmbkm.service.LaporanService;
 import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -45,9 +47,21 @@ public class DosenController {
         return new ResponseEntity<>(allDosen, HttpStatus.OK);
     }
 
-    @Operation(summary = "Verifikasi Laporan MBKM")
+    @Operation(summary = "Verifikasi Laporan MBKM menjadi diterima")
     @PostMapping("/verifikasi-laporan/{laporanId}")
-    public ResponseEntity<LaporanResponse> verifikasiLaporan(
+    public ResponseEntity<LaporanResponse> verifikasiLaporanTrue(
+            @PathVariable("laporanId") Integer laporanId) {
+        Laporan laporan = laporanService.findByLaporanId(laporanId);
+        LocalDateTime currentTime = LocalDateTime.now();
+        laporan.setVerifikasi(true);
+        laporan.setWaktuUpdate(Timestamp.valueOf(currentTime));
+        laporanService.saveLaporan(laporan);
+
+        return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
+    }
+    @Operation(summary = "Verifikasi Laporan MBKM menjadi ditolak")
+    @PostMapping("/verifikasi-laporan/{laporanId}")
+    public ResponseEntity<LaporanResponse> verifikasiLaporanFalse(
             @PathVariable("laporanId") Integer laporanId) {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         LocalDateTime currentTime = LocalDateTime.now();
@@ -58,7 +72,7 @@ public class DosenController {
         return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
     }
 
-    @Operation(summary = "Verifikasi Tugas Akhir MBKM")
+    @Operation(summary = "Verifikasi Tugas Akhir MBKM menjadi di terima")
     @PostMapping("/verifikasi-tugas-akhir/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhir(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId) {
@@ -72,20 +86,24 @@ public class DosenController {
     }
 
     @Operation(summary = "menampilkan daftar Laporan berdasarkan userId dosen ")
-    @GetMapping("/list-laporan/{dosenId}")
+    @GetMapping("/list-laporan")
     public ResponseEntity<LaporanResponse> getLaporanByUserId(
-            @PathVariable("dosenId") Integer dosenId) {
-        List<Laporan> laporan = laporanService.findLaporanByDosenId(dosenId);
+            Authentication authentication) {
+        Users users = usersService.findByUsername(authentication.getName());
+        Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        List<Laporan> laporan = laporanService.findLaporanByDosenId(dosen.getDosenId());
         List<LaporanResponse> TAGetResponse =
                 laporan.stream().map(LaporanResponse::new).collect(Collectors.toList());
 
         return new ResponseEntity(TAGetResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/list-tugas-akhir/{dosenId}")
+    @GetMapping("/list-tugas-akhir")
     public ResponseEntity<TugasAkhirResponse> getTugasAkhirByUserId(
-            @PathVariable("dosenId") Integer dosenId) {
-        List<TugasAkhir> TA = tugasAkhirService.getTugasAkhirByDosenId(dosenId);
+            Authentication authentication) {
+        Users users = usersService.findByUsername(authentication.getName());
+        Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        List<TugasAkhir> TA = tugasAkhirService.getTugasAkhirByDosenId(dosen.getDosenId());
         List<TugasAkhirResponse> TAGetResponse =
                 TA.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
 

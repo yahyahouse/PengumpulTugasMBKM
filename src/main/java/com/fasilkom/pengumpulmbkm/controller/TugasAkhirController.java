@@ -64,7 +64,7 @@ public class TugasAkhirController {
             TA.setLembarPengesahan(lembarPengesahan.getBytes());
             TA.setNilai(nilai.getBytes());
             TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
-            TA.setVerifikasi(false);
+            TA.setVerifikasi(null);
             TA.setWaktuPengumpulan(Timestamp.valueOf(currentTime));
             tugasAkhirService.saveTugasAkhir(TA);
 

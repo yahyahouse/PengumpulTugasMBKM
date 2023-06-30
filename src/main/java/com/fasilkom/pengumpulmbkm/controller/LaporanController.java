@@ -50,7 +50,7 @@ public class LaporanController {
         laporan.setUserId(users);
         laporan.setDosenId(dosen);
         laporan.setLaporan(laporanMBKM);
-        laporan.setVerifikasi(false);
+        laporan.setVerifikasi(null);
         laporan.setWaktuPengumpulan(Timestamp.valueOf(currentTime));
         laporanService.saveLaporan(laporan);
 

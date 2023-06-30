@@ -45,6 +45,9 @@ public class TugasAkhir implements Serializable {
     @Column(name = "verifikasi")
     private Boolean verifikasi;
 
+    @Column(name = "catatan")
+    private String catatan;
+
     @Column(name = "waktu_pengumpulan")
     private Timestamp waktuPengumpulan;
 
