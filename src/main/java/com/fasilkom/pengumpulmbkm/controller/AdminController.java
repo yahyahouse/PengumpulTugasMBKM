@@ -1,9 +1,7 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
-import com.fasilkom.pengumpulmbkm.model.response.DosenResponse;
-import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
-import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
-import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
+import com.fasilkom.pengumpulmbkm.model.UserDetailsImpl;
+import com.fasilkom.pengumpulmbkm.model.response.*;
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
@@ -84,6 +82,15 @@ public class AdminController {
         return new ResponseEntity<>(allDosen, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get all users")
+    @GetMapping(value ="/all-users")
+    public ResponseEntity<List<UsersResponse>> getAllUsers() {
+        List<Users> users = usersService.getAllUsers();
+        List<UsersResponse> allUsers =
+                users.stream().map(UsersResponse::new).collect(Collectors.toList());
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+    }
+
     @Operation(summary = "Get all laporan")
     @GetMapping(value = "/all-laporan")
     public ResponseEntity<List<LaporanResponse>> getAllLaporan() {
@@ -100,6 +107,20 @@ public class AdminController {
         List<TugasAkhirResponse> TA =
                 TAs.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
         return new ResponseEntity<>(TA, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get detail Tugas Akhir")
+    @GetMapping(value = "/detail-tugas-akhir/{tugasAkhirId}")
+    public ResponseEntity<TugasAkhirResponse> getDetailTugasAkhirById(@PathVariable("tugasAkhirId") Integer tugasAkhirId) {
+        TugasAkhir tugasAkhir = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        return new ResponseEntity<>(new TugasAkhirResponse(tugasAkhir), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get detail Laporan")
+    @GetMapping(value = "/detail-laporan/{laporanId}")
+    public ResponseEntity<LaporanResponse> getDetailLaporanById(@PathVariable("laporanId") Integer laporanId) {
+        Laporan laporan = laporanService.findByLaporanId(laporanId);
+        return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
     }
 
 }

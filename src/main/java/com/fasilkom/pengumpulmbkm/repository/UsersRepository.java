@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 @Transactional
@@ -20,6 +22,9 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
             @Param("user_id") Integer userId
     );
     Users findByUserId(Integer userId);
+
+    @Query(value = "SELECT * FROM users", nativeQuery = true)
+    List<Users> getAllUsers();
 
     public Users findByEmail(String email);
     Boolean existsByEmail(String email);

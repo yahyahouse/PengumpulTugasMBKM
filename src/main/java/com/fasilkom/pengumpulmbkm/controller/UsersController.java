@@ -1,6 +1,8 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.model.response.DosenResponse;
+import com.fasilkom.pengumpulmbkm.model.response.ProfileResponse;
+import com.fasilkom.pengumpulmbkm.model.response.UsersResponse;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.service.DosenService;
@@ -31,6 +33,13 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
+    @Operation(summary = "Get detail profile")
+    @GetMapping(value = "/profil")
+    public ResponseEntity<UsersResponse> getDetailUser(
+            Authentication authentication) {
+        Users users = usersService.findByUsername(authentication.getName());
+        return new ResponseEntity<>(new UsersResponse(users), HttpStatus.OK);
+    }
     @Operation(summary = "melakukan update password ")
     @PostMapping("/update-users-password")
     public ResponseEntity<ResponseEntity> updateUsersPassword(
@@ -49,6 +58,27 @@ public class UsersController {
 
         } else
             return new ResponseEntity(PASSWORD_SAMA, HttpStatus.BAD_REQUEST);
+    }
+
+    @Operation(summary = "melakukan update profile ")
+    @PostMapping("/update-users-profile")
+    public ResponseEntity updateUsersProfile(
+            @RequestParam("noHp") String noHp,
+            @RequestParam("namaLengkap") String namalengkap,
+            @RequestParam("npm") String npm,
+            @RequestParam("password") String password,
+            Authentication authentication) {
+        Users user = usersService.findByUsername(authentication.getName());
+        Users users = usersService.findByUserId(user.getUserId());
+            if (passwordEncoder.matches(password, users.getPassword())) {
+                users.setNamaLengkap(namalengkap);
+                users.setNoHp(noHp);
+                users.setNpm(npm);
+                usersService.updateProfile(users);
+                return new ResponseEntity(UPDATE_BERHASIL, HttpStatus.OK);
+            } else
+                return new ResponseEntity(SALAH_PASSWORD, HttpStatus.BAD_REQUEST);
+
     }
 
 }

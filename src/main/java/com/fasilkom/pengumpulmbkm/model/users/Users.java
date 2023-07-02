@@ -4,6 +4,7 @@ package com.fasilkom.pengumpulmbkm.model.users;
 import com.fasilkom.pengumpulmbkm.model.roles.Prodi;
 import com.fasilkom.pengumpulmbkm.model.roles.Program;
 import com.fasilkom.pengumpulmbkm.model.roles.Roles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Users implements Serializable {
     @Column(name = "user_id")
     private Integer userId;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 

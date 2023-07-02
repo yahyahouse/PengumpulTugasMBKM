@@ -56,23 +56,4 @@ public class MahasiswaController {
         return new ResponseEntity<>(allDosen, HttpStatus.OK);
     }
 
-    @PostMapping("/update-users-password")
-    public ResponseEntity<ResponseEntity> updateUsersPassword(
-            @RequestParam("old_password") String oldPassword,
-            @RequestParam("password") String password,
-            @RequestParam("retype_password") String retypePassword,
-            Authentication authentication) {
-        Users user = usersService.findByUsername(authentication.getName());
-        Users users = usersService.findByUserId(user.getUserId());
-        if (password.equals(retypePassword)) {
-            if (passwordEncoder.matches(oldPassword, users.getPassword())) {
-                usersService.updateUsersPassword(password, user.getUserId());
-                return new ResponseEntity(PASSWORD_TERGANTI, HttpStatus.OK);
-            } else
-                return new ResponseEntity(SALAH_PASSWORD, HttpStatus.BAD_REQUEST);
-
-        } else
-            return new ResponseEntity(PASSWORD_SAMA, HttpStatus.BAD_REQUEST);
-    }
-
 }

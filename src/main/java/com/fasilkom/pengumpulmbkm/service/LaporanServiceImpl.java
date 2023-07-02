@@ -39,4 +39,9 @@ public class LaporanServiceImpl implements LaporanService{
     public List<Laporan> getAllLaporan() {
         return laporanRepository.getAllLaporan();
     }
+
+    @Override
+    public void updateLaporan(Laporan laporan) {
+        laporanRepository.save(laporan);
+    }
 }

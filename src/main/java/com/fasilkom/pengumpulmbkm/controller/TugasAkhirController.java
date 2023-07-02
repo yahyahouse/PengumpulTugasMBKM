@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.fasilkom.pengumpulmbkm.model.Info.AKSES_DITOLAK;
+
 @Tag(name = "Tugas Akhir MBKM", description = "API for processing various operations with Tugas Akhir entity")
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -98,7 +100,7 @@ public class TugasAkhirController {
                 tugasAkhirService.updateTugasAkhir(TA);
                 return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+                return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
             }
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -116,7 +118,7 @@ public class TugasAkhirController {
         if (TA.getUserId().getUserId().equals(users.getUserId())) {
             return new ResponseEntity<>(new TugasAkhirResponse(TA), HttpStatus.OK);
         } else
-            return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
     @Operation(summary = "menampilkan daftar laporan sesuai season login ")
@@ -157,7 +159,7 @@ public class TugasAkhirController {
                 return ResponseEntity.notFound().build();
             }
         } else {
-            return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 
     }
@@ -188,7 +190,7 @@ public class TugasAkhirController {
                 return ResponseEntity.notFound().build();
             }
         }else {
-            return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 
     }
@@ -219,7 +221,7 @@ public class TugasAkhirController {
                 return ResponseEntity.notFound().build();
             }
         }else {
-            return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 
     }
@@ -250,7 +252,7 @@ public class TugasAkhirController {
                 return ResponseEntity.notFound().build();
             }
         }else {
-            return new ResponseEntity<>(HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 
 

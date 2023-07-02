@@ -52,53 +52,88 @@ public class DosenController {
     @Operation(summary = "Verifikasi Laporan MBKM menjadi diterima")
     @PostMapping("/verifikasi-laporan-true/{laporanId}")
     public ResponseEntity<LaporanResponse> verifikasiLaporanTrue(
-            @PathVariable("laporanId") Integer laporanId) {
+            @PathVariable("laporanId") Integer laporanId,
+            Authentication authentication) {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
-        LocalDateTime currentTime = LocalDateTime.now();
-        laporan.setVerifikasi(true);
-        laporan.setWaktuUpdate(Timestamp.valueOf(currentTime));
-        laporanService.saveLaporan(laporan);
+        Users users = usersService.findByUsername(authentication.getName());
+        Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (laporan.getDosenId().getDosenId().equals(dosen.getDosenId())) {
+            LocalDateTime currentTime = LocalDateTime.now();
+            laporan.setVerifikasi(true);
+            laporan.setWaktuUpdate(Timestamp.valueOf(currentTime));
+            laporanService.saveLaporan(laporan);
+            return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
+        } else
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
-        return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
     }
 
     @Operation(summary = "Verifikasi Laporan MBKM menjadi ditolak")
     @PostMapping("/verifikasi-laporan-false/{laporanId}")
     public ResponseEntity<LaporanResponse> verifikasiLaporanFalse(
-            @PathVariable("laporanId") Integer laporanId) {
+            @PathVariable("laporanId") Integer laporanId,
+            @RequestParam("catatan") String catatan,
+            Authentication authentication) {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
-        LocalDateTime currentTime = LocalDateTime.now();
-        laporan.setVerifikasi(false);
-        laporan.setWaktuUpdate(Timestamp.valueOf(currentTime));
-        laporanService.saveLaporan(laporan);
+        Users users = usersService.findByUsername(authentication.getName());
+        Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (laporan.getDosenId().getDosenId().equals(dosen.getDosenId())) {
+            LocalDateTime currentTime = LocalDateTime.now();
+            laporan.setCatatan(catatan);
+            laporan.setVerifikasi(false);
+            laporan.setWaktuUpdate(Timestamp.valueOf(currentTime));
+            laporanService.saveLaporan(laporan);
 
-        return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
+            return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
+        } else
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+
+
     }
 
     @Operation(summary = "Verifikasi Tugas Akhir MBKM menjadi di terima")
     @PostMapping("/verifikasi-tugas-akhir-true/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhirTrue(
-            @PathVariable("tugasAkhirId") Integer tugasAkhirId) {
+            @PathVariable("tugasAkhirId") Integer tugasAkhirId,
+            Authentication authentication) {
         TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
-        LocalDateTime currentTime = LocalDateTime.now();
-        TA.setVerifikasi(true);
-        TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
-        tugasAkhirService.saveTugasAkhir(TA);
+        Users users = usersService.findByUsername(authentication.getName());
+        Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (TA.getDosenId().getDosenId().equals(dosen.getDosenId())) {
+            LocalDateTime currentTime = LocalDateTime.now();
+            TA.setVerifikasi(true);
+            TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
+            tugasAkhirService.saveTugasAkhir(TA);
 
-        return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+            return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+        } else
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+
+
     }
 
     @Operation(summary = "Verifikasi Tugas Akhir MBKM menjadi ditolak")
     @PostMapping("/verifikasi-tugas-akhir-false/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhirFalse(
-            @PathVariable("tugasAkhirId") Integer tugasAkhirId) {
+            @PathVariable("tugasAkhirId") Integer tugasAkhirId,
+            @RequestParam("catatan") String catatan,
+            Authentication authentication) {
         TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
-        LocalDateTime currentTime = LocalDateTime.now();
-        TA.setVerifikasi(false);
-        TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
-        tugasAkhirService.saveTugasAkhir(TA);
+        Users users = usersService.findByUsername(authentication.getName());
+        Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (TA.getDosenId().getDosenId().equals(dosen.getDosenId())) {
+            LocalDateTime currentTime = LocalDateTime.now();
+            TA.setCatatan(catatan);
+            TA.setVerifikasi(false);
+            TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
+            tugasAkhirService.saveTugasAkhir(TA);
 
-        return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+            return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+        } else
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+
+
+
     }
 
     @Operation(summary = "menampilkan daftar Laporan berdasarkan userId dosen ")
@@ -129,7 +164,7 @@ public class DosenController {
 
     @Operation(summary = "menampilkan detail Laporan Tugas Akhir berdasarkan tugasAkhirId")
     @GetMapping("/detail-tugas-akhir/{tugasAkhirId}")
-    public ResponseEntity<TugasAkhirResponse> getDetailTugasAkhirByid(
+    public ResponseEntity<TugasAkhirResponse> getDetailTugasAkhirById(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             Authentication authentication) {
         TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
@@ -137,6 +172,19 @@ public class DosenController {
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
         if (TA.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             return new ResponseEntity<>(new TugasAkhirResponse(TA), HttpStatus.OK);
+        } else
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+    }
+    @Operation(summary = "menampilkan detail Laporan berdasarkan laporanId")
+    @GetMapping("/detail-laporan/{laporanId}")
+    public ResponseEntity<LaporanResponse> getDetailLaporanById(
+            @PathVariable("laporanId") Integer laporanId,
+            Authentication authentication) {
+        Laporan laporan = laporanService.findByLaporanId(laporanId);
+        Users users = usersService.findByUsername(authentication.getName());
+        Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (laporan.getDosenId().getDosenId().equals(dosen.getDosenId())) {
+            return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
         } else
             return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }

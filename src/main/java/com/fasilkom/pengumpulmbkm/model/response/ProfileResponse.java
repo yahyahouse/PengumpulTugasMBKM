@@ -3,12 +3,13 @@ package com.fasilkom.pengumpulmbkm.model.response;
 import com.fasilkom.pengumpulmbkm.model.roles.Prodi;
 import com.fasilkom.pengumpulmbkm.model.roles.Program;
 import com.fasilkom.pengumpulmbkm.model.roles.Roles;
-import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
+import lombok.Data;
 
 import java.util.Set;
 
-public class ProfilResponse {
+@Data
+public class ProfileResponse {
     private Integer userId;
     private String namaLengkap;
     private String email;
@@ -19,7 +20,7 @@ public class ProfilResponse {
 
     private Set<Program> program;
     private String noHp;
-    public ProfilResponse(Users users) {
+    public ProfileResponse(Users users) {
         this.userId = users.getUserId();
         this.namaLengkap = users.getNamaLengkap();
         this.email = users.getEmail();

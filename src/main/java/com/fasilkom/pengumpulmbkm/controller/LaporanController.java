@@ -1,7 +1,9 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
+import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
+import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.service.DosenService;
@@ -14,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -55,6 +59,27 @@ public class LaporanController {
         laporanService.saveLaporan(laporan);
 
         return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Update Laporan ")
+    @PostMapping("/update-laporan/{laporanId}")
+    public ResponseEntity<LaporanResponse> updatelaporan(
+            @PathVariable("laporanId") Integer laporanId,
+            @RequestParam("laporan") String laporan,
+            Authentication authentication
+    ) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Laporan laporanSave = laporanService.findByLaporanId(laporanId);
+        Users users = usersService.findByUsername(authentication.getName());
+        if (laporanSave.getUserId().getUserId().equals(users.getUserId())) {
+            laporanSave.setLaporan(laporan);
+            laporanSave.setWaktuUpdate(Timestamp.valueOf(currentTime));
+            laporanService.saveLaporan(laporanSave);
+            return new ResponseEntity<>(new LaporanResponse(laporanSave), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+        }
+
     }
     @Operation(summary = "menampilkan daftar Laporan berdasarkan userId")
     @GetMapping("/list-laporan")
