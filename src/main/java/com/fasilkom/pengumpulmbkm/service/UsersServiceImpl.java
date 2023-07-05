@@ -30,6 +30,11 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public Users findByEmail(String email) {
+        return usersRepository.findByEmail(email);
+    }
+
+    @Override
     public void updateUsersPassword(String password, Integer userId) {
         usersRepository.updatePassword(passwordEncoder.encode(password), userId);
     }
@@ -42,6 +47,11 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public List<Users> getAllUsers() {
         return usersRepository.getAllUsers();
+    }
+
+    @Override
+    public void savePassword(Users users) {
+        usersRepository.save(users);
     }
 
 

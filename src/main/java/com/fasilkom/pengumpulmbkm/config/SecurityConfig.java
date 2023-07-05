@@ -71,6 +71,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .permitAll()
                 .antMatchers("/api/auth/signup")
                 .permitAll()
+                .antMatchers("/account-recovery/**")
+                .permitAll()
                 .antMatchers("/mahasiswa/**")
                 .hasAnyAuthority(ERole.MAHASISWA.name(),ERole.ADMIN.name())
                 .antMatchers("/dosen/**")
