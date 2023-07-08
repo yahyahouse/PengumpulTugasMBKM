@@ -47,6 +47,10 @@ public class AdminController {
     public ResponseEntity<MessageResponse> addDosen(
             @RequestParam("userId") Integer userId) {
         Dosen dosen = dosenService.getDosenByUserId(userId);
+        if (usersService.findByUserId(userId)==null){
+            return ResponseEntity.badRequest()
+                    .body(new MessageResponse("cannot find user!!"));
+        }
         if (dosen != null) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("the lecturer already exists in the database!!"));

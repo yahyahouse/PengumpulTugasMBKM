@@ -5,6 +5,7 @@ import com.fasilkom.pengumpulmbkm.repository.TugasAkhirRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -23,8 +24,17 @@ public class TugasAkhirServiceImpl implements TugasAkhirService{
     }
 
     @Override
-    public void updateTugasAkhir(TugasAkhir tugasAkhir) {
-        tugasAkhirRepository.save(tugasAkhir);
+    public void updateTugasAkhir(Integer tugasAkhirId, byte[] laporanTugasAkhir, byte[] lembarPengesahan, byte[] nilai,
+                                 byte[] sertifikat, Timestamp waktuUpdate) {
+        tugasAkhirRepository.updateTugasAkhirsById(tugasAkhirId,laporanTugasAkhir,lembarPengesahan,nilai,sertifikat,waktuUpdate);
+    }
+
+    @Override
+    public void updateCatatanInTugasAkhir(TugasAkhir tugasAkhir) {
+        tugasAkhirRepository.updateTugasAkhirsForCatatanAndVerifikasiById(
+                tugasAkhir.getTugasAkhirId(),
+                tugasAkhir.getCatatan(),
+                tugasAkhir.getWaktuUpdate());
     }
 
     @Override

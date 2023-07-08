@@ -97,7 +97,7 @@ public class TugasAkhirController {
                 TA.setNilai(nilai.getBytes());
                 TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
                 TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
-                tugasAkhirService.updateTugasAkhir(TA);
+                tugasAkhirService.saveTugasAkhir(TA);
                 return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
             } else {
                 return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);

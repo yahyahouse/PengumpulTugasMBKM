@@ -75,6 +75,9 @@ public class AuthController {
                     "}")
             @RequestBody Map<String, Object> login) {
 
+        if (usersRepository.findUsersByEmail(login.get("email").toString())==null){
+            return new ResponseEntity("akun tidak dapat ditemukan",HttpStatus.NOT_FOUND);
+        }
         Users users = usersRepository.findUsersByEmail(login.get("email").toString());
 
         Authentication authentication = authenticationManager.authenticate(
