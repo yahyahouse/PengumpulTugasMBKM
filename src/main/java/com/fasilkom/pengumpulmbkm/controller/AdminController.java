@@ -72,7 +72,7 @@ public class AdminController {
             dosenService.deletDosenByDosenId(dosenId);
             return ResponseEntity.ok(new MessageResponse("Successfully delete Lecturer"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Cannot delete lecturer with id" + dosenId));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageResponse("Cannot delete lecturer with id" + dosenId));
         }
 
     }
