@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.fasilkom.pengumpulmbkm.model.Info.PASSWORD_SAMA;
+
 @Controller
 @RequestMapping("/account-recovery")
 public class ForgotPasswordController {
@@ -38,9 +40,9 @@ public class ForgotPasswordController {
             recoveryService.createRecoveryToken(user);
             model.addAttribute("message", "Email reset password telah dikirim ke " + email);
 
-            return ResponseEntity.ok("Recovery token created successfully.");
+            return ResponseEntity.ok("Recovery token created successfully. please check your email");
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity("email not found",HttpStatus.NOT_FOUND);
         }
     }
 
@@ -55,19 +57,27 @@ public class ForgotPasswordController {
     }
     @Operation(summary = "Melakukan reset password ketika sudah mendapatkan token")
     @PostMapping("/reset-password/{token}")
-    public ResponseEntity<String> resetPassword(@PathVariable("token") String token, @RequestParam("password") String newPassword) {
+    public ResponseEntity<String> resetPassword(@PathVariable("token") String token,
+                                                @RequestParam("password") String newPassword,
+                                                @RequestParam("passwordRetype") String newPasswordRetype) {
         AccountRecoveryToken accountRecoveryToken = recoveryService.getRecoveryTokenByToken(token);
 
         if (accountRecoveryToken == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token");
         }
-        Users users = recoveryService.getRecoveryTokenByToken(token).getUser();
-        users.setPassword(passwordEncoder.encode(newPassword));
-        accountRecoveryToken.setToken(null);
-        usersService.savePassword(users);
-        recoveryService.saveToken(accountRecoveryToken);
+        if (newPassword.equals(newPasswordRetype)){
+            Users users = recoveryService.getRecoveryTokenByToken(token).getUser();
+            users.setPassword(passwordEncoder.encode(newPassword));
+            accountRecoveryToken.setToken(null);
+            usersService.savePassword(users);
+            recoveryService.saveToken(accountRecoveryToken);
 
-        return ResponseEntity.ok("Password reset successful");
+            return ResponseEntity.ok("Password reset successful");
+        }else {
+            return new ResponseEntity(PASSWORD_SAMA, HttpStatus.BAD_REQUEST);
+        }
+
+
     }
 
 
