@@ -1,11 +1,14 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.model.UserDetailsImpl;
+import com.fasilkom.pengumpulmbkm.model.enumeration.ERole;
 import com.fasilkom.pengumpulmbkm.model.response.*;
+import com.fasilkom.pengumpulmbkm.model.roles.Roles;
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
+import com.fasilkom.pengumpulmbkm.repository.RoleRepository;
 import com.fasilkom.pengumpulmbkm.repository.TugasAkhirRepository;
 import com.fasilkom.pengumpulmbkm.service.DosenService;
 import com.fasilkom.pengumpulmbkm.service.LaporanService;
@@ -19,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Tag(name = "Admin", description = "API for processing various operations with Dosen entity")
@@ -34,13 +38,10 @@ public class AdminController {
     private LaporanService laporanService;
     @Autowired
     private TugasAkhirService tugasAkhirService;
+    @Autowired
+    private RoleRepository roleRepository;
 
-    @Operation(summary = "Get detail dosen")
-    @GetMapping(value = "/detail-profil-dosen/{dosenId}")
-    public ResponseEntity<DosenResponse> getDetailDosenByDosenId(@PathVariable("dosenId") Integer dosenId) {
-        Dosen dosen = dosenService.getDosenByDosenId(dosenId);
-        return new ResponseEntity<>(new DosenResponse(dosen), HttpStatus.OK);
-    }
+
 
     @Operation(summary = "add dosen")
     @PostMapping(value = "/add-dosen")
@@ -77,14 +78,6 @@ public class AdminController {
 
     }
 
-    @Operation(summary = "Get all dosen")
-    @GetMapping(value = "/all-dosen")
-    public ResponseEntity<List<DosenResponse>> getAllDosen() {
-        List<Dosen> dosen = dosenService.getAllDosen();
-        List<DosenResponse> allDosen =
-                dosen.stream().map(DosenResponse::new).collect(Collectors.toList());
-        return new ResponseEntity<>(allDosen, HttpStatus.OK);
-    }
 
     @Operation(summary = "Get all users")
     @GetMapping(value = "/all-users")

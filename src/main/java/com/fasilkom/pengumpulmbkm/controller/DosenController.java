@@ -40,14 +40,7 @@ public class DosenController {
     @Autowired
     private TugasAkhirService tugasAkhirService;
 
-    @Operation(summary = "Get all dosen")
-    @GetMapping(value = "/all-dosen")
-    public ResponseEntity<List<DosenResponse>> getAllDosen() {
-        List<Dosen> dosen = dosenService.getAllDosen();
-        List<DosenResponse> allDosen =
-                dosen.stream().map(DosenResponse::new).collect(Collectors.toList());
-        return new ResponseEntity<>(allDosen, HttpStatus.OK);
-    }
+
 
     @Operation(summary = "Verifikasi Laporan MBKM menjadi diterima")
     @PostMapping("/verifikasi-laporan-true/{laporanId}")

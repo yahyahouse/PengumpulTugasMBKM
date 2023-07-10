@@ -32,6 +32,8 @@ public class UsersController {
     PasswordEncoder passwordEncoder;
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private DosenService dosenService;
 
     @Operation(summary = "Get detail profile")
     @GetMapping(value = "/profil")
@@ -82,4 +84,22 @@ public class UsersController {
 
     }
 
+    @Operation(summary = "Get all dosen")
+    @GetMapping(value = "/all-dosen")
+    public ResponseEntity<List<DosenResponse>> getAllDosen() {
+        List<Dosen> dosen = dosenService.getAllDosen();
+        List<DosenResponse> allDosen =
+                dosen.stream().map(DosenResponse::new).collect(Collectors.toList());
+        return new ResponseEntity<>(allDosen, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get detail dosen")
+    @GetMapping(value = "/detail-profil-dosen/{dosenId}")
+    public ResponseEntity<DosenResponse> getDetailDosenByDosenId(@PathVariable("dosenId") Integer dosenId) {
+        Dosen dosen = dosenService.getDosenByDosenId(dosenId);
+        if (dosen.getDosenId() == null){
+            return new ResponseEntity("Not Found", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new DosenResponse(dosen), HttpStatus.OK);
+    }
 }
