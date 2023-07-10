@@ -24,10 +24,10 @@ public class Laporan implements Serializable {
     @JoinColumn(name = "dosen_id")
     private Dosen dosenId;
 
-    @Column(name = "laporan",columnDefinition = "TEXT")
+    @Column(name = "laporan", columnDefinition = "TEXT")
     private String laporan;
 
-    @Column(name = "verifikasi",columnDefinition = "BOOLEAN DEFAULT NULL")
+    @Column(name = "verifikasi", columnDefinition = "BOOLEAN DEFAULT NULL")
     private Boolean verifikasi;
 
     @Column(name = "catatan")

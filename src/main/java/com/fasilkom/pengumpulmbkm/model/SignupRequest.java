@@ -32,7 +32,7 @@ public class SignupRequest {
     private String password;
 
     @NotBlank
-    @Size(min = 10, max =50)
+    @Size(min = 10, max = 50)
     private String namaLengkap;
 
 }

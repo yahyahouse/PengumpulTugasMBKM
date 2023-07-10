@@ -9,9 +9,10 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-public class TugasAkhirServiceImpl implements TugasAkhirService{
+public class TugasAkhirServiceImpl implements TugasAkhirService {
     @Autowired
     TugasAkhirRepository tugasAkhirRepository;
+
     @Override
     public TugasAkhir findByTugasAkhirId(Integer tugasAkhirId) {
         return tugasAkhirRepository.findByTugasAkhirId(tugasAkhirId);
@@ -26,7 +27,7 @@ public class TugasAkhirServiceImpl implements TugasAkhirService{
     @Override
     public void updateTugasAkhir(Integer tugasAkhirId, byte[] laporanTugasAkhir, byte[] lembarPengesahan, byte[] nilai,
                                  byte[] sertifikat, Timestamp waktuUpdate) {
-        tugasAkhirRepository.updateTugasAkhirsById(tugasAkhirId,laporanTugasAkhir,lembarPengesahan,nilai,sertifikat,waktuUpdate);
+        tugasAkhirRepository.updateTugasAkhirsById(tugasAkhirId, laporanTugasAkhir, lembarPengesahan, nilai, sertifikat, waktuUpdate);
     }
 
     @Override

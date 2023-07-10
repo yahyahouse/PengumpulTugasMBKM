@@ -46,7 +46,6 @@ public class MahasiswaController {
     private TugasAkhirService tugasAkhirService;
 
 
-
     @Operation(summary = "Get all dosen")
     @GetMapping(value = "/all-dosen")
     public ResponseEntity<List<DosenResponse>> getAllDosen() {

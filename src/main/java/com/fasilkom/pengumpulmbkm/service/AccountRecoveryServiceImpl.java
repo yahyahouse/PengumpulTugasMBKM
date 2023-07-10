@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-public class AccountRecoveryServiceImpl implements AccountRecoveryService{
+public class AccountRecoveryServiceImpl implements AccountRecoveryService {
     private static final int TOKEN_EXPIRATION_HOURS = 24;
     private static final int TOKEN_LENGTH = 32;
 
@@ -32,6 +32,7 @@ public class AccountRecoveryServiceImpl implements AccountRecoveryService{
         String resetPasswordUrl = "http://localhost:8080/account-recovery/reset-password/" + recoveryToken.getToken();
         sendResetPasswordEmail(user.getEmail(), resetPasswordUrl);
     }
+
     private void sendResetPasswordEmail(String email, String resetPasswordUrl) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);

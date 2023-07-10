@@ -42,7 +42,7 @@ public class ForgotPasswordController {
 
             return ResponseEntity.ok("Recovery token created successfully. please check your email");
         } else {
-            return new ResponseEntity("email not found",HttpStatus.NOT_FOUND);
+            return new ResponseEntity("email not found", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -55,6 +55,7 @@ public class ForgotPasswordController {
             return ResponseEntity.badRequest().body("Invalid or expired recovery token.");
         }
     }
+
     @Operation(summary = "Melakukan reset password ketika sudah mendapatkan token")
     @PostMapping("/reset-password/{token}")
     public ResponseEntity<String> resetPassword(@PathVariable("token") String token,
@@ -65,7 +66,7 @@ public class ForgotPasswordController {
         if (accountRecoveryToken == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token");
         }
-        if (newPassword.equals(newPasswordRetype)){
+        if (newPassword.equals(newPasswordRetype)) {
             Users users = recoveryService.getRecoveryTokenByToken(token).getUser();
             users.setPassword(passwordEncoder.encode(newPassword));
             accountRecoveryToken.setToken(null);
@@ -73,13 +74,12 @@ public class ForgotPasswordController {
             recoveryService.saveToken(accountRecoveryToken);
 
             return ResponseEntity.ok("Password reset successful");
-        }else {
+        } else {
             return new ResponseEntity(PASSWORD_SAMA, HttpStatus.BAD_REQUEST);
         }
 
 
     }
-
 
 
 }

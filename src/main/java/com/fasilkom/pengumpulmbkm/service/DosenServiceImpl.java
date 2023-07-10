@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DosenServiceImpl implements DosenService{
+public class DosenServiceImpl implements DosenService {
 
     @Autowired
     private DosenRepository dosenRepository;
+
     @Override
     public void saveDosen(Dosen dosen) {
         dosenRepository.save(dosen);

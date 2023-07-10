@@ -15,5 +15,6 @@ public interface AccountRecoveryService {
     String generateToken();
 
     LocalDateTime calculateExpirationDate();
+
     void saveToken(AccountRecoveryToken accountRecoveryToken);
 }

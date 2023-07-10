@@ -9,12 +9,16 @@ import java.util.List;
 @Service
 public interface LaporanService {
 
-    Laporan findByLaporanId (Integer laporanId);
+    Laporan findByLaporanId(Integer laporanId);
+
     void saveLaporan(Laporan laporan);
 
-    List<Laporan> findLaporanByUserId (Integer userId);
-    List<Laporan> findLaporanByDosenId (Integer dosenId);
+    List<Laporan> findLaporanByUserId(Integer userId);
+
+    List<Laporan> findLaporanByDosenId(Integer dosenId);
+
     List<Laporan> getAllLaporan();
-    void updateLaporan (Laporan laporan);
+
+    void updateLaporan(Laporan laporan);
 
 }

@@ -1,5 +1,6 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
+import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirGetDetailResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
@@ -78,7 +79,7 @@ public class TugasAkhirController {
     }
 
     @Operation(summary = "Update Laporan Tugas Akhir")
-    @PostMapping("/update-tugas-akhir/{tugasAkhirId}")
+    @PutMapping("/update-tugas-akhir/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> updateTugasAkhir(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             @RequestParam("sertifikat") MultipartFile sertifikat,
@@ -92,15 +93,23 @@ public class TugasAkhirController {
             TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
             Users users = usersService.findByUsername(authentication.getName());
             if (TA.getUserId().getUserId().equals(users.getUserId())) {
-                TA.setSertifikat(sertifikat.getBytes());
-                TA.setLembarPengesahan(lembarPengesahan.getBytes());
-                TA.setNilai(nilai.getBytes());
-                TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
+                if (!sertifikat.isEmpty()) {
+                    TA.setSertifikat(sertifikat.getBytes());
+                }
+                if (!lembarPengesahan.isEmpty()) {
+                    TA.setLembarPengesahan(lembarPengesahan.getBytes());
+                }
+                if (!nilai.isEmpty()) {
+                    TA.setNilai(nilai.getBytes());
+                }
+                if (!laporanTugasAkhir.isEmpty()) {
+                    TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
+                }
                 TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
                 tugasAkhirService.saveTugasAkhir(TA);
                 return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
             } else {
-                return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+                return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
             }
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -110,15 +119,15 @@ public class TugasAkhirController {
 
     @Operation(summary = "menampilkan detail Laporan Tugas Akhir berdasarkan tugasAkhirId")
     @GetMapping("/detail-tugas-akhir/{tugasAkhirId}")
-    public ResponseEntity<TugasAkhirResponse> getTugasAkhirByid(
+    public ResponseEntity<TugasAkhirGetDetailResponse> getTugasAkhirByid(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             Authentication authentication) {
         TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
         if (TA.getUserId().getUserId().equals(users.getUserId())) {
-            return new ResponseEntity<>(new TugasAkhirResponse(TA), HttpStatus.OK);
+            return new ResponseEntity<>(new TugasAkhirGetDetailResponse(TA), HttpStatus.OK);
         } else
-            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
     @Operation(summary = "menampilkan daftar laporan sesuai season login ")
@@ -159,7 +168,7 @@ public class TugasAkhirController {
                 return ResponseEntity.notFound().build();
             }
         } else {
-            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 
     }
@@ -189,8 +198,8 @@ public class TugasAkhirController {
             } else {
                 return ResponseEntity.notFound().build();
             }
-        }else {
-            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+        } else {
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 
     }
@@ -220,8 +229,8 @@ public class TugasAkhirController {
             } else {
                 return ResponseEntity.notFound().build();
             }
-        }else {
-            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+        } else {
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 
     }
@@ -251,8 +260,8 @@ public class TugasAkhirController {
             } else {
                 return ResponseEntity.notFound().build();
             }
-        }else {
-            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+        } else {
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 
 

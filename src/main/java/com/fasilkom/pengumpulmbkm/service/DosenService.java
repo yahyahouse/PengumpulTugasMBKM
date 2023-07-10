@@ -13,10 +13,16 @@ import java.util.List;
 public interface DosenService {
 
     void saveDosen(Dosen dosen);
-    Dosen getDosenByDosenId (Integer dosenId);
-    Dosen getDosenByUserId (Integer userId);
+
+    Dosen getDosenByDosenId(Integer dosenId);
+
+    Dosen getDosenByUserId(Integer userId);
+
     void deletDosenByDosenId(Integer dosenId);
-    List<Dosen> getAllDosen ();
+
+    List<Dosen> getAllDosen();
+
     boolean existsDosenByDosenId(Integer dosenId);
+
     boolean existsDosenByUserId(Integer userId);
 }

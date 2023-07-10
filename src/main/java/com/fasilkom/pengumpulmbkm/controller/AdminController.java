@@ -47,7 +47,7 @@ public class AdminController {
     public ResponseEntity<MessageResponse> addDosen(
             @RequestParam("userId") Integer userId) {
         Dosen dosen = dosenService.getDosenByUserId(userId);
-        if (usersService.findByUserId(userId)==null){
+        if (usersService.findByUserId(userId) == null) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("cannot find user!!"));
         }
@@ -87,7 +87,7 @@ public class AdminController {
     }
 
     @Operation(summary = "Get all users")
-    @GetMapping(value ="/all-users")
+    @GetMapping(value = "/all-users")
     public ResponseEntity<List<UsersResponse>> getAllUsers() {
         List<Users> users = usersService.getAllUsers();
         List<UsersResponse> allUsers =

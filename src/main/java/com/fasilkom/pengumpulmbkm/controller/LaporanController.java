@@ -77,10 +77,11 @@ public class LaporanController {
             laporanService.saveLaporan(laporanSave);
             return new ResponseEntity<>(new LaporanResponse(laporanSave), HttpStatus.OK);
         } else {
-            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 
     }
+
     @Operation(summary = "menampilkan daftar Laporan berdasarkan userId")
     @GetMapping("/list-laporan")
     public ResponseEntity<LaporanResponse> getLaporanByUserId(
@@ -102,8 +103,8 @@ public class LaporanController {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         if (laporan.getUserId().getUserId().equals(users.getUserId())) {
             return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
-        }else
-            return new ResponseEntity(AKSES_DITOLAK,HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+        } else
+            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
 }

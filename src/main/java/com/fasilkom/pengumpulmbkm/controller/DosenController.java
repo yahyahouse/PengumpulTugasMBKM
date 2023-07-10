@@ -133,7 +133,6 @@ public class DosenController {
             return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
 
-
     }
 
     @Operation(summary = "menampilkan daftar Laporan berdasarkan userId dosen ")
@@ -175,6 +174,7 @@ public class DosenController {
         } else
             return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
+
     @Operation(summary = "menampilkan detail Laporan berdasarkan laporanId")
     @GetMapping("/detail-laporan/{laporanId}")
     public ResponseEntity<LaporanResponse> getDetailLaporanById(

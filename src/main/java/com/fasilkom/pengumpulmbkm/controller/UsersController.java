@@ -40,6 +40,7 @@ public class UsersController {
         Users users = usersService.findByUsername(authentication.getName());
         return new ResponseEntity<>(new UsersResponse(users), HttpStatus.OK);
     }
+
     @Operation(summary = "melakukan update password ")
     @PostMapping("/update-users-password")
     public ResponseEntity<ResponseEntity> updateUsersPassword(
@@ -70,14 +71,14 @@ public class UsersController {
             Authentication authentication) {
         Users user = usersService.findByUsername(authentication.getName());
         Users users = usersService.findByUserId(user.getUserId());
-            if (passwordEncoder.matches(password, users.getPassword())) {
-                users.setNamaLengkap(namalengkap);
-                users.setNoHp(noHp);
-                users.setNpm(npm);
-                usersService.updateProfile(users);
-                return new ResponseEntity(UPDATE_BERHASIL, HttpStatus.OK);
-            } else
-                return new ResponseEntity(SALAH_PASSWORD, HttpStatus.BAD_REQUEST);
+        if (passwordEncoder.matches(password, users.getPassword())) {
+            users.setNamaLengkap(namalengkap);
+            users.setNoHp(noHp);
+            users.setNpm(npm);
+            usersService.updateProfile(users);
+            return new ResponseEntity(UPDATE_BERHASIL, HttpStatus.OK);
+        } else
+            return new ResponseEntity(SALAH_PASSWORD, HttpStatus.BAD_REQUEST);
 
     }
 

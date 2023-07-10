@@ -1,4 +1,5 @@
 package com.fasilkom.pengumpulmbkm.model;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,7 @@ public class JwtResponse {
     private String email;
     private List<String> roles;
 
-    public JwtResponse (String token, Integer userId, String username, String email, List<String> roles){
+    public JwtResponse(String token, Integer userId, String username, String email, List<String> roles) {
         this.token = token;
         this.userId = userId;
         this.username = username;

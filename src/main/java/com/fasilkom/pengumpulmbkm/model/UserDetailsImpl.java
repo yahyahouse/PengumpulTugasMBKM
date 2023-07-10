@@ -95,14 +95,14 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(userId, user.userId);
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(userId);
     }
 }

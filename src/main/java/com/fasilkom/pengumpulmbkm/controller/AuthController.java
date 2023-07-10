@@ -69,14 +69,14 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<JwtResponse> authenticateUser(
-            @Schema (example = "{" +
+            @Schema(example = "{" +
                     "\"email\":\"userTest@gmail.com\"," +
                     "\"password\":\"userTest\"" +
                     "}")
             @RequestBody Map<String, Object> login) {
 
-        if (usersRepository.findUsersByEmail(login.get("email").toString())==null){
-            return new ResponseEntity("akun tidak dapat ditemukan",HttpStatus.NOT_FOUND);
+        if (usersRepository.findUsersByEmail(login.get("email").toString()) == null) {
+            return new ResponseEntity("akun tidak dapat ditemukan", HttpStatus.NOT_FOUND);
         }
         Users users = usersRepository.findUsersByEmail(login.get("email").toString());
 
@@ -111,13 +111,13 @@ public class AuthController {
                     "}")
             @RequestBody SignupRequest signupRequest) {
         Boolean usernameExist = usersRepository.existsByUsername(signupRequest.getUsername());
-        if(Boolean.TRUE.equals(usernameExist)) {
+        if (Boolean.TRUE.equals(usernameExist)) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
         Boolean emailExist = usersRepository.existsByEmail(signupRequest.getEmail());
-        if(Boolean.TRUE.equals(emailExist)) {
+        if (Boolean.TRUE.equals(emailExist)) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: Email is already taken!"));
         }
@@ -129,7 +129,7 @@ public class AuthController {
         Set<String> strRoles = signupRequest.getRole();
         Set<Roles> roles = new HashSet<>();
 
-        if(strRoles == null) {
+        if (strRoles == null) {
             Roles role = roleRepository.findByName(ERole.MAHASISWA)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
             roles.add(role);
@@ -145,7 +145,7 @@ public class AuthController {
         Set<String> strProdi = signupRequest.getProdi();
         Set<Prodi> enumProdi = new HashSet<>();
 
-        if(strProdi == null) {
+        if (strProdi == null) {
             Prodi prodi = prodiRepository.findByName(EProdi.TI)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
             enumProdi.add(prodi);
@@ -161,7 +161,7 @@ public class AuthController {
         Set<String> strProgram = signupRequest.getProgram();
         Set<Program> enumProgram = new HashSet<>();
 
-        if(strProgram == null) {
+        if (strProgram == null) {
             Program program = programRepository.findByName(EProgram.BANGKIT)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
             enumProgram.add(program);

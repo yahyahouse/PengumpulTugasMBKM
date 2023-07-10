@@ -17,11 +17,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserDetailsServiceImpl userDetailsService;
@@ -46,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
@@ -74,13 +75,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/account-recovery/**")
                 .permitAll()
                 .antMatchers("/mahasiswa/**")
-                .hasAnyAuthority(ERole.MAHASISWA.name(),ERole.ADMIN.name())
+                .hasAnyAuthority(ERole.MAHASISWA.name(), ERole.ADMIN.name())
                 .antMatchers("/dosen/**")
-                .hasAnyAuthority(ERole.DOSEN.name(),ERole.ADMIN.name())
+                .hasAnyAuthority(ERole.DOSEN.name(), ERole.ADMIN.name())
                 .antMatchers("/admin/**")
                 .hasAuthority(ERole.ADMIN.name())
                 .antMatchers("/users/**")
-                .hasAnyAuthority(ERole.ADMIN.name(),ERole.DOSEN.name(),ERole.MAHASISWA.name())
+                .hasAnyAuthority(ERole.ADMIN.name(), ERole.DOSEN.name(), ERole.MAHASISWA.name())
                 .anyRequest()
                 .authenticated();
 
