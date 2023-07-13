@@ -1,5 +1,6 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
+import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirGetDetailResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
@@ -109,7 +110,7 @@ public class TugasAkhirController {
                 tugasAkhirService.saveTugasAkhir(TA);
                 return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
             } else {
-                return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+                return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
             }
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -127,7 +128,7 @@ public class TugasAkhirController {
         if (TA.getUserId().getUserId().equals(users.getUserId())) {
             return new ResponseEntity<>(new TugasAkhirGetDetailResponse(TA), HttpStatus.OK);
         } else
-            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
     @Operation(summary = "menampilkan daftar laporan sesuai season login ")
@@ -263,8 +264,6 @@ public class TugasAkhirController {
         } else {
             return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
-
-
     }
 }
 

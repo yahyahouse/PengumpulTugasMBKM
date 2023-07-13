@@ -5,6 +5,7 @@ import com.fasilkom.pengumpulmbkm.model.users.Users;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -21,9 +22,11 @@ public class Laporan implements Serializable {
     private Users userId;
 
     @ManyToOne
+    @NotBlank(message = "dosen is required")
     @JoinColumn(name = "dosen_id")
     private Dosen dosenId;
 
+    @NotBlank(message = "Leporan is required")
     @Column(name = "laporan", columnDefinition = "TEXT")
     private String laporan;
 

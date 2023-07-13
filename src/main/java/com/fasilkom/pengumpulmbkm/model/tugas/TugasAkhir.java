@@ -6,6 +6,7 @@ import com.fasilkom.pengumpulmbkm.model.users.Users;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -23,22 +24,27 @@ public class TugasAkhir implements Serializable {
     private Users userId;
 
     @ManyToOne
+    @NotBlank(message = "Dosen is required")
     @JoinColumn(name = "dosen_id")
     private Dosen dosenId;
 
     @Lob
+    @NotBlank(message = "Sertifikat is required")
     @Column(name = "sertifikat")
     private byte[] sertifikat;
 
     @Lob
+    @NotBlank(message = "Lembar Pengesahan is required")
     @Column(name = "lembar_pengesahan")
     private byte[] lembarPengesahan;
 
     @Lob
+    @NotBlank(message = "Nilai is required")
     @Column(name = "nilai")
     private byte[] nilai;
 
     @Lob
+    @NotBlank(message = "Tugas Akhir is required")
     @Column(name = "laporan_tugas_akhir")
     private byte[] laporanTugasAkhir;
 

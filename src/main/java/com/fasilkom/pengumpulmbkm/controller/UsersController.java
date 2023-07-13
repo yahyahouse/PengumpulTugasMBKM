@@ -1,6 +1,7 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.model.response.DosenResponse;
+import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.response.ProfileResponse;
 import com.fasilkom.pengumpulmbkm.model.response.UsersResponse;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
@@ -55,12 +56,12 @@ public class UsersController {
         if (password.equals(retypePassword)) {
             if (passwordEncoder.matches(oldPassword, users.getPassword())) {
                 usersService.updateUsersPassword(password, user.getUserId());
-                return new ResponseEntity(PASSWORD_TERGANTI, HttpStatus.OK);
+                return new ResponseEntity(new MessageResponse(PASSWORD_TERGANTI), HttpStatus.OK);
             } else
-                return new ResponseEntity(SALAH_PASSWORD, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new MessageResponse(SALAH_PASSWORD), HttpStatus.BAD_REQUEST);
 
         } else
-            return new ResponseEntity(PASSWORD_SAMA, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new MessageResponse(PASSWORD_SAMA), HttpStatus.BAD_REQUEST);
     }
 
     @Operation(summary = "melakukan update profile ")
@@ -78,9 +79,9 @@ public class UsersController {
             users.setNoHp(noHp);
             users.setNpm(npm);
             usersService.updateProfile(users);
-            return new ResponseEntity(UPDATE_BERHASIL, HttpStatus.OK);
+            return new ResponseEntity(new MessageResponse(UPDATE_BERHASIL), HttpStatus.OK);
         } else
-            return new ResponseEntity(SALAH_PASSWORD, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new MessageResponse(SALAH_PASSWORD), HttpStatus.BAD_REQUEST);
 
     }
 

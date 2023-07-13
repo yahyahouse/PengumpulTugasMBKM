@@ -2,6 +2,7 @@ package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.model.response.DosenResponse;
 import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
+import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
@@ -57,7 +58,7 @@ public class DosenController {
             laporanService.saveLaporan(laporan);
             return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
         } else
-            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK),HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
     }
 
@@ -79,7 +80,7 @@ public class DosenController {
 
             return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
         } else
-            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
 
     }
@@ -100,7 +101,7 @@ public class DosenController {
 
             return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
         } else
-            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
 
     }
@@ -123,7 +124,7 @@ public class DosenController {
 
             return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
         } else
-            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
 
     }
@@ -165,7 +166,7 @@ public class DosenController {
         if (TA.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             return new ResponseEntity<>(new TugasAkhirResponse(TA), HttpStatus.OK);
         } else
-            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
     @Operation(summary = "menampilkan detail Laporan berdasarkan laporanId")
@@ -179,7 +180,7 @@ public class DosenController {
         if (laporan.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
         } else
-            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
+import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
@@ -77,7 +78,7 @@ public class LaporanController {
             laporanService.saveLaporan(laporanSave);
             return new ResponseEntity<>(new LaporanResponse(laporanSave), HttpStatus.OK);
         } else {
-            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
         }
 
     }
@@ -104,7 +105,7 @@ public class LaporanController {
         if (laporan.getUserId().getUserId().equals(users.getUserId())) {
             return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
         } else
-            return new ResponseEntity(AKSES_DITOLAK, HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
 
 }

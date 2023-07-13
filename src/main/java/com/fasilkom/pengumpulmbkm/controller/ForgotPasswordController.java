@@ -1,6 +1,7 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.model.AccountRecoveryToken;
+import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.service.AccountRecoveryService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static com.fasilkom.pengumpulmbkm.model.Info.PASSWORD_SAMA;
+import static com.fasilkom.pengumpulmbkm.model.Info.*;
 
 @Controller
 @RequestMapping("/account-recovery")
@@ -40,9 +41,9 @@ public class ForgotPasswordController {
             recoveryService.createRecoveryToken(user);
             model.addAttribute("message", "Email reset password telah dikirim ke " + email);
 
-            return ResponseEntity.ok("Recovery token created successfully. please check your email");
+            return new ResponseEntity(new MessageResponse(RECOVERY_SUCCESS),HttpStatus.OK);
         } else {
-            return new ResponseEntity("email not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new MessageResponse(EMAIL_NOT_FOUND), HttpStatus.NOT_FOUND);
         }
     }
 
