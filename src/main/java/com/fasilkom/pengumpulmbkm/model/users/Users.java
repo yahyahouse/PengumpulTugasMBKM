@@ -1,6 +1,7 @@
 package com.fasilkom.pengumpulmbkm.model.users;
 
 
+import com.fasilkom.pengumpulmbkm.model.SignupRequest;
 import com.fasilkom.pengumpulmbkm.model.roles.Prodi;
 import com.fasilkom.pengumpulmbkm.model.roles.Program;
 import com.fasilkom.pengumpulmbkm.model.roles.Roles;
@@ -61,5 +62,8 @@ public class Users implements Serializable {
     }
 
     public Users() {
+    }
+
+    public Users(SignupRequest request) {
     }
 }

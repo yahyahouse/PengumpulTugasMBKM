@@ -1,6 +1,7 @@
 package com.fasilkom.pengumpulmbkm;
 
 import com.fasilkom.pengumpulmbkm.config.JwtUtils;
+import com.fasilkom.pengumpulmbkm.config.enumConfig.EnumConfig;
 import com.fasilkom.pengumpulmbkm.controller.AuthController;
 import com.fasilkom.pengumpulmbkm.model.JwtResponse;
 import com.fasilkom.pengumpulmbkm.model.SignupRequest;
@@ -8,37 +9,44 @@ import com.fasilkom.pengumpulmbkm.model.UserDetailsImpl;
 import com.fasilkom.pengumpulmbkm.model.enumeration.EProdi;
 import com.fasilkom.pengumpulmbkm.model.enumeration.EProgram;
 import com.fasilkom.pengumpulmbkm.model.enumeration.ERole;
+import com.fasilkom.pengumpulmbkm.model.roles.Roles;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
+import com.fasilkom.pengumpulmbkm.repository.RoleRepository;
 import com.fasilkom.pengumpulmbkm.repository.UsersRepository;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.aspectj.lang.annotation.Before;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 
 @SpringBootTest
@@ -48,6 +56,9 @@ public class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private EnumConfig enumConfig;
+
     @MockBean
     private UsersRepository usersRepository;
     @MockBean
@@ -56,6 +67,11 @@ public class AuthControllerTest {
     AuthenticationManager authenticationManager;
     @Autowired
     JwtUtils jwtUtils;
+    @MockBean
+    private RoleRepository roleRepository;
+    @InjectMocks
+    private AuthController authController;
+    private static final Logger LOG = LoggerFactory.getLogger(EnumConfig.class);
 
     private static String asJsonString(Object obj) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -105,37 +121,55 @@ public class AuthControllerTest {
     }
 
 //    @Test
-//    @DisplayName("test login berhasil")
-//    public void testLogin_Success() throws Exception {
+//    public void testAuthenticateUser() {
+//        // Prepare test data
+//        String email = "userTest@gmail.com";
+//        String password = "userTest";
 //        Map<String, Object> login = new HashMap<>();
-//        login.put("email", "userTest@gmail.com");
-//        login.put("password", "userTest");
+//        login.put("email", email);
+//        login.put("password", password);
 //
-//        Users users = new Users();
-//        users.setEmail("userTest@gmail.com");
-//        users.setUsername("userTest");
-//        users.setPassword("userTest");
+//        Users user = new Users();
+//        user.setUserId(1);
+//        user.setUsername("userTest");
+//        user.setEmail(email);
+//        user.setPassword(password);
 //
-//        when(usersRepository.findUsersByEmail(login.get("email").toString())).thenReturn(users);
+//        Roles role = new Roles();
+//        role.setRoleId(1);
+//        role.setName(ERole.MAHASISWA);
+//        user.setRoles(Collections.singleton(role));
 //
-//        Authentication authentication = new UsernamePasswordAuthenticationToken(users.getUsername(), login.get("password"));
+//        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        String jwt = "jwtToken";
+//
+//        UserDetailsImpl userDetails = new UserDetailsImpl(user);
+//        List<String> roles = userDetails.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .collect(Collectors.toList());
+//
+//        JwtResponse expectedResponse = new JwtResponse(jwt, userDetails.getUserId(), userDetails.getUsername(),
+//                userDetails.getEmail(), roles);
+//        ResponseEntity<JwtResponse> expectedEntity = new ResponseEntity<>(expectedResponse, HttpStatus.OK);
+//
+//        // Mock the dependencies
+//        when(usersRepository.findUsersByEmail(email)).thenReturn(user);
 //        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
-//
-//        String jwt = "dummy-token";
 //        when(jwtUtils.generateJwtToken(authentication)).thenReturn(jwt);
 //
-//        UserDetailsImpl userDetails = new UserDetailsImpl(users);
-//        when(userDetails.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .collect(Collectors.toList()));
-//        when(authentication.getPrincipal()).thenReturn(userDetails);
+//        // Call the method under test
+//        ResponseEntity<JwtResponse> actualEntity = authController.authenticateUser(login);
 //
+//        // Verify the result
+//        assertEquals(expectedEntity.getStatusCode(), actualEntity.getStatusCode());
+//        assertEquals(expectedEntity.getBody(), actualEntity.getBody());
 //
-//        mockMvc.perform(post("/signin")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(asJsonString(login)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.token").value(jwt));
+//        // Verify the mock invocations
+//        verify(usersRepository, times(1)).findUsersByEmail(email);
+//        verify(authenticationManager, times(1)).authenticate(any(UsernamePasswordAuthenticationToken.class));
+//        verify(jwtUtils, times(1)).generateJwtToken(authentication);
 //    }
+
 }
 

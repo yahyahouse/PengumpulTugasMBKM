@@ -39,12 +39,11 @@ public class AdminController {
     @PostMapping(value = "/add-dosen")
     public ResponseEntity<MessageResponse> addDosen(
             @RequestParam("userId") Integer userId) {
-        Dosen dosen = dosenService.getDosenByUserId(userId);
         if (usersService.findByUserId(userId) == null) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("cannot find user!!"));
         }
-        if (dosen != null) {
+        if (dosenService.getDosenByUserId(userId)!= null) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("the lecturer already exists in the database!!"));
         }
@@ -65,11 +64,10 @@ public class AdminController {
             dosenService.deletDosenByDosenId(dosenId);
             return ResponseEntity.ok(new MessageResponse("Successfully delete Lecturer"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageResponse("Cannot delete lecturer with id" + dosenId));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageResponse("Cannot delete lecturer with id " + dosenId));
         }
 
     }
-
 
     @Operation(summary = "Get all users")
     @GetMapping(value = "/all-users")
