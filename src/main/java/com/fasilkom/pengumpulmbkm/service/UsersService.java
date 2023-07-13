@@ -1,8 +1,7 @@
 package com.fasilkom.pengumpulmbkm.service;
 
 
-import com.fasilkom.pengumpulmbkm.model.roles.Roles;
-import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
+
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import org.springframework.stereotype.Service;
 

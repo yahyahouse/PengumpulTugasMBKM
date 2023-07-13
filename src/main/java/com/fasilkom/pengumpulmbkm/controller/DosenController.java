@@ -1,6 +1,6 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
-import com.fasilkom.pengumpulmbkm.model.response.DosenResponse;
+
 import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
 import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
@@ -42,7 +42,6 @@ public class DosenController {
     private TugasAkhirService tugasAkhirService;
 
 
-
     @Operation(summary = "Verifikasi Laporan MBKM menjadi diterima")
     @PostMapping("/verifikasi-laporan-true/{laporanId}")
     public ResponseEntity<LaporanResponse> verifikasiLaporanTrue(
@@ -56,9 +55,9 @@ public class DosenController {
             laporan.setVerifikasi(true);
             laporan.setWaktuUpdate(Timestamp.valueOf(currentTime));
             laporanService.saveLaporan(laporan);
-            return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
+            return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
         } else
-            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK),HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
     }
 
@@ -78,7 +77,7 @@ public class DosenController {
             laporan.setWaktuUpdate(Timestamp.valueOf(currentTime));
             laporanService.saveLaporan(laporan);
 
-            return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
+            return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
         } else
             return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
@@ -90,16 +89,16 @@ public class DosenController {
     public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhirTrue(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             Authentication authentication) {
-        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
-        if (TA.getDosenId().getDosenId().equals(dosen.getDosenId())) {
+        if (ta.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             LocalDateTime currentTime = LocalDateTime.now();
-            TA.setVerifikasi(true);
-            TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
-            tugasAkhirService.saveTugasAkhir(TA);
+            ta.setVerifikasi(true);
+            ta.setWaktuUpdate(Timestamp.valueOf(currentTime));
+            tugasAkhirService.saveTugasAkhir(ta);
 
-            return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+            return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } else
             return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
@@ -112,17 +111,17 @@ public class DosenController {
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             @RequestParam("catatan") String catatan,
             Authentication authentication) {
-        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
-        if (TA.getDosenId().getDosenId().equals(dosen.getDosenId())) {
+        if (ta.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             LocalDateTime currentTime = LocalDateTime.now();
-            TA.setCatatan(catatan);
-            TA.setVerifikasi(false);
-            TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
-            tugasAkhirService.saveTugasAkhir(TA);
+            ta.setCatatan(catatan);
+            ta.setVerifikasi(false);
+            ta.setWaktuUpdate(Timestamp.valueOf(currentTime));
+            tugasAkhirService.saveTugasAkhir(ta);
 
-            return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+            return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } else
             return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
 
@@ -136,10 +135,10 @@ public class DosenController {
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
         List<Laporan> laporan = laporanService.findLaporanByDosenId(dosen.getDosenId());
-        List<LaporanResponse> TAGetResponse =
+        List<LaporanResponse> taGetResponse =
                 laporan.stream().map(LaporanResponse::new).collect(Collectors.toList());
 
-        return new ResponseEntity(TAGetResponse, HttpStatus.OK);
+        return new ResponseEntity(taGetResponse, HttpStatus.OK);
     }
 
     @Operation(summary = "menampilkan daftar Tugas AKhir berdasarkan userId dosen ")
@@ -148,11 +147,11 @@ public class DosenController {
             Authentication authentication) {
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
-        List<TugasAkhir> TA = tugasAkhirService.getTugasAkhirByDosenId(dosen.getDosenId());
-        List<TugasAkhirResponse> TAGetResponse =
-                TA.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
+        List<TugasAkhir> ta = tugasAkhirService.getTugasAkhirByDosenId(dosen.getDosenId());
+        List<TugasAkhirResponse> taGetResponse =
+                ta.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
 
-        return new ResponseEntity(TAGetResponse, HttpStatus.OK);
+        return new ResponseEntity(taGetResponse, HttpStatus.OK);
     }
 
     @Operation(summary = "menampilkan detail Laporan Tugas Akhir berdasarkan tugasAkhirId")
@@ -160,11 +159,11 @@ public class DosenController {
     public ResponseEntity<TugasAkhirResponse> getDetailTugasAkhirById(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             Authentication authentication) {
-        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
-        if (TA.getDosenId().getDosenId().equals(dosen.getDosenId())) {
-            return new ResponseEntity<>(new TugasAkhirResponse(TA), HttpStatus.OK);
+        if (ta.getDosenId().getDosenId().equals(dosen.getDosenId())) {
+            return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } else
             return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }

@@ -42,17 +42,17 @@ public class Users implements Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Column(name = "program_studi")
-    private Set<Prodi> programStudi = new HashSet<>();
+    private transient Set<Prodi> programStudi = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Column(name = "program_mbkm")
-    private Set<Program> programMBKM = new HashSet<>();
+    private transient Set<Program> programMBKM = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Roles> roles = new HashSet<>();
+    private transient Set<Roles> roles = new HashSet<>();
 
     public Users(String username, String email, String password) {
         this.username = username;

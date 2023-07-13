@@ -2,8 +2,7 @@ package com.fasilkom.pengumpulmbkm.repository;
 
 
 
-import com.fasilkom.pengumpulmbkm.model.roles.Prodi;
-import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
+
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

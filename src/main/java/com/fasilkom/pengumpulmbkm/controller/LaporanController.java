@@ -2,9 +2,7 @@ package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
 import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
-import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
-import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.service.DosenService;
@@ -17,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -89,10 +85,10 @@ public class LaporanController {
             Authentication authentication) {
         Users users = usersService.findByUsername(authentication.getName());
         List<Laporan> laporan = laporanService.findLaporanByUserId(users.getUserId());
-        List<LaporanResponse> TAGetResponse =
+        List<LaporanResponse> taGetResponse =
                 laporan.stream().map(LaporanResponse::new).collect(Collectors.toList());
 
-        return new ResponseEntity(TAGetResponse, HttpStatus.OK);
+        return new ResponseEntity(taGetResponse, HttpStatus.OK);
     }
 
     @Operation(summary = "menampilkan detail Laporan ")
@@ -103,7 +99,7 @@ public class LaporanController {
         Users users = usersService.findByUsername(authentication.getName());
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         if (laporan.getUserId().getUserId().equals(users.getUserId())) {
-            return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
+            return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
         } else
             return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }

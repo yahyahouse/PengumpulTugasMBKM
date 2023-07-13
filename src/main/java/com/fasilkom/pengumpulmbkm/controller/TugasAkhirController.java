@@ -58,22 +58,22 @@ public class TugasAkhirController {
             Authentication authentication) {
         try {
             Users user = usersService.findByUsername(authentication.getName());
-            TugasAkhir TA = new TugasAkhir();
+            TugasAkhir ta = new TugasAkhir();
             Users users = usersService.findByUserId(user.getUserId());
             Dosen dosen = dosenService.getDosenByDosenId(dosenId);
             LocalDateTime currentTime = LocalDateTime.now();
-            TA.setUserId(users);
-            TA.setDosenId(dosen);
-            TA.setSertifikat(sertifikat.getBytes());
-            TA.setLembarPengesahan(lembarPengesahan.getBytes());
-            TA.setNilai(nilai.getBytes());
-            TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
-            TA.setVerifikasi(null);
-            TA.setWaktuPengumpulan(Timestamp.valueOf(currentTime));
-            tugasAkhirService.saveTugasAkhir(TA);
+            ta.setUserId(users);
+            ta.setDosenId(dosen);
+            ta.setSertifikat(sertifikat.getBytes());
+            ta.setLembarPengesahan(lembarPengesahan.getBytes());
+            ta.setNilai(nilai.getBytes());
+            ta.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
+            ta.setVerifikasi(null);
+            ta.setWaktuPengumpulan(Timestamp.valueOf(currentTime));
+            tugasAkhirService.saveTugasAkhir(ta);
 
 
-            return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+            return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -91,24 +91,24 @@ public class TugasAkhirController {
     ) {
         try {
             LocalDateTime currentTime = LocalDateTime.now();
-            TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+            TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
             Users users = usersService.findByUsername(authentication.getName());
-            if (TA.getUserId().getUserId().equals(users.getUserId())) {
+            if (ta.getUserId().getUserId().equals(users.getUserId())) {
                 if (!sertifikat.isEmpty()) {
-                    TA.setSertifikat(sertifikat.getBytes());
+                    ta.setSertifikat(sertifikat.getBytes());
                 }
                 if (!lembarPengesahan.isEmpty()) {
-                    TA.setLembarPengesahan(lembarPengesahan.getBytes());
+                    ta.setLembarPengesahan(lembarPengesahan.getBytes());
                 }
                 if (!nilai.isEmpty()) {
-                    TA.setNilai(nilai.getBytes());
+                    ta.setNilai(nilai.getBytes());
                 }
                 if (!laporanTugasAkhir.isEmpty()) {
-                    TA.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
+                    ta.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
                 }
-                TA.setWaktuUpdate(Timestamp.valueOf(currentTime));
-                tugasAkhirService.saveTugasAkhir(TA);
-                return new ResponseEntity(new TugasAkhirResponse(TA), HttpStatus.OK);
+                ta.setWaktuUpdate(Timestamp.valueOf(currentTime));
+                tugasAkhirService.saveTugasAkhir(ta);
+                return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
             } else {
                 return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
             }
@@ -123,10 +123,10 @@ public class TugasAkhirController {
     public ResponseEntity<TugasAkhirGetDetailResponse> getTugasAkhirByid(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             Authentication authentication) {
-        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
-        if (TA.getUserId().getUserId().equals(users.getUserId())) {
-            return new ResponseEntity<>(new TugasAkhirGetDetailResponse(TA), HttpStatus.OK);
+        if (ta.getUserId().getUserId().equals(users.getUserId())) {
+            return new ResponseEntity<>(new TugasAkhirGetDetailResponse(ta), HttpStatus.OK);
         } else
             return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
     }
@@ -136,11 +136,11 @@ public class TugasAkhirController {
     public ResponseEntity<TugasAkhirResponse> getTugasAkhirByUserId(
             Authentication authentication) {
         Users users = usersService.findByUsername(authentication.getName());
-        List<TugasAkhir> TA = tugasAkhirService.getTugasAkhirByUserId(users.getUserId());
-        List<TugasAkhirResponse> TAGetResponse =
-                TA.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
+        List<TugasAkhir> ta = tugasAkhirService.getTugasAkhirByUserId(users.getUserId());
+        List<TugasAkhirResponse> taGetResponse =
+                ta.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
 
-        return new ResponseEntity(TAGetResponse, HttpStatus.OK);
+        return new ResponseEntity(taGetResponse, HttpStatus.OK);
     }
 
     @Operation(summary = "menampilkan file sertifikat")
@@ -148,9 +148,9 @@ public class TugasAkhirController {
     public ResponseEntity<Resource> displayFileSertifikat(
             @PathVariable Integer tugasAkhirId,
             Authentication authentication) {
-        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
-        if (TA.getUserId().getUserId().equals(users.getUserId())) {
+        if (ta.getUserId().getUserId().equals(users.getUserId())) {
             Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
             if (optionalDocument.isPresent()) {
                 TugasAkhir tugasAkhir = optionalDocument.get();
@@ -179,9 +179,9 @@ public class TugasAkhirController {
     public ResponseEntity<Resource> displayFileNilai(
             @PathVariable Integer tugasAkhirId,
             Authentication authentication) {
-        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
-        if (TA.getUserId().getUserId().equals(users.getUserId())) {
+        if (ta.getUserId().getUserId().equals(users.getUserId())) {
             Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
             if (optionalDocument.isPresent()) {
                 TugasAkhir tugasAkhir = optionalDocument.get();
@@ -210,9 +210,9 @@ public class TugasAkhirController {
     public ResponseEntity<Resource> displayFileLembarPengesahan(
             @PathVariable Integer tugasAkhirId,
             Authentication authentication) {
-        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
-        if (TA.getUserId().getUserId().equals(users.getUserId())) {
+        if (ta.getUserId().getUserId().equals(users.getUserId())) {
             Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
             if (optionalDocument.isPresent()) {
                 TugasAkhir tugasAkhir = optionalDocument.get();
@@ -241,9 +241,9 @@ public class TugasAkhirController {
     public ResponseEntity<Resource> displayFileTugasAkhir(
             @PathVariable Integer tugasAkhirId,
             Authentication authentication) {
-        TugasAkhir TA = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
-        if (TA.getUserId().getUserId().equals(users.getUserId())) {
+        if (ta.getUserId().getUserId().equals(users.getUserId())) {
             Optional<TugasAkhir> optionalDocument = Optional.ofNullable(tugasAkhirService.findByTugasAkhirId(tugasAkhirId));
             if (optionalDocument.isPresent()) {
                 TugasAkhir tugasAkhir = optionalDocument.get();

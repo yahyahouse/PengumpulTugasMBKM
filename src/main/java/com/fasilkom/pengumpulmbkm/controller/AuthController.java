@@ -36,8 +36,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.fasilkom.pengumpulmbkm.model.Info.*;
-
 @Tag(name = "Auth", description = "API for processing various operations with Auth entity")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -147,7 +145,7 @@ public class AuthController {
 
         if (strProdi == null) {
             Prodi prodi = prodiRepository.findByName(EProdi.TI)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                    .orElseThrow(() -> new RuntimeException("Error: Program Studi is not found"));
             enumProdi.add(prodi);
         } else {
             strProdi.forEach(prodi -> {
@@ -163,7 +161,7 @@ public class AuthController {
 
         if (strProgram == null) {
             Program program = programRepository.findByName(EProgram.BANGKIT)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                    .orElseThrow(() -> new RuntimeException("Error: Program MBKM is not found"));
             enumProgram.add(program);
         } else {
             strProgram.forEach(program -> {

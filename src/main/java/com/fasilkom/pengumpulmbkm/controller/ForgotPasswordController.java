@@ -9,15 +9,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static com.fasilkom.pengumpulmbkm.model.Info.*;
 
@@ -41,7 +38,7 @@ public class ForgotPasswordController {
             recoveryService.createRecoveryToken(user);
             model.addAttribute("message", "Email reset password telah dikirim ke " + email);
 
-            return new ResponseEntity(new MessageResponse(RECOVERY_SUCCESS),HttpStatus.OK);
+            return new ResponseEntity(new MessageResponse(RECOVERY_SUCCESS), HttpStatus.OK);
         } else {
             return new ResponseEntity(new MessageResponse(EMAIL_NOT_FOUND), HttpStatus.NOT_FOUND);
         }

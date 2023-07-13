@@ -1,6 +1,6 @@
 package com.fasilkom.pengumpulmbkm.repository;
 
-import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
+
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

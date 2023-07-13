@@ -1,9 +1,6 @@
 package com.fasilkom.pengumpulmbkm.model.response;
 
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
-import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
-import com.fasilkom.pengumpulmbkm.model.users.Dosen;
-import com.fasilkom.pengumpulmbkm.model.users.Users;
 import lombok.Data;
 
 import java.sql.Timestamp;

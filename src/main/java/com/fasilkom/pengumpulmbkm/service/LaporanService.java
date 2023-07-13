@@ -1,7 +1,6 @@
 package com.fasilkom.pengumpulmbkm.service;
 
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
-import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

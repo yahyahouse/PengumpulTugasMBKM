@@ -1,7 +1,6 @@
 package com.fasilkom.pengumpulmbkm.service;
 
 import com.fasilkom.pengumpulmbkm.model.AccountRecoveryToken;
-import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 
 import java.time.LocalDateTime;

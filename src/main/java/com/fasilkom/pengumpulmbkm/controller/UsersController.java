@@ -2,13 +2,10 @@ package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.model.response.DosenResponse;
 import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
-import com.fasilkom.pengumpulmbkm.model.response.ProfileResponse;
 import com.fasilkom.pengumpulmbkm.model.response.UsersResponse;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.service.DosenService;
-import com.fasilkom.pengumpulmbkm.service.LaporanService;
-import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -98,7 +95,7 @@ public class UsersController {
     @GetMapping(value = "/detail-profil-dosen/{dosenId}")
     public ResponseEntity<DosenResponse> getDetailDosenByDosenId(@PathVariable("dosenId") Integer dosenId) {
         Dosen dosen = dosenService.getDosenByDosenId(dosenId);
-        if (dosen.getDosenId() == null){
+        if (dosen.getDosenId() == null) {
             return new ResponseEntity("Not Found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new DosenResponse(dosen), HttpStatus.OK);

@@ -1,15 +1,11 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
-import com.fasilkom.pengumpulmbkm.model.UserDetailsImpl;
-import com.fasilkom.pengumpulmbkm.model.enumeration.ERole;
+
 import com.fasilkom.pengumpulmbkm.model.response.*;
-import com.fasilkom.pengumpulmbkm.model.roles.Roles;
 import com.fasilkom.pengumpulmbkm.model.tugas.Laporan;
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
-import com.fasilkom.pengumpulmbkm.repository.RoleRepository;
-import com.fasilkom.pengumpulmbkm.repository.TugasAkhirRepository;
 import com.fasilkom.pengumpulmbkm.service.DosenService;
 import com.fasilkom.pengumpulmbkm.service.LaporanService;
 import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
@@ -20,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Tag(name = "Admin", description = "API for processing various operations with Dosen entity")
@@ -38,8 +32,6 @@ public class AdminController {
     private LaporanService laporanService;
     @Autowired
     private TugasAkhirService tugasAkhirService;
-    @Autowired
-    private RoleRepository roleRepository;
 
 
 
@@ -100,10 +92,10 @@ public class AdminController {
     @Operation(summary = "Get all Tugas Akhir")
     @GetMapping(value = "/all-tugas-akhir")
     public ResponseEntity<List<TugasAkhirResponse>> getAllTugasAkhir() {
-        List<TugasAkhir> TAs = tugasAkhirService.getAllTugasAkhir();
-        List<TugasAkhirResponse> TA =
-                TAs.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
-        return new ResponseEntity<>(TA, HttpStatus.OK);
+        List<TugasAkhir> tas = tugasAkhirService.getAllTugasAkhir();
+        List<TugasAkhirResponse> ta =
+                tas.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
+        return new ResponseEntity<>(ta, HttpStatus.OK);
     }
 
     @Operation(summary = "Get detail Tugas Akhir")
