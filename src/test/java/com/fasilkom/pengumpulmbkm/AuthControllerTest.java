@@ -21,6 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +57,16 @@ public class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @Mock
     private EnumConfig enumConfig;
 
     @MockBean
     private UsersRepository usersRepository;
     @MockBean
     private UsersService usersService;
-    @Autowired
+    @Mock
     AuthenticationManager authenticationManager;
-    @Autowired
+    @Mock
     JwtUtils jwtUtils;
     @MockBean
     private RoleRepository roleRepository;

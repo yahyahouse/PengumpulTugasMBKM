@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +44,15 @@ import static org.mockito.Mockito.*;
 public class AdminControllerTest {
     @InjectMocks
     private AdminController adminController;
-    @Autowired
+    @Mock
     private MockMvc mockMvc;
-    @MockBean
+    @Mock
     private DosenService dosenService;
-    @MockBean
+    @Mock
     private UsersService usersService;
-    @MockBean
+    @Mock
     private LaporanService laporanService;
-    @MockBean
+    @Mock
     private TugasAkhirService tugasAkhirService;
 
     @BeforeEach
