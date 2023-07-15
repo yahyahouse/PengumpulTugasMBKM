@@ -86,7 +86,7 @@ public class AuthControllerTest {
         SignupRequest request = new SignupRequest();
         request.setUsername("userTest");
         request.setEmail("userTest@gmail.com");
-        request.setNamaLengkap("userTestLengkap");
+        request.setNamaLengkap("userTest");
         request.setPassword("userTest");
         request.setRole(Collections.singleton(ERole.MAHASISWA.name()));
         request.setProdi(Collections.singleton(EProdi.TI.name()));

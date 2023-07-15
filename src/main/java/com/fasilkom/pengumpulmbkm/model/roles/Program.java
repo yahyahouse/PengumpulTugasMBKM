@@ -13,7 +13,7 @@ public class Program {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer roleProgramId;
+    private Integer programId;
 
     @Enumerated(EnumType.STRING)
     @Column(length =20)

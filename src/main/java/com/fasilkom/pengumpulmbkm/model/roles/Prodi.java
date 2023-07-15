@@ -13,7 +13,7 @@ public class Prodi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer roleProdiId;
+    private Integer prodiId;
 
     @Enumerated(EnumType.STRING)
     @Column(length =20)
