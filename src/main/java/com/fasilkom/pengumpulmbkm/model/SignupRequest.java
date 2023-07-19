@@ -35,4 +35,8 @@ public class SignupRequest {
     @Size(min = 10, max = 50)
     private String namaLengkap;
 
+    @NotBlank
+    @Size(min = 10, max = 50)
+    private String npm;
+
 }

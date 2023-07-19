@@ -105,7 +105,8 @@ public class AuthController {
                     "\"password\":\"userTest\"," +
                     "\"role\":[\"DOSEN\", \"MAHASISWA\", \"ADMIN\"]," +
                     "\"prodi\":[\"TI\"]," +
-                    "\"program\":[\"BANGKIT\"]" +
+                    "\"program\":[\"BANGKIT\"]," +
+                    "\"npm\": 12345" +
                     "}")
             @RequestBody SignupRequest signupRequest) {
         Boolean usernameExist = usersRepository.existsByUsername(signupRequest.getUsername());
@@ -174,6 +175,7 @@ public class AuthController {
         users.setProgramStudi(enumProdi);
         users.setNamaLengkap(signupRequest.getNamaLengkap());
         users.setProgramMBKM(enumProgram);
+        users.setNpm(signupRequest.getNpm());
         usersRepository.save(users);
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
 
