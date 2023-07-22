@@ -10,6 +10,8 @@ import com.fasilkom.pengumpulmbkm.service.DosenService;
 import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -48,7 +50,7 @@ public class TugasAkhirController {
     private TugasAkhirService tugasAkhirService;
 
     @Operation(summary = "Upload Tugas Akhir")
-    @PostMapping("/upload-tugas-akhir")
+    @PostMapping(value = "/upload-tugas-akhir",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TugasAkhirResponse> uploadTugasAkhir(
             @RequestParam("dosenId") Integer dosenId,
             @RequestParam("sertifikat") MultipartFile sertifikat,
@@ -80,7 +82,7 @@ public class TugasAkhirController {
     }
 
     @Operation(summary = "Update Laporan Tugas Akhir")
-    @PutMapping("/update-tugas-akhir/{tugasAkhirId}")
+    @PutMapping(value = "/update-tugas-akhir/{tugasAkhirId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TugasAkhirResponse> updateTugasAkhir(
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             @RequestParam("sertifikat") MultipartFile sertifikat,

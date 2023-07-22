@@ -16,10 +16,15 @@ import com.fasilkom.pengumpulmbkm.repository.ProgramRepository;
 import com.fasilkom.pengumpulmbkm.repository.RoleRepository;
 import com.fasilkom.pengumpulmbkm.repository.UsersRepository;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -65,36 +70,63 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Operation(summary = "Login ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login successful",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = JwtResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class)))
+    })
     @PostMapping("/signin")
-    public ResponseEntity<JwtResponse> authenticateUser(
+    public ResponseEntity<?> authenticateUser(
             @Schema(example = "{" +
                     "\"email\":\"userTest@gmail.com\"," +
                     "\"password\":\"userTest\"" +
                     "}")
             @RequestBody Map<String, Object> login) {
-
-        if (usersRepository.findUsersByEmail(login.get("email").toString()) == null) {
-            return new ResponseEntity(new MessageResponse("Account Not Found"), HttpStatus.NOT_FOUND);
-        }
+        try {
         Users users = usersRepository.findUsersByEmail(login.get("email").toString());
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(users.getUsername(), login.get("password")));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+        if (users == null) {
+            MessageResponse messageResponse = new MessageResponse("Account Not Found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageResponse);
+        }
 
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getUserId(), userDetails.getUsername(), userDetails.getEmail(),
-                roles));
+
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(users.getUsername(), login.get("password")));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
+
+            JwtResponse jwtResponse = new JwtResponse(jwt,
+                    userDetails.getUserId(), userDetails.getUsername(), userDetails.getEmail(),
+                    roles);
+
+            return ResponseEntity.ok(jwtResponse);
+        } catch (Exception e) {
+            MessageResponse messageResponse = new MessageResponse("Internal server error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageResponse);
+        }
     }
 
+
+    @Operation(summary = "Sign up new user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User registered successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class)))
+    })
     @PostMapping("/signup")
     public ResponseEntity<MessageResponse> registerUser(
             @Valid
