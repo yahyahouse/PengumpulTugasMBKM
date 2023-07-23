@@ -4,10 +4,8 @@ package com.fasilkom.pengumpulmbkm.controller;
 import com.fasilkom.pengumpulmbkm.config.JwtUtils;
 import com.fasilkom.pengumpulmbkm.model.*;
 import com.fasilkom.pengumpulmbkm.model.enumeration.EProdi;
-import com.fasilkom.pengumpulmbkm.model.enumeration.EProgram;
 import com.fasilkom.pengumpulmbkm.model.enumeration.ERole;
 import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
-import com.fasilkom.pengumpulmbkm.model.roles.Program;
 import com.fasilkom.pengumpulmbkm.model.roles.Roles;
 import com.fasilkom.pengumpulmbkm.model.roles.Prodi;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
@@ -41,7 +39,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Tag(name = "Auth", description = "API for processing various operations with Auth entity")
+@Tag(name = "Auth", description = "API untuk memproses berbagai operasi untuk dapat mengakses sistem")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -70,7 +68,7 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @Operation(summary = "Login ")
+    @Operation(summary = "Login untuk dapat mengakses sisetem")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Login successful",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = JwtResponse.class))),
@@ -118,7 +116,7 @@ public class AuthController {
     }
 
 
-    @Operation(summary = "Sign up new user")
+    @Operation(summary = "Registrasi akun baru")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User registered successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
@@ -133,12 +131,11 @@ public class AuthController {
             @Schema(example = "{" +
                     "\"username\":\"userTest\"," +
                     "\"email\":\"userTest@gmail.com\"," +
-                    "\"namaLengakap\":\"userTestLengkap\"," +
+                    "\"namaLengkap\":\"userTestLengkap\"," +
                     "\"password\":\"userTest\"," +
                     "\"role\":[\"DOSEN\", \"MAHASISWA\", \"ADMIN\"]," +
                     "\"prodi\":[\"TI\"]," +
-                    "\"program\":[\"BANGKIT\"]," +
-                    "\"npm\": 12345" +
+                    "\"npm\": 1234567891011" +
                     "}")
             @RequestBody SignupRequest signupRequest) {
         Boolean usernameExist = usersRepository.existsByUsername(signupRequest.getUsername());
@@ -188,25 +185,9 @@ public class AuthController {
             });
         }
 
-        //untuk program
-        Set<String> strProgram = signupRequest.getProgram();
-        Set<Program> enumProgram = new HashSet<>();
-
-        if (strProgram == null) {
-            Program program = programRepository.findByName(EProgram.BANGKIT)
-                    .orElseThrow(() -> new RuntimeException("Error: Program MBKM is not found"));
-            enumProgram.add(program);
-        } else {
-            strProgram.forEach(program -> {
-                Program program1 = programRepository.findByName(EProgram.valueOf(program))
-                        .orElseThrow(() -> new RuntimeException("Error: Role " + program + " is not found"));
-                enumProgram.add(program1);
-            });
-        }
         users.setRoles(roles);
         users.setProgramStudi(enumProdi);
         users.setNamaLengkap(signupRequest.getNamaLengkap());
-        users.setProgramMBKM(enumProgram);
         users.setNpm(signupRequest.getNpm());
         usersRepository.save(users);
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));

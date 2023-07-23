@@ -31,7 +31,6 @@ public class UsersResponse {
         this.noHp = users.getNoHp();
         this.role = users.getRoles();
         this.prodi = users.getProgramStudi();
-        this.program = users.getProgramMBKM();
 
     }
 }

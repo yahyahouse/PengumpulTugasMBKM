@@ -9,20 +9,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class EnumProdiConfig {
+public class ProdiConfig {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EnumProdiConfig.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProdiConfig.class);
 
-    EnumProdiConfig(ProdiRepository prodiRepository) {
+    ProdiConfig(ProdiRepository prodiRepository) {
 
-        LOG.info("Test Prodi run");
+        LOG.info("Test Program Studi run");
         for (EProdi p: EProdi.values()) {
             try {
                 Prodi rolesProdi = prodiRepository.findByName(p)
                         .orElseThrow(() -> new RuntimeException("Roles not found"));
-                LOG.info("Role {} has been found!", rolesProdi.getName());
+                LOG.info("Prodi {} has been found!", rolesProdi.getName());
             } catch(RuntimeException rte) {
-                LOG.info("Role {} is not found, inserting to DB . . .", p.name());
+                LOG.info("Prodi {} is not found, inserting to DB . . .", p.name());
                 Prodi rolesProdi = new Prodi();
                 rolesProdi.setName(p);
                 prodiRepository.save(rolesProdi);

@@ -6,8 +6,16 @@ import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.service.AccountRecoveryService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +26,8 @@ import java.time.LocalDateTime;
 
 import static com.fasilkom.pengumpulmbkm.model.Info.*;
 
+@Tag(name = "Reset Password", description = "API for reset password user")
+@Order(2)
 @Controller
 @RequestMapping("/account-recovery")
 public class ForgotPasswordController {
@@ -31,8 +41,16 @@ public class ForgotPasswordController {
     private AccountRecoveryService recoveryService;
 
     @Operation(summary = "membuat token yang dikirimkan ke email untuk melakukan reset password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class)))
+    })
     @PostMapping("/create-token")
-    public ResponseEntity<String> createRecoveryToken(@RequestParam String email, Model model) {
+    public ResponseEntity<String> createRecoveryToken(
+            @Parameter(description = "Email untuk mengirimkan recoverty token", example = "user@email.com")
+            @RequestParam String email, Model model) {
         Users user = usersService.findByEmail(email);
         if (user != null) {
             recoveryService.createRecoveryToken(user);
@@ -56,9 +74,13 @@ public class ForgotPasswordController {
 
     @Operation(summary = "Melakukan reset password ketika sudah mendapatkan token")
     @PostMapping("/reset-password/{token}")
-    public ResponseEntity<String> resetPassword(@PathVariable("token") String token,
-                                                @RequestParam("password") String newPassword,
-                                                @RequestParam("passwordRetype") String newPasswordRetype) {
+    public ResponseEntity<String> resetPassword(
+            @Parameter(description = "Token yang berasal dari email")
+            @PathVariable("token") String token,
+            @Parameter(description = "masukan password baru")
+            @RequestParam("password") String newPassword,
+            @Parameter(description = "ulangi pengetikan password baru")
+            @RequestParam("passwordRetype") String newPasswordRetype) {
         AccountRecoveryToken accountRecoveryToken = recoveryService.getRecoveryTokenByToken(token);
 
         if (accountRecoveryToken == null) {

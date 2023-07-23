@@ -13,9 +13,10 @@ public class Prodi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "prodi_id")
     private Integer prodiId;
 
     @Enumerated(EnumType.STRING)
-    @Column(length =20)
+    @Column(name = "name",length =20)
     private EProdi name;
 }

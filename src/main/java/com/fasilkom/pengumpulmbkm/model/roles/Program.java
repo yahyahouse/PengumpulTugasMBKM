@@ -13,9 +13,10 @@ public class Program {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "program_id")
     private Integer programId;
 
     @Enumerated(EnumType.STRING)
-    @Column(length =20)
+    @Column(name = "name",length =20)
     private EProgram name;
 }

@@ -47,11 +47,6 @@ public class Users implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "prodi_id"))
     private Set<Prodi> programStudi = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_program_mbkm",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "program_id"))
-    private Set<Program> programMBKM = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",

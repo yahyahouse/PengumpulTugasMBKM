@@ -1,6 +1,7 @@
 package com.fasilkom.pengumpulmbkm.model.tugas;
 
 
+import com.fasilkom.pengumpulmbkm.model.roles.Program;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import lombok.Data;
@@ -27,6 +28,10 @@ public class TugasAkhir implements Serializable {
     @NotBlank(message = "Dosen is required")
     @JoinColumn(name = "dosen_id")
     private Dosen dosenId;
+
+    @ManyToOne
+    @JoinColumn(name = "program_id")
+    private Program programId;
 
     @Lob
     @NotBlank(message = "Sertifikat is required")

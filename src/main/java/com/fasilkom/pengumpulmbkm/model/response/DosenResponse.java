@@ -29,7 +29,6 @@ public class DosenResponse {
         this.email = dosen.getUserId().getEmail();
         this.role = dosen.getUserId().getRoles();
         this.prodi = dosen.getUserId().getProgramStudi();
-        this.program = dosen.getUserId().getProgramMBKM();
         this.noHp = dosen.getUserId().getNoHp();
     }
 }

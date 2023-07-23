@@ -29,7 +29,7 @@ public class AccountRecoveryServiceImpl implements AccountRecoveryService {
         recoveryToken.setToken(generateToken());
         recoveryToken.setExpirationDate(calculateExpirationDate());
         recoveryTokenRepository.save(recoveryToken);
-        String resetPasswordUrl = "http://localhost:8080/account-recovery/reset-password/" + recoveryToken.getToken();
+        String resetPasswordUrl = recoveryToken.getToken();
         sendResetPasswordEmail(user.getEmail(), resetPasswordUrl);
     }
 
@@ -37,7 +37,13 @@ public class AccountRecoveryServiceImpl implements AccountRecoveryService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject("Reset Password");
-        message.setText("Silakan kunjungi tautan berikut untuk mereset password Anda: " + resetPasswordUrl);
+        message.setText("We have received a request to reset the password for your account. To proceed with the password reset, please click on the link below:\n" +
+                "\n" +
+                "Reset Password: \n" + resetPasswordUrl+
+                "\n" +
+                "Please note that this link will expire in [Insert Expiry Time, e.g., 24 hours].\n" +
+                "\n" +
+                "If you did not request this password reset or believe this is an unauthorized attempt, please ignore this email. Your account will remain secure.  " );
         emailSender.send(message);
     }
 

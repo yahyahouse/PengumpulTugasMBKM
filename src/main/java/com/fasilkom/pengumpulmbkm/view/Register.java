@@ -99,27 +99,6 @@ public class Register extends JDialog{
             jsonPayload = jsonPayload.substring(0, jsonPayload.length() - 1);
         }
 
-        jsonPayload += "]," +
-                "\"program\":[";
-
-
-        int programMBKM = comboBox1.getSelectedIndex();
-        if (programMBKM == 0) {
-            jsonPayload += "\"BANGKIT\",";
-        }
-        if (programMBKM == 1){
-            jsonPayload += "\"STUDIINDEPENDEN\",";
-        }
-        if (programMBKM == 2){
-            jsonPayload += "\"MAGANG\",";
-        }
-        if (programMBKM == 3){
-            jsonPayload += "\"MENAGAJAR\",";
-        }
-        // Remove the trailing comma if any
-        if (jsonPayload.endsWith(",")) {
-            jsonPayload = jsonPayload.substring(0, jsonPayload.length() - 1);
-        }
 
         jsonPayload += "]" +
                 "}";

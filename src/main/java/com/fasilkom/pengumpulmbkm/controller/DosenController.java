@@ -13,9 +13,16 @@ import com.fasilkom.pengumpulmbkm.service.LaporanService;
 import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +35,7 @@ import java.util.stream.Collectors;
 import static com.fasilkom.pengumpulmbkm.model.Info.AKSES_DITOLAK;
 
 @Tag(name = "Dosen", description = "API for processing various operations with Dosen entity")
+@Order(6)
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/dosen")
@@ -43,8 +51,17 @@ public class DosenController {
 
 
     @Operation(summary = "Verifikasi Laporan MBKM menjadi diterima")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = LaporanResponse.class))),
+            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @PostMapping("/verifikasi-laporan-true/{laporanId}")
     public ResponseEntity<LaporanResponse> verifikasiLaporanTrue(
+            @Parameter(description = "ID Laporan yang ingin diverifikasi", example = "123")
             @PathVariable("laporanId") Integer laporanId,
             Authentication authentication) {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
@@ -62,9 +79,19 @@ public class DosenController {
     }
 
     @Operation(summary = "Verifikasi Laporan MBKM menjadi ditolak")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = LaporanResponse.class))),
+            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @PostMapping("/verifikasi-laporan-false/{laporanId}")
     public ResponseEntity<LaporanResponse> verifikasiLaporanFalse(
+            @Parameter(description = "ID Laporan yang ingin diverifikasi", example = "123")
             @PathVariable("laporanId") Integer laporanId,
+            @Parameter(description = "menambahkan catatan", example = "laporan sama seperti sebelumnya")
             @RequestParam("catatan") String catatan,
             Authentication authentication) {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
@@ -85,8 +112,17 @@ public class DosenController {
     }
 
     @Operation(summary = "Verifikasi Tugas Akhir MBKM menjadi di terima")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = TugasAkhirResponse.class))),
+            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @PostMapping("/verifikasi-tugas-akhir-true/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhirTrue(
+            @Parameter(description = "ID Tugas Akhir yang ingin diverifikasi", example = "123")
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             Authentication authentication) {
         TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
@@ -97,7 +133,6 @@ public class DosenController {
             ta.setVerifikasi(true);
             ta.setWaktuUpdate(Timestamp.valueOf(currentTime));
             tugasAkhirService.saveTugasAkhir(ta);
-
             return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } else
             return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
@@ -106,9 +141,19 @@ public class DosenController {
     }
 
     @Operation(summary = "Verifikasi Tugas Akhir MBKM menjadi ditolak")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = TugasAkhirResponse.class))),
+            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @PostMapping("/verifikasi-tugas-akhir-false/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhirFalse(
+            @Parameter(description = "ID Tugas Akhir yang ingin diverifikasi", example = "123")
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
+            @Parameter(description = "menambahakan catatan", example = "gambar pada file laporan tidak jelas")
             @RequestParam("catatan") String catatan,
             Authentication authentication) {
         TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
@@ -129,6 +174,11 @@ public class DosenController {
     }
 
     @Operation(summary = "menampilkan daftar Laporan berdasarkan userId dosen ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = TugasAkhirResponse.class)))
+    })
     @GetMapping("/list-laporan")
     public ResponseEntity<LaporanResponse> getLaporanByUserId(
             Authentication authentication) {
@@ -141,7 +191,12 @@ public class DosenController {
         return new ResponseEntity(taGetResponse, HttpStatus.OK);
     }
 
-    @Operation(summary = "menampilkan daftar Tugas AKhir berdasarkan userId dosen ")
+    @Operation(summary = "menampilkan daftar Tugas Akhir berdasarkan userId dosen ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = TugasAkhirResponse.class)))
+    })
     @GetMapping("/list-tugas-akhir")
     public ResponseEntity<TugasAkhirResponse> getTugasAkhirByUserId(
             Authentication authentication) {
@@ -155,13 +210,28 @@ public class DosenController {
     }
 
     @Operation(summary = "menampilkan detail Laporan Tugas Akhir berdasarkan tugasAkhirId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = TugasAkhirResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @GetMapping("/detail-tugas-akhir/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> getDetailTugasAkhirById(
+            @Parameter(description = "ID Tugas Akhir yang ingin ditampilkan", example = "123")
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             Authentication authentication) {
         TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (ta == null) {
+            return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
+        }
         if (ta.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } else
@@ -169,8 +239,20 @@ public class DosenController {
     }
 
     @Operation(summary = "menampilkan detail Laporan berdasarkan laporanId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = LaporanResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @GetMapping("/detail-laporan/{laporanId}")
     public ResponseEntity<LaporanResponse> getDetailLaporanById(
+            @Parameter(description = "ID Tugas Akhir yang ingin ditampilkan", example = "123")
             @PathVariable("laporanId") Integer laporanId,
             Authentication authentication) {
         Laporan laporan = laporanService.findByLaporanId(laporanId);

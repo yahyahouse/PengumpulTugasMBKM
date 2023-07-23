@@ -29,7 +29,6 @@ public class ProfileResponse {
         this.noHp = users.getNoHp();
         this.role = users.getRoles();
         this.prodi = users.getProgramStudi();
-        this.program = users.getProgramMBKM();
 
     }
 }
