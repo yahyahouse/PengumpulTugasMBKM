@@ -133,9 +133,9 @@ public class AuthController {
                     "\"email\":\"userTest@gmail.com\"," +
                     "\"namaLengkap\":\"userTestLengkap\"," +
                     "\"password\":\"userTest\"," +
+                    "\"npm\":\"1234567891011\"," +
                     "\"role\":[\"DOSEN\", \"MAHASISWA\", \"ADMIN\"]," +
-                    "\"prodi\":[\"TI\"]," +
-                    "\"npm\": 1234567891011" +
+                    "\"prodi\":[\"TI\"]" +
                     "}")
             @RequestBody SignupRequest signupRequest) {
         Boolean usernameExist = usersRepository.existsByUsername(signupRequest.getUsername());
