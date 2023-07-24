@@ -20,15 +20,6 @@ public class Login extends JDialog{
     private JPanel loginPanel;
     private JButton lupaPasswordButton;
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Login login = new Login(null);
-                login.setVisible(true);
-            }
-        });
-    }
     public Login(JFrame parent) {
         super(parent);
         setTitle("Login");
