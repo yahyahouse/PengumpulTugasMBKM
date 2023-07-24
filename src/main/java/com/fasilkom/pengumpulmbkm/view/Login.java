@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
 
 public class Login extends JDialog{
     private JTextField emailTextField;
@@ -19,6 +18,7 @@ public class Login extends JDialog{
     private JButton loginButton;
     private JButton registrasiButton;
     private JPanel loginPanel;
+    private JButton lupaPasswordButton;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -52,6 +52,13 @@ public class Login extends JDialog{
             public void actionPerformed(ActionEvent e) {
                 Register register = new Register(null);
                 register.setVisible(true);
+            }
+        });
+        lupaPasswordButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LupaPassword lupaPassword = new LupaPassword(null);
+                lupaPassword.setVisible(true);
             }
         });
     }

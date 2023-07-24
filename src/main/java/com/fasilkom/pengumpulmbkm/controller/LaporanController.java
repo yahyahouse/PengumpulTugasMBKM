@@ -12,10 +12,15 @@ import com.fasilkom.pengumpulmbkm.service.ProgramService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +49,11 @@ public class LaporanController {
     private ProgramService programService;
 
     @Operation(summary = "Upload Laporan")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = LaporanResponse.class)))
+    })
     @PostMapping("/upload-laporan")
     public ResponseEntity<LaporanResponse> uploadLaporan(
             @Parameter(description = "Masukan ID dosen sesuai dengan SK", example = "123")
@@ -71,6 +81,17 @@ public class LaporanController {
     }
 
     @Operation(summary = "Update Laporan ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = LaporanResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @PostMapping("/update-laporan/{laporanId}")
     public ResponseEntity<LaporanResponse> updatelaporan(
             @Parameter(description = "ID Tugas Akhir yang ingin ditampilkan", example = "123")
@@ -83,6 +104,9 @@ public class LaporanController {
     ) {
         LocalDateTime currentTime = LocalDateTime.now();
         Laporan laporanSave = laporanService.findByLaporanId(laporanId);
+        if (laporanSave==null){
+            return new ResponseEntity(new MessageResponse("Not Found"),HttpStatus.NOT_FOUND);
+        }
         Users users = usersService.findByUsername(authentication.getName());
         if (laporanSave.getUserId().getUserId().equals(users.getUserId())) {
             if (programId !=null){
@@ -100,6 +124,11 @@ public class LaporanController {
     }
 
     @Operation(summary = "menampilkan daftar Laporan berdasarkan userId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = LaporanResponse.class)))
+    })
     @GetMapping("/list-laporan")
     public ResponseEntity<LaporanResponse> getLaporanByUserId(
             Authentication authentication) {
@@ -112,6 +141,17 @@ public class LaporanController {
     }
 
     @Operation(summary = "menampilkan detail Laporan ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = LaporanResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @GetMapping("/detail-laporan/{laporanId}")
     public ResponseEntity<LaporanResponse> getLaporanByid(
             @Parameter(description = "ID laporan untuk mendapatkan laporan", example = "123")
@@ -119,6 +159,9 @@ public class LaporanController {
             Authentication authentication) {
         Users users = usersService.findByUsername(authentication.getName());
         Laporan laporan = laporanService.findByLaporanId(laporanId);
+        if (laporan==null){
+            return new ResponseEntity(new MessageResponse("Not Found"),HttpStatus.NOT_FOUND);
+        }
         if (laporan.getUserId().getUserId().equals(users.getUserId())) {
             return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
         } else

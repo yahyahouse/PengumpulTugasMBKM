@@ -27,21 +27,21 @@ public class LaporanAdmin extends JDialog {
     private JButton closeButton;
     private JPanel laporanPanel;
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                LaporanAdmin laporanAdmin = null;
-                try {
-                    laporanAdmin = new LaporanAdmin(null);
-                    laporanAdmin.setVisible(true);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-            }
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                LaporanAdmin laporanAdmin = null;
+//                try {
+//                    laporanAdmin = new LaporanAdmin(null);
+//                    laporanAdmin.setVisible(true);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//            }
+//        });
+//    }
 
     public LaporanAdmin(JFrame parent) throws IOException {
         setTitle("Laporan");

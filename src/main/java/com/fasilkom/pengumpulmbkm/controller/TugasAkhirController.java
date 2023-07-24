@@ -1,5 +1,6 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
+import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
 import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirGetDetailResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
@@ -14,6 +15,9 @@ import com.fasilkom.pengumpulmbkm.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -55,6 +59,14 @@ public class TugasAkhirController {
     private TugasAkhirService tugasAkhirService;
 
     @Operation(summary = "Upload Tugas Akhir")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = TugasAkhirResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @PostMapping(value = "/upload-tugas-akhir", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TugasAkhirResponse> uploadTugasAkhir(
             @Parameter(description = "ID Dosen sesuai dengan SK", example = "123")
@@ -87,15 +99,24 @@ public class TugasAkhirController {
             ta.setVerifikasi(null);
             ta.setWaktuPengumpulan(Timestamp.valueOf(currentTime));
             tugasAkhirService.saveTugasAkhir(ta);
-
-
             return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new MessageResponse("Error {} "+e),HttpStatus.BAD_REQUEST);
         }
     }
 
     @Operation(summary = "Update Laporan Tugas Akhir")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = TugasAkhirResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @PutMapping(value = "/update-tugas-akhir/{tugasAkhirId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TugasAkhirResponse> updateTugasAkhir(
             @Parameter(description = "ID tugas akhir yang diupdate", example = "123")
@@ -138,18 +159,32 @@ public class TugasAkhirController {
                 return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
             }
         } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new MessageResponse("Error {} "+e),HttpStatus.BAD_REQUEST);
         }
 
     }
 
     @Operation(summary = "menampilkan detail Laporan Tugas Akhir berdasarkan tugasAkhirId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = TugasAkhirResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class)))
+    })
     @GetMapping("/detail-tugas-akhir/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirGetDetailResponse> getTugasAkhirByid(
             @Parameter(description = "ID tugas akhir ")
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             Authentication authentication) {
         TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        if (ta == null){
+            return new ResponseEntity(new MessageResponse("Not Found"),HttpStatus.NOT_FOUND);
+        }
         Users users = usersService.findByUsername(authentication.getName());
         if (ta.getUserId().getUserId().equals(users.getUserId())) {
             return new ResponseEntity<>(new TugasAkhirGetDetailResponse(ta), HttpStatus.OK);
@@ -158,6 +193,11 @@ public class TugasAkhirController {
     }
 
     @Operation(summary = "menampilkan daftar laporan sesuai season login ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = TugasAkhirResponse.class))),
+    })
     @GetMapping("/list-tugas-akhir")
     public ResponseEntity<TugasAkhirResponse> getTugasAkhirByUserId(
             Authentication authentication) {

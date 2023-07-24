@@ -37,13 +37,13 @@ public class AccountRecoveryServiceImpl implements AccountRecoveryService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject("Reset Password");
-        message.setText("We have received a request to reset the password for your account. To proceed with the password reset, please click on the link below:\n" +
+        message.setText("Terima kasih telah menggunakan layanan kami! Untuk melanjutkan proses verifikasi akun Anda, silakan gunakan token berikut:\n" +
                 "\n" +
-                "Reset Password: \n" + resetPasswordUrl+
+                "Token: "+resetPasswordUrl+"\n" +
                 "\n" +
-                "Please note that this link will expire in [Insert Expiry Time, e.g., 24 hours].\n" +
+                "Harap jangan bagikan token ini dengan siapa pun kecuali dengan tim dukungan kami. Token ini adalah kunci untuk mengamankan akun Anda, dan kami selalu menjaga keamanan informasi Anda dengan sepenuh hati.\n" +
                 "\n" +
-                "If you did not request this password reset or believe this is an unauthorized attempt, please ignore this email. Your account will remain secure.  " );
+                "Jika Anda tidak merasa melakukan tindakan ini, mohon abaikan email ini. Akun Anda tetap aman dan tidak akan terpengaruh.");
         emailSender.send(message);
     }
 

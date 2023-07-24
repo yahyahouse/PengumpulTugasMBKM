@@ -19,7 +19,6 @@ public class Register extends JDialog{
     private JCheckBox MAHASISWA;
     private JRadioButton TI;
     private JRadioButton SI;
-    private JComboBox comboBox1;
     private JPasswordField passwordRegisterField;
     private JButton registerButton;
     private JTextField npmTextField;
