@@ -65,15 +65,6 @@ public class ForgotPasswordController {
         }
     }
 
-    @GetMapping("/validate-token/{token}")
-    public ResponseEntity<String> validateRecoveryToken(@PathVariable String token) {
-        AccountRecoveryToken recoveryToken = recoveryService.getRecoveryTokenByToken(token);
-        if (recoveryToken != null && recoveryToken.getExpirationDate().isAfter(LocalDateTime.now())) {
-            return ResponseEntity.ok("Recovery token is valid.");
-        } else {
-            return ResponseEntity.badRequest().body("Invalid or expired recovery token.");
-        }
-    }
 
     @Operation(summary = "Melakukan reset password ketika sudah mendapatkan token")
     @ApiResponses(value = {
@@ -93,7 +84,9 @@ public class ForgotPasswordController {
             @Parameter(description = "ulangi pengetikan password baru")
             @RequestParam("passwordRetype") String newPasswordRetype) {
         AccountRecoveryToken accountRecoveryToken = recoveryService.getRecoveryTokenByToken(token);
-
+        if (recoveryService.validateRecoveryToken(token)){
+            return new ResponseEntity(new MessageResponse("Token Expired"),HttpStatus.BAD_REQUEST);
+        }
         if (accountRecoveryToken == null) {
             return new ResponseEntity(new MessageResponse("Invalid token"),HttpStatus.BAD_REQUEST);
         }

@@ -16,4 +16,7 @@ public interface AccountRecoveryService {
     LocalDateTime calculateExpirationDate();
 
     void saveToken(AccountRecoveryToken accountRecoveryToken);
+
+    boolean validateRecoveryToken(String token);
+
 }

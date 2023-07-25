@@ -67,4 +67,11 @@ public class AccountRecoveryServiceImpl implements AccountRecoveryService {
     public void saveToken(AccountRecoveryToken accountRecoveryToken) {
         recoveryTokenRepository.save(accountRecoveryToken);
     }
+
+    @Override
+    public boolean validateRecoveryToken(String token) {
+        AccountRecoveryToken recoveryToken = getRecoveryTokenByToken(token);
+        return recoveryToken == null || !recoveryToken.getExpirationDate().isAfter(LocalDateTime.now());
+    }
+
 }

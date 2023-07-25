@@ -69,8 +69,7 @@ public class ResetPassword extends JDialog {
                 // Tampilkan pesan respons dari server
                 showMessage(response);
             } else {
-                // Gagal, tampilkan pesan error
-                showMessage("Token Salah");
+                showMessage("Token Expired or Invalid token");
             }
 
             conn.disconnect();

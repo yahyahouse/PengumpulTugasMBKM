@@ -14,6 +14,7 @@ public class LupaPassword extends JDialog{
     private JTextField emailTextField;
     private JButton kirimButton;
     private JPanel lupaPasswordPanel;
+    private JButton inputTokenButton;
 
     public LupaPassword(JFrame parent) {
         super(parent);
@@ -30,6 +31,13 @@ public class LupaPassword extends JDialog{
                 String email = emailTextField.getText();
                 sendResetPasswordRequest(email);
                 dispose();
+                ResetPassword resetPassword = new ResetPassword(null);
+                resetPassword.setVisible(true);
+            }
+        });
+        inputTokenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 ResetPassword resetPassword = new ResetPassword(null);
                 resetPassword.setVisible(true);
             }
