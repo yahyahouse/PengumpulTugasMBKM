@@ -23,7 +23,7 @@ import java.util.List;
 
 public class LaporanAdmin extends JDialog {
     private JTable tableLaporan;
-    private DefaultTableModel tableModel;
+    private final DefaultTableModel tableModel;
     private JButton closeButton;
     private JPanel laporanPanel;
 
@@ -51,7 +51,6 @@ public class LaporanAdmin extends JDialog {
         setModal(true);
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        ;
 
         tableModel = new DefaultTableModel();
         tableModel.addColumn("Laporan ID");
@@ -89,10 +88,10 @@ public class LaporanAdmin extends JDialog {
                     laporan.getUserId(),
                     laporan.getDosenId(),
                     laporan.getLaporan(),
-                    laporan.getVerifikasi() != null ? laporan.getVerifikasi().toString() : "",
-                    laporan.getCatatan() != null ? laporan.getCatatan().toString() : "",
+                    laporan.getVerifikasi() != null ? laporan.getVerifikasi() : "",
+                    laporan.getCatatan() != null ? laporan.getCatatan() : "",
                     laporan.getWaktuPengumpulan(),
-                    laporan.getWaktuUpdate() != null ? laporan.getWaktuUpdate().toString() : ""
+                    laporan.getWaktuUpdate() != null ? laporan.getWaktuUpdate() : ""
             };
             tableModel.addRow(rowData);
         }
@@ -159,23 +158,23 @@ public class LaporanAdmin extends JDialog {
     private static class Laporan {
 
         @Getter
-        private int laporanId;
+        private final int laporanId;
 
         @Getter
-        private int userId;
+        private final int userId;
 
         @Getter
-        private int dosenId;
+        private final int dosenId;
         @Getter
-        private String laporan;
+        private final String laporan;
         @Getter
-        private String verifikasi;
+        private final String verifikasi;
         @Getter
-        private String catatan;
+        private final String catatan;
         @Getter
-        private String waktuPengumpulan;
+        private final String waktuPengumpulan;
         @Getter
-        private String waktuUpdate;
+        private final String waktuUpdate;
 
         public Laporan(int laporanId, int userId, int dosenId, String laporan, String verifikasi, String catatan, String waktuPengumpulan, String waktuUpdate) {
             this.laporanId = laporanId;

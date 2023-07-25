@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 public interface AccountRecoveryService {
 
-    public void createRecoveryToken(Users user);
+    void createRecoveryToken(Users user);
 
-    public AccountRecoveryToken getRecoveryTokenByToken(String token);
+    AccountRecoveryToken getRecoveryTokenByToken(String token);
 
     String generateToken();
 

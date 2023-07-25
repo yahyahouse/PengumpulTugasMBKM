@@ -26,7 +26,7 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
     @Query(value = "SELECT * FROM users", nativeQuery = true)
     List<Users> getAllUsers();
 
-    public Users findByEmail(String email);
+    Users findByEmail(String email);
     Boolean existsByEmail(String email);
     Boolean existsByUsername(String username);
 
