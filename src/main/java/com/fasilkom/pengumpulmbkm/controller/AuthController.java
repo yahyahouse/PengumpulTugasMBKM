@@ -39,8 +39,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Tag(name = "Auth", description = "API untuk memproses berbagai operasi untuk dapat mengakses sistem")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "1. Auth", description = "API yang digunakan untuk dapat mengakses sistem dengan mendaftarkan akun baru atau login")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

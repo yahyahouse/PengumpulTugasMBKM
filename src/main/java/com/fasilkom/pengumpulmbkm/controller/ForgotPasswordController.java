@@ -1,7 +1,6 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
 import com.fasilkom.pengumpulmbkm.model.AccountRecoveryToken;
-import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
 import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.service.AccountRecoveryService;
@@ -14,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +21,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 
 import static com.fasilkom.pengumpulmbkm.model.Info.*;
 
-@Tag(name = "Reset Password", description = "API for reset password user")
-@Order(2)
+@Tag(name = "2. Reset Password", description = "API for reset password user")
 @Controller
 @RequestMapping("/account-recovery")
 public class ForgotPasswordController {

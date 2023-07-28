@@ -84,8 +84,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyAuthority(ERole.ADMIN.name(), ERole.DOSEN.name(), ERole.MAHASISWA.name())
                 .anyRequest()
                 .authenticated();
-
-
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

@@ -1,6 +1,5 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
-import com.fasilkom.pengumpulmbkm.model.response.LaporanResponse;
 import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirGetDetailResponse;
 import com.fasilkom.pengumpulmbkm.model.response.TugasAkhirResponse;
@@ -20,10 +19,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,15 +32,12 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.fasilkom.pengumpulmbkm.model.Info.AKSES_DITOLAK;
 
-@Tag(name = "Tugas Akhir MBKM", description = "API for processing various operations with Tugas Akhir entity")
-@Order(5)
+@Tag(name = "5. Tugas Akhir MBKM", description = "API for processing various operations with Tugas Akhir entity")
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/mahasiswa/tugas-akhir")
 public class TugasAkhirController {
 

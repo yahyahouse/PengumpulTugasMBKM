@@ -14,7 +14,6 @@ import java.util.Collections;
 
 @Configuration
 public class SwaggerConfig {
-
     @Bean
     public OpenAPI myAPI() {
         return new OpenAPI()
@@ -38,5 +37,4 @@ public class SwaggerConfig {
                                 .addList("bearer-key", Collections.emptyList())
                 );
     }
-
 }

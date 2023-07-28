@@ -10,11 +10,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ProgramConfig {
-
     private static final Logger LOG = LoggerFactory.getLogger(ProgramConfig.class);
-
     ProgramConfig(ProgramRepository programRepository) {
-
         LOG.info("Test Program MBKM run");
         for (EProgram o: EProgram.values()) {
             try {
@@ -28,7 +25,5 @@ public class ProgramConfig {
                 programRepository.save(program);
             }
         }
-
     }
-
 }

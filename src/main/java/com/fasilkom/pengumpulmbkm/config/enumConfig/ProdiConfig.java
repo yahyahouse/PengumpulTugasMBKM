@@ -10,11 +10,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ProdiConfig {
-
     private static final Logger LOG = LoggerFactory.getLogger(ProdiConfig.class);
-
     ProdiConfig(ProdiRepository prodiRepository) {
-
         LOG.info("Test Program Studi run");
         for (EProdi p: EProdi.values()) {
             try {
@@ -28,7 +25,5 @@ public class ProdiConfig {
                 prodiRepository.save(rolesProdi);
             }
         }
-
     }
-
 }

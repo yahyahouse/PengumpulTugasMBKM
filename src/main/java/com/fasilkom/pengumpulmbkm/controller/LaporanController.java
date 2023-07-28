@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +31,8 @@ import java.util.stream.Collectors;
 
 import static com.fasilkom.pengumpulmbkm.model.Info.*;
 
-@Tag(name = "Laporan MBKM", description = "API for processing various operations with Laporan entity")
-@Order(4)
+@Tag(name = "4. Laporan MBKM", description = "API for processing various operations with Laporan entity")
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/mahasiswa/laporan")
 public class LaporanController {
 

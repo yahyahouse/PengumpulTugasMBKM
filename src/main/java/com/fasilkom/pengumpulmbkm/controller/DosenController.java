@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,10 +33,8 @@ import java.util.stream.Collectors;
 
 import static com.fasilkom.pengumpulmbkm.model.Info.AKSES_DITOLAK;
 
-@Tag(name = "Dosen", description = "API for processing various operations with Dosen entity")
-@Order(6)
+@Tag(name = "6. Dosen", description = "API for processing various operations with Dosen entity")
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/dosen")
 public class DosenController {
     @Autowired
