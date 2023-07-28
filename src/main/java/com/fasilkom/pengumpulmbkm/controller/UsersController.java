@@ -22,12 +22,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.fasilkom.pengumpulmbkm.model.Info.*;
 
-@Tag(name = "3. Users", description = "API for processing various operations with User entity")
+@Tag(name = "3. Users", description = "API yang dapat digunakan oleh akun yang memiliki role ADMIN, MAHASISWA, DOSEN")
 @RestController
 @RequestMapping("/users")
 public class UsersController {
@@ -38,7 +39,7 @@ public class UsersController {
     @Autowired
     private DosenService dosenService;
 
-    @Operation(summary = "Get detail profile")
+    @Operation(summary = "Mendapatkan detail profil untuk user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -51,7 +52,7 @@ public class UsersController {
         return new ResponseEntity<>(new UsersResponse(users), HttpStatus.OK);
     }
 
-    @Operation(summary = "melakukan update password ")
+    @Operation(summary = "melakukan update password untuk user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -82,7 +83,7 @@ public class UsersController {
             return new ResponseEntity(new MessageResponse(PASSWORD_SAMA), HttpStatus.BAD_REQUEST);
     }
 
-    @Operation(summary = "melakukan update profile ")
+    @Operation(summary = "melakukan update profile untuk user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -98,6 +99,7 @@ public class UsersController {
             @Parameter(description = "masukan nama lengkap",example = "Lena VonRueden")
             @RequestParam("namaLengkap") String namalengkap,
             @Parameter(description = "masukan nomor pokok mahasiswa (NPM)",example = "1910631170000")
+            @Size(min = 12)
             @RequestParam("npm") String npm,
             @Parameter(description = "masukan password")
             @RequestParam("password") String password,
@@ -115,7 +117,7 @@ public class UsersController {
 
     }
 
-    @Operation(summary = "Get all dosen")
+    @Operation(summary = "Mendapatkan semua daftar dosen")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -129,7 +131,7 @@ public class UsersController {
         return new ResponseEntity<>(allDosen, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get detail dosen")
+    @Operation(summary = "mendapatkan detail dosen sesuai dengan id dosen")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

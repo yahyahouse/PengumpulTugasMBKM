@@ -4,12 +4,12 @@ import com.fasilkom.pengumpulmbkm.model.enumeration.EProgram;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Data
-@Entity
-@Table(name = "program_mbkm")
-public class Program {
+@Entity(name = "program_mbkm")
+public class Program implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

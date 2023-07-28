@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -71,6 +72,8 @@ public class AuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Login successful",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = JwtResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
             @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error",
@@ -90,8 +93,6 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageResponse);
         }
 
-
-
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(users.getUsername(), login.get("password")));
 
@@ -108,6 +109,9 @@ public class AuthController {
                     roles);
 
             return ResponseEntity.ok(jwtResponse);
+        }catch (BadCredentialsException e) {
+            MessageResponse messageResponse = new MessageResponse("Invalid password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(messageResponse);
         } catch (Exception e) {
             MessageResponse messageResponse = new MessageResponse("Internal server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageResponse);

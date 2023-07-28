@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 import static com.fasilkom.pengumpulmbkm.model.Info.AKSES_DITOLAK;
 
-@Tag(name = "6. Dosen", description = "API for processing various operations with Dosen entity")
+@Tag(name = "6. Dosen", description = "API yang digunakan untuk user yang memiliki role DOSEN")
 @RestController
 @RequestMapping("/dosen")
 public class DosenController {

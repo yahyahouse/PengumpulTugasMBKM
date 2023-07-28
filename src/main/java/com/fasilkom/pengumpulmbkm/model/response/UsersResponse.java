@@ -16,10 +16,7 @@ public class UsersResponse {
     private String email;
     private String npm;
     private Set<Roles> role;
-
     private Set<Prodi> prodi;
-
-    private Set<Program> program;
     private String noHp;
 
     public UsersResponse(Users users) {

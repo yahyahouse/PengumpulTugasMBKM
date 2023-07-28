@@ -23,7 +23,6 @@ public class Laporan implements Serializable {
     private Users userId;
 
     @ManyToOne
-    @NotBlank(message = "dosen is required")
     @JoinColumn(name = "dosen_id")
     private Dosen dosenId;
 

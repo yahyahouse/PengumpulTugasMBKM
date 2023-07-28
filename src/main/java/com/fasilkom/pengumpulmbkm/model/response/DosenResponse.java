@@ -16,10 +16,7 @@ public class DosenResponse {
     private String namaLengkap;
     private String email;
     private Set<Roles> role;
-
     private Set<Prodi> prodi;
-
-    private Set<Program> program;
     private String noHp;
 
     public DosenResponse(Dosen dosen) {

@@ -15,6 +15,7 @@ public class TugasAkhirResponse {
     private Integer tugasAkhirId;
     private Integer userId;
     private Integer dosenId;
+    private Integer programId;
     private byte[] sertifikat;
     private byte[] lembarPengesahan;
     private byte[] nilai;
@@ -28,6 +29,7 @@ public class TugasAkhirResponse {
         this.tugasAkhirId = tugasAkhir.getTugasAkhirId();
         this.userId = tugasAkhir.getUserId().getUserId();
         this.dosenId = tugasAkhir.getDosenId().getDosenId();
+        this.programId = tugasAkhir.getProgramId().getProgramId();
         this.sertifikat = tugasAkhir.getSertifikat();
         this.lembarPengesahan = tugasAkhir.getLembarPengesahan();
         this.nilai = tugasAkhir.getNilai();

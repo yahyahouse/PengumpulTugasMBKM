@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name = "7. Admin", description = "API for processing various operations with Dosen entity")
+@Tag(name = "7. Admin", description = "API yang dapat digunakan oleh role ADMIN")
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -40,7 +40,7 @@ public class AdminController {
 
 
 
-    @Operation(summary = "add dosen")
+    @Operation(summary = "menambahkan dosen dengan cara memasukan user id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully Added Lecturer",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
@@ -68,7 +68,7 @@ public class AdminController {
         return ResponseEntity.ok(new MessageResponse("Successfully Added Lecturer"));
     }
 
-    @Operation(summary = "delete dosen")
+    @Operation(summary = "menghapus dosen sesuai id dosen")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully delete Lecturer",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
@@ -90,7 +90,7 @@ public class AdminController {
 
     }
 
-    @Operation(summary = "Get all users")
+    @Operation(summary = "Menampilkan semua users yang terdaftar pasa sistem")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User List",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UsersResponse.class)))
@@ -103,7 +103,7 @@ public class AdminController {
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all laporan")
+    @Operation(summary = "Menampilkan semua laporan yang di unggal oleh mahasiswa")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List Laporan",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = LaporanResponse.class)))
@@ -116,7 +116,7 @@ public class AdminController {
         return new ResponseEntity<>(laporan, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all Tugas Akhir")
+    @Operation(summary = "Menampilkan semua Tugas Akhir yang di unggal oleh mahasiswa")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List Tugas Akhir",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TugasAkhirResponse.class)))
@@ -129,7 +129,7 @@ public class AdminController {
         return new ResponseEntity<>(ta, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get detail Tugas Akhir")
+    @Operation(summary = "Menampilkan detail Tugas Akhir")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully delete Lecturer",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TugasAkhirResponse.class))),
@@ -149,7 +149,7 @@ public class AdminController {
         }
     }
 
-    @Operation(summary = "Get detail Laporan")
+    @Operation(summary = "Menampilkan detail Laporan")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully delete Lecturer",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = LaporanResponse.class))),

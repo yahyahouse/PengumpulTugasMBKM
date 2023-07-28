@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 import java.sql.Timestamp;
@@ -36,7 +38,8 @@ import java.util.stream.Collectors;
 
 import static com.fasilkom.pengumpulmbkm.model.Info.AKSES_DITOLAK;
 
-@Tag(name = "5. Tugas Akhir MBKM", description = "API for processing various operations with Tugas Akhir entity")
+@Tag(name = "5. Tugas Akhir MBKM",
+        description = "API yang digunakan oleh role MAHASISWA untuk dapat melakukan CRUD pada entity Tugas Akhir")
 @RestController
 @RequestMapping("/mahasiswa/tugas-akhir")
 public class TugasAkhirController {
@@ -50,7 +53,7 @@ public class TugasAkhirController {
     @Autowired
     private TugasAkhirService tugasAkhirService;
 
-    @Operation(summary = "Upload Tugas Akhir")
+    @Operation(summary = "Melakukan Upload Tugas Akhir")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -62,6 +65,7 @@ public class TugasAkhirController {
     @PostMapping(value = "/upload-tugas-akhir", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TugasAkhirResponse> uploadTugasAkhir(
             @Parameter(description = "ID Dosen sesuai dengan SK", example = "123")
+            @NotBlank(message = "dosenId cannot be null")
             @RequestParam("dosenId") Integer dosenId,
             @Parameter(description = "ID program sesuai dengan yang diikuti", example = "123")
             @RequestParam("programId") Integer prgramId,
@@ -97,7 +101,7 @@ public class TugasAkhirController {
         }
     }
 
-    @Operation(summary = "Update Laporan Tugas Akhir")
+    @Operation(summary = "Melakukan Update Laporan Tugas Akhir")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

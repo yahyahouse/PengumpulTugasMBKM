@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.fasilkom.pengumpulmbkm.model.Info.*;
 
-@Tag(name = "2. Reset Password", description = "API for reset password user")
+@Tag(name = "2. Reset Password", description = "API untuk melakukan reset password")
 @Controller
 @RequestMapping("/account-recovery")
 public class ForgotPasswordController {

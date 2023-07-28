@@ -25,7 +25,6 @@ public class TugasAkhir implements Serializable {
     private Users userId;
 
     @ManyToOne
-    @NotBlank(message = "Dosen is required")
     @JoinColumn(name = "dosen_id")
     private Dosen dosenId;
 
