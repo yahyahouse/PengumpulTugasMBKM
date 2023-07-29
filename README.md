@@ -2,6 +2,7 @@
 ## Configuration
 
 Untuk menjalankan API ini perlu menginstal MySQL dan buat database baru
+
 Gunakan Java 8
 
 Pada bagian application.properties ubah nilai berikut
