@@ -33,22 +33,18 @@ public class TugasAkhir implements Serializable {
     private Program programId;
 
     @Lob
-    @NotBlank(message = "Sertifikat is required")
     @Column(name = "sertifikat")
     private byte[] sertifikat;
 
     @Lob
-    @NotBlank(message = "Lembar Pengesahan is required")
     @Column(name = "lembar_pengesahan")
     private byte[] lembarPengesahan;
 
     @Lob
-    @NotBlank(message = "Nilai is required")
     @Column(name = "nilai")
     private byte[] nilai;
 
     @Lob
-    @NotBlank(message = "Tugas Akhir is required")
     @Column(name = "laporan_tugas_akhir")
     private byte[] laporanTugasAkhir;
 

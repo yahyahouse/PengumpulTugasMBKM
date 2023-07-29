@@ -11,6 +11,7 @@ import com.fasilkom.pengumpulmbkm.service.DosenService;
 import com.fasilkom.pengumpulmbkm.service.ProgramService;
 import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
+import com.sun.org.glassfish.gmbal.NameValue;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +19,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -52,13 +56,17 @@ public class TugasAkhirController {
     private ProgramService programService;
     @Autowired
     private TugasAkhirService tugasAkhirService;
+    private static final Logger LOG = LoggerFactory.getLogger(LaporanController.class);
 
     @Operation(summary = "Melakukan Upload Tugas Akhir")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = TugasAkhirResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request",
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class)))
     })
@@ -68,14 +76,18 @@ public class TugasAkhirController {
             @NotBlank(message = "dosenId cannot be null")
             @RequestParam("dosenId") Integer dosenId,
             @Parameter(description = "ID program sesuai dengan yang diikuti", example = "123")
-            @RequestParam("programId") Integer prgramId,
+            @RequestParam("programId") Integer programId,
             @Parameter(description = "File sertifikat")
+            @NotNull
             @RequestParam("sertifikat") MultipartFile sertifikat,
             @Parameter(description = "File lembar pengesahan")
+            @NotNull
             @RequestParam("lembarPengesahan") MultipartFile lembarPengesahan,
             @Parameter(description = "File nilai")
+            @NotNull
             @RequestParam("nilai") MultipartFile nilai,
             @Parameter(description = "File Laporan Tugas Akhir")
+            @NotNull
             @RequestParam("laporanTugasAkhir") MultipartFile laporanTugasAkhir,
             Authentication authentication) {
         try {
@@ -83,7 +95,13 @@ public class TugasAkhirController {
             TugasAkhir ta = new TugasAkhir();
             Users users = usersService.findByUserId(user.getUserId());
             Dosen dosen = dosenService.getDosenByDosenId(dosenId);
-            Program program = programService.findByProgramid(prgramId);
+            Program program = programService.findByProgramid(programId);
+            if (dosen == null) {
+                return new ResponseEntity(new MessageResponse("Dosen Not Found"), HttpStatus.NOT_FOUND);
+            }
+            if (program == null) {
+                return new ResponseEntity(new MessageResponse("Program MBKM Not Found"), HttpStatus.NOT_FOUND);
+            }
             LocalDateTime currentTime = LocalDateTime.now();
             ta.setUserId(users);
             ta.setDosenId(dosen);
@@ -97,7 +115,7 @@ public class TugasAkhirController {
             tugasAkhirService.saveTugasAkhir(ta);
             return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } catch (IOException e) {
-            return new ResponseEntity(new MessageResponse("Error {} "+e),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new MessageResponse("Internal Server Error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -106,10 +124,13 @@ public class TugasAkhirController {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = TugasAkhirResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request",
+            @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class))),
             @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class)))
     })
@@ -120,33 +141,39 @@ public class TugasAkhirController {
             @Parameter(description = "ID program yang ingin diupdate", example = "123")
             @RequestParam("programId") Integer programId,
             @Parameter(description = "File sertifikat")
-            @RequestParam("sertifikat") MultipartFile sertifikat,
+            @RequestParam(value = "sertifikat",required = false) MultipartFile sertifikat,
             @Parameter(description = "File lembar pengesahan")
-            @RequestParam("lembarPengesahan") MultipartFile lembarPengesahan,
+            @RequestParam(value = "lembarPengesahan",required = false) MultipartFile lembarPengesahan,
             @Parameter(description = "File nilai")
-            @RequestParam("nilai") MultipartFile nilai,
+            @RequestParam(value = "nilai",required = false) MultipartFile nilai,
             @Parameter(description = "File laporan tugas akhir")
-            @RequestParam("laporanTugasAkhir") MultipartFile laporanTugasAkhir,
+            @RequestParam(value = "laporanTugasAkhir",required = false) MultipartFile laporanTugasAkhir,
             Authentication authentication
     ) {
         try {
             LocalDateTime currentTime = LocalDateTime.now();
             TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+            Program program = programService.findByProgramid(programId);
+            if (ta == null){
+                return new ResponseEntity(new MessageResponse(" Tugas Akhir Not Found"), HttpStatus.NOT_FOUND);
+            }
+            if (program==null){
+                return new ResponseEntity(new MessageResponse(" Program MBKM Not Found"), HttpStatus.NOT_FOUND);
+            }
             Users users = usersService.findByUsername(authentication.getName());
             if (ta.getUserId().getUserId().equals(users.getUserId())) {
-                if (!sertifikat.isEmpty()) {
+                if (sertifikat != null) {
                     ta.setSertifikat(sertifikat.getBytes());
                 }
-                if (!lembarPengesahan.isEmpty()) {
+                if (lembarPengesahan != null) {
                     ta.setLembarPengesahan(lembarPengesahan.getBytes());
                 }
-                if (!nilai.isEmpty()) {
+                if (nilai != null) {
                     ta.setNilai(nilai.getBytes());
                 }
-                if (!laporanTugasAkhir.isEmpty()) {
+                if (laporanTugasAkhir != null) {
                     ta.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
                 }
-                Program program = programService.findByProgramid(programId);
                 ta.setProgramId(program);
                 ta.setWaktuUpdate(Timestamp.valueOf(currentTime));
                 tugasAkhirService.saveTugasAkhir(ta);
@@ -155,9 +182,8 @@ public class TugasAkhirController {
                 return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
             }
         } catch (IOException e) {
-            return new ResponseEntity(new MessageResponse("Error {} "+e),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new MessageResponse("Internal Server Error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @Operation(summary = "menampilkan detail Laporan Tugas Akhir berdasarkan tugasAkhirId")
@@ -178,8 +204,8 @@ public class TugasAkhirController {
             @PathVariable("tugasAkhirId") Integer tugasAkhirId,
             Authentication authentication) {
         TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
-        if (ta == null){
-            return new ResponseEntity(new MessageResponse("Not Found"),HttpStatus.NOT_FOUND);
+        if (ta == null) {
+            return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
         }
         Users users = usersService.findByUsername(authentication.getName());
         if (ta.getUserId().getUserId().equals(users.getUserId())) {
