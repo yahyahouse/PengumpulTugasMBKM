@@ -30,11 +30,10 @@ public class Laporan implements Serializable {
     @JoinColumn(name = "program_id")
     private Program programId;
 
-    @NotBlank(message = "Leporan is required")
-    @Column(name = "laporan", columnDefinition = "TEXT")
+    @Column(name = "laporan")
     private String laporan;
 
-    @Column(name = "verifikasi", columnDefinition = "BOOLEAN DEFAULT NULL")
+    @Column(name = "verifikasi")
     private Boolean verifikasi;
 
     @Column(name = "catatan")
