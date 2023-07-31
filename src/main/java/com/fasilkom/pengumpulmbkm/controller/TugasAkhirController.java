@@ -191,7 +191,7 @@ public class TugasAkhirController {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = TugasAkhirResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request",
+            @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class))),
             @ApiResponse(responseCode = "407", description = "Akses Ditolak",
@@ -205,7 +205,7 @@ public class TugasAkhirController {
             Authentication authentication) {
         TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         if (ta == null) {
-            return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new MessageResponse("Tugas Akhir Not Found"), HttpStatus.NOT_FOUND);
         }
         Users users = usersService.findByUsername(authentication.getName());
         if (ta.getUserId().getUserId().equals(users.getUserId())) {
@@ -219,12 +219,18 @@ public class TugasAkhirController {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = TugasAkhirResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
     })
     @GetMapping("/list-tugas-akhir")
     public ResponseEntity<TugasAkhirResponse> getTugasAkhirByUserId(
             Authentication authentication) {
         Users users = usersService.findByUsername(authentication.getName());
         List<TugasAkhir> ta = tugasAkhirService.getTugasAkhirByUserId(users.getUserId());
+        if (ta ==null){
+            return new ResponseEntity(new MessageResponse("Tugas Akhir Not Found"),HttpStatus.NOT_FOUND);
+        }
         List<TugasAkhirResponse> taGetResponse =
                 ta.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
 
