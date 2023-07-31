@@ -11,7 +11,6 @@ import com.fasilkom.pengumpulmbkm.service.DosenService;
 import com.fasilkom.pengumpulmbkm.service.ProgramService;
 import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
-import com.sun.org.glassfish.gmbal.NameValue;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
