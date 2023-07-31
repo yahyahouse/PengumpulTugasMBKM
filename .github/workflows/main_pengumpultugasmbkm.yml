@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'pengumpultugasmbkm'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76454FE8001F417AA0A14124EA69FF46 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_425C988095D848379DB8B7A1F4DCA75F }}
           package: '*.jar'
