@@ -110,7 +110,7 @@ public class LaporanController {
             @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class))),
-            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+            @ApiResponse(responseCode = "403", description = "Akses Ditolak",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class)))
     })
@@ -143,7 +143,7 @@ public class LaporanController {
             laporanService.saveLaporan(laporanSave);
             return new ResponseEntity<>(new LaporanResponse(laporanSave), HttpStatus.OK);
         } else {
-            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.FORBIDDEN);
         }
 
     }
@@ -173,7 +173,7 @@ public class LaporanController {
             @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class))),
-            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+            @ApiResponse(responseCode = "403", description = "Akses Ditolak",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class)))
     })
@@ -191,7 +191,7 @@ public class LaporanController {
             if (laporan.getUserId().getUserId().equals(users.getUserId())) {
                 return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
             } else
-                return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+                return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.FORBIDDEN);
         }catch (Exception e){
             return new ResponseEntity(new MessageResponse("internal server error "+e),HttpStatus.INTERNAL_SERVER_ERROR);
         }

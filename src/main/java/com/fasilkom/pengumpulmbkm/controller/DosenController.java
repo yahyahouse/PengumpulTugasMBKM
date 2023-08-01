@@ -52,9 +52,12 @@ public class DosenController {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = LaporanResponse.class))),
-            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+            @ApiResponse(responseCode = "403", description = "Akses Ditolak",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = MessageResponse.class)))
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
     })
     @PostMapping("/verifikasi-laporan-true/{laporanId}")
     public ResponseEntity<LaporanResponse> verifikasiLaporanTrue(
@@ -64,6 +67,9 @@ public class DosenController {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (laporan==null){
+            return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
+        }
         if (laporan.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             LocalDateTime currentTime = LocalDateTime.now();
             laporan.setVerifikasi(true);
@@ -71,7 +77,7 @@ public class DosenController {
             laporanService.saveLaporan(laporan);
             return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
         } else
-            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.FORBIDDEN);
 
     }
 
@@ -80,7 +86,10 @@ public class DosenController {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = LaporanResponse.class))),
-            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+            @ApiResponse(responseCode = "403", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class)))
     })
@@ -94,6 +103,9 @@ public class DosenController {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (laporan==null){
+            return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
+        }
         if (laporan.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             LocalDateTime currentTime = LocalDateTime.now();
             laporan.setCatatan(catatan);
@@ -103,7 +115,7 @@ public class DosenController {
 
             return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
         } else
-            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.FORBIDDEN);
 
 
     }
@@ -113,9 +125,12 @@ public class DosenController {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = TugasAkhirResponse.class))),
-            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+            @ApiResponse(responseCode = "403", description = "Akses Ditolak",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = MessageResponse.class)))
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
     })
     @PostMapping("/verifikasi-tugas-akhir-true/{tugasAkhirId}")
     public ResponseEntity<TugasAkhirResponse> verifikasiTugasAkhirTrue(
@@ -125,6 +140,9 @@ public class DosenController {
         TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (ta==null){
+            return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
+        }
         if (ta.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             LocalDateTime currentTime = LocalDateTime.now();
             ta.setVerifikasi(true);
@@ -132,7 +150,7 @@ public class DosenController {
             tugasAkhirService.saveTugasAkhir(ta);
             return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } else
-            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.FORBIDDEN);
 
 
     }
@@ -142,7 +160,10 @@ public class DosenController {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = TugasAkhirResponse.class))),
-            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+            @ApiResponse(responseCode = "403", description = "Akses Ditolak",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class)))
     })
@@ -156,6 +177,9 @@ public class DosenController {
         TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (ta==null){
+            return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
+        }
         if (ta.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             LocalDateTime currentTime = LocalDateTime.now();
             ta.setCatatan(catatan);
@@ -165,7 +189,7 @@ public class DosenController {
 
             return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } else
-            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.FORBIDDEN);
 
 
     }
@@ -214,7 +238,7 @@ public class DosenController {
             @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class))),
-            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+            @ApiResponse(responseCode = "403", description = "Akses Ditolak",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class)))
     })
@@ -232,7 +256,7 @@ public class DosenController {
         if (ta.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } else
-            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.FORBIDDEN);
     }
 
     @Operation(summary = "menampilkan detail Laporan berdasarkan laporanId")
@@ -243,7 +267,7 @@ public class DosenController {
             @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class))),
-            @ApiResponse(responseCode = "407", description = "Akses Ditolak",
+            @ApiResponse(responseCode = "403", description = "Akses Ditolak",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MessageResponse.class)))
     })
@@ -255,10 +279,13 @@ public class DosenController {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
+        if (laporan == null) {
+            return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
+        }
         if (laporan.getDosenId().getDosenId().equals(dosen.getDosenId())) {
             return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
-        } else
-            return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+        }
+        return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.FORBIDDEN);
     }
 
 }

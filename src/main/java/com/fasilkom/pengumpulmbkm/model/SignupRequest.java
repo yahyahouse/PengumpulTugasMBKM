@@ -13,7 +13,7 @@ import java.util.Set;
 public class SignupRequest {
 
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 10, max = 20)
     private String username;
 
     @NotBlank
@@ -32,7 +32,6 @@ public class SignupRequest {
     private String password;
 
     @NotBlank
-    @Size(min = 10, max = 50)
     private String namaLengkap;
 
     @NotBlank

@@ -82,10 +82,16 @@ public class AdminController {
             @Parameter(description = "ID dosen yang akan di hapus", example = "123")
             @RequestParam("dosenId") Integer dosenId) {
         try {
+            if (laporanService.findLaporanByDosenId(dosenId)!=null){
+                return new ResponseEntity(new MessageResponse("Cannot delete lecturer with id " + dosenId),HttpStatus.BAD_REQUEST);
+            }
+            if (tugasAkhirService.getTugasAkhirByDosenId(dosenId)!=null){
+                return new ResponseEntity(new MessageResponse("Cannot delete lecturer with id " + dosenId),HttpStatus.BAD_REQUEST);
+            }
             dosenService.deletDosenByDosenId(dosenId);
             return ResponseEntity.ok(new MessageResponse("Successfully delete Lecturer"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Cannot delete lecturer with id " + dosenId));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Cannot delete lecturer with id " + dosenId));
         }
 
     }

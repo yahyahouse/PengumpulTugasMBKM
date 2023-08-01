@@ -80,11 +80,11 @@ public class ForgotPasswordController {
             @Parameter(description = "ulangi pengetikan password baru")
             @RequestParam("passwordRetype") String newPasswordRetype) {
         AccountRecoveryToken accountRecoveryToken = recoveryService.getRecoveryTokenByToken(token);
-        if (recoveryService.validateRecoveryToken(token)){
-            return new ResponseEntity(new MessageResponse("Token Expired"),HttpStatus.BAD_REQUEST);
-        }
         if (accountRecoveryToken == null) {
             return new ResponseEntity(new MessageResponse("Invalid token"),HttpStatus.BAD_REQUEST);
+        }
+        if (recoveryService.validateRecoveryToken(token)){
+            return new ResponseEntity(new MessageResponse("Token Expired"),HttpStatus.BAD_REQUEST);
         }
         if (newPassword.equals(newPasswordRetype)) {
             Users users = recoveryService.getRecoveryTokenByToken(token).getUser();

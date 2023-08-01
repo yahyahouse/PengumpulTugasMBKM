@@ -4,6 +4,7 @@ import com.fasilkom.pengumpulmbkm.model.AccountRecoveryToken;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.repository.AccountRecoveryTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,9 @@ import java.util.UUID;
 
 @Service
 public class AccountRecoveryServiceImpl implements AccountRecoveryService {
-    private static final int TOKEN_EXPIRATION_HOURS = 24;
+
+    @Value("${tokenExpiredHours}")
+    private int tokenExpirationHours;
     private static final int TOKEN_LENGTH = 32;
 
     @Autowired
@@ -60,7 +63,7 @@ public class AccountRecoveryServiceImpl implements AccountRecoveryService {
 
     @Override
     public LocalDateTime calculateExpirationDate() {
-        return LocalDateTime.now().plusHours(TOKEN_EXPIRATION_HOURS);
+        return LocalDateTime.now().plusHours(tokenExpirationHours);
     }
 
     @Override
