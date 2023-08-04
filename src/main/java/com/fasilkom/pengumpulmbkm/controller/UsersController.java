@@ -94,7 +94,7 @@ public class UsersController {
                             schema = @Schema(implementation = MessageResponse.class))),
     })
     @PostMapping("/update-users-profile")
-    public ResponseEntity updateUsersProfile(
+    public ResponseEntity<MessageResponse> updateUsersProfile(
             @Parameter(description = "masukan nomor handphone",example = "082009296186")
             @RequestParam("noHp") String noHp,
             @Parameter(description = "masukan nama lengkap",example = "Lena VonRueden")

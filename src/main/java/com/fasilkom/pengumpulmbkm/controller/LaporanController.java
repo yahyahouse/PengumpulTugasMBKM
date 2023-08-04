@@ -116,11 +116,11 @@ public class LaporanController {
     })
     @PostMapping("/update-laporan/{laporanId}")
     public ResponseEntity<LaporanResponse> updatelaporan(
-            @Parameter(description = "ID Tugas Akhir yang ingin ditampilkan", example = "123")
+            @Parameter(description = "ID Laporan", example = "123")
             @PathVariable("laporanId") Integer laporanId,
-            @Parameter(description = "Update Laporan", example = "consetetur elit sed ubique ferri")
+            @Parameter(description = "Isi laporan", example = "consetetur elit sed ubique ferri")
             @RequestParam("laporan") String laporan,
-            @Parameter(description = "ID Tugas Akhir yang ingin ditampilkan", example = "123")
+            @Parameter(description = "ID Program MBKM", example = "123")
             @RequestParam("program_id")Integer programId,
             Authentication authentication
     ) {

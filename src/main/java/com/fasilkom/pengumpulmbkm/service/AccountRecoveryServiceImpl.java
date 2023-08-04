@@ -17,7 +17,6 @@ public class AccountRecoveryServiceImpl implements AccountRecoveryService {
 
     @Value("${tokenExpiredHours}")
     private int tokenExpirationHours;
-    private static final int TOKEN_LENGTH = 32;
 
     @Autowired
     private AccountRecoveryTokenRepository recoveryTokenRepository;
