@@ -132,10 +132,10 @@ public class AuthController {
     public ResponseEntity<MessageResponse> registerUser(
             @Valid
             @Schema(example = "{" +
-                    "\"username\":\"userTest\"," +
-                    "\"email\":\"userTest@gmail.com\"," +
+                    "\"username\":\"userTest1234\"," +
+                    "\"email\":\"userTest1234@gmail.com\"," +
                     "\"namaLengkap\":\"userTestLengkap\"," +
-                    "\"password\":\"userTest\"," +
+                    "\"password\":\"userTest1234\"," +
                     "\"npm\":\"1234567891011\"," +
                     "\"role\":[\"DOSEN\", \"MAHASISWA\", \"ADMIN\"]," +
                     "\"prodi\":[\"TI\"]" +
@@ -160,7 +160,7 @@ public class AuthController {
         Set<String> strRoles = signupRequest.getRole();
         Set<Roles> roles = new HashSet<>();
 
-        if (strRoles == null) {
+        if (strRoles == null|| strRoles.isEmpty()) {
             Roles role = roleRepository.findByName(ERole.MAHASISWA)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
             roles.add(role);
@@ -176,7 +176,7 @@ public class AuthController {
         Set<String> strProdi = signupRequest.getProdi();
         Set<Prodi> enumProdi = new HashSet<>();
 
-        if (strProdi == null) {
+        if (strProdi == null||strProdi.isEmpty()) {
             Prodi prodi = prodiRepository.findByName(EProdi.TI)
                     .orElseThrow(() -> new RuntimeException("Error: Program Studi is not found"));
             enumProdi.add(prodi);

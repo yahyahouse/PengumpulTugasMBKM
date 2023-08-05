@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,6 @@ public class AdminController {
     private LaporanService laporanService;
     @Autowired
     private TugasAkhirService tugasAkhirService;
-
 
 
     @Operation(summary = "menambahkan dosen dengan cara memasukan user id")
@@ -57,7 +57,7 @@ public class AdminController {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("cannot find user!!"));
         }
-        if (dosenService.getDosenByUserId(userId)!= null) {
+        if (dosenService.getDosenByUserId(userId) != null) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("the lecturer already exists in the database!!"));
         }
@@ -82,16 +82,16 @@ public class AdminController {
             @Parameter(description = "ID dosen yang akan di hapus", example = "123")
             @RequestParam("dosenId") Integer dosenId) {
         try {
-            if (laporanService.findLaporanByDosenId(dosenId)!=null){
-                return new ResponseEntity(new MessageResponse("Cannot delete lecturer with id " + dosenId),HttpStatus.BAD_REQUEST);
+            if (!dosenService.existsDosenByDosenId(dosenId)){
+                return new ResponseEntity(new MessageResponse("Not Found"),HttpStatus.BAD_REQUEST);
             }
-            if (tugasAkhirService.getTugasAkhirByDosenId(dosenId)!=null){
-                return new ResponseEntity(new MessageResponse("Cannot delete lecturer with id " + dosenId),HttpStatus.BAD_REQUEST);
+            if (tugasAkhirService.getTugasAkhirByDosenId(dosenId).isEmpty() || laporanService.findLaporanByDosenId(dosenId).isEmpty()) {
+                dosenService.deletDosenByDosenId(dosenId);
+                return ResponseEntity.ok(new MessageResponse("Successfully delete Lecturer"));
             }
-            dosenService.deletDosenByDosenId(dosenId);
-            return ResponseEntity.ok(new MessageResponse("Successfully delete Lecturer"));
+            return new ResponseEntity(new MessageResponse("Cannot delete lecturer with id " + dosenId), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Cannot delete lecturer with id " + dosenId));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Internal Server Error"));
         }
 
     }
@@ -169,7 +169,7 @@ public class AdminController {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         if (laporan == null) {
             return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
-        }else {
+        } else {
             return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
         }
     }
