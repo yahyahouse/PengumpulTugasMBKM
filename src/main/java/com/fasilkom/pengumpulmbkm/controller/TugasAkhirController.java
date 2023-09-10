@@ -139,46 +139,45 @@ public class TugasAkhirController {
             @Parameter(description = "ID program yang ingin diupdate", example = "123")
             @RequestParam("programId") Integer programId,
             @Parameter(description = "File sertifikat")
-            @RequestParam(value = "sertifikat",required = false) MultipartFile sertifikat,
+            @RequestParam(value = "sertifikat", required = false) MultipartFile sertifikat,
             @Parameter(description = "File lembar pengesahan")
-            @RequestParam(value = "lembarPengesahan",required = false) MultipartFile lembarPengesahan,
+            @RequestParam(value = "lembarPengesahan", required = false) MultipartFile lembarPengesahan,
             @Parameter(description = "File nilai")
-            @RequestParam(value = "nilai",required = false) MultipartFile nilai,
+            @RequestParam(value = "nilai", required = false) MultipartFile nilai,
             @Parameter(description = "File laporan tugas akhir")
-            @RequestParam(value = "laporanTugasAkhir",required = false) MultipartFile laporanTugasAkhir,
+            @RequestParam(value = "laporanTugasAkhir", required = false) MultipartFile laporanTugasAkhir,
             Authentication authentication
     ) {
         try {
             LocalDateTime currentTime = LocalDateTime.now();
             TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
             Program program = programService.findByProgramid(programId);
-            if (ta == null){
+            if (ta == null) {
                 return new ResponseEntity(new MessageResponse(" Tugas Akhir Not Found"), HttpStatus.NOT_FOUND);
             }
-            if (program==null){
+            if (program == null) {
                 return new ResponseEntity(new MessageResponse(" Program MBKM Not Found"), HttpStatus.NOT_FOUND);
             }
             Users users = usersService.findByUsername(authentication.getName());
-            if (ta.getUserId().getUserId().equals(users.getUserId())) {
-                if (sertifikat != null) {
-                    ta.setSertifikat(sertifikat.getBytes());
-                }
-                if (lembarPengesahan != null) {
-                    ta.setLembarPengesahan(lembarPengesahan.getBytes());
-                }
-                if (nilai != null) {
-                    ta.setNilai(nilai.getBytes());
-                }
-                if (laporanTugasAkhir != null) {
-                    ta.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
-                }
-                ta.setProgramId(program);
-                ta.setWaktuUpdate(Timestamp.valueOf(currentTime));
-                tugasAkhirService.saveTugasAkhir(ta);
-                return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
-            } else {
+            if (!ta.getUserId().getUserId().equals(users.getUserId())) {
                 return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.FORBIDDEN);
             }
+            if (sertifikat != null) {
+                ta.setSertifikat(sertifikat.getBytes());
+            }
+            if (lembarPengesahan != null) {
+                ta.setLembarPengesahan(lembarPengesahan.getBytes());
+            }
+            if (nilai != null) {
+                ta.setNilai(nilai.getBytes());
+            }
+            if (laporanTugasAkhir != null) {
+                ta.setLaporanTugasAkhir(laporanTugasAkhir.getBytes());
+            }
+            ta.setProgramId(program);
+            ta.setWaktuUpdate(Timestamp.valueOf(currentTime));
+            tugasAkhirService.saveTugasAkhir(ta);
+            return new ResponseEntity<>(new TugasAkhirResponse(ta), HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity(new MessageResponse("Internal Server Error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -226,8 +225,8 @@ public class TugasAkhirController {
             Authentication authentication) {
         Users users = usersService.findByUsername(authentication.getName());
         List<TugasAkhir> ta = tugasAkhirService.getTugasAkhirByUserId(users.getUserId());
-        if (ta ==null){
-            return new ResponseEntity(new MessageResponse("Tugas Akhir Not Found"),HttpStatus.NOT_FOUND);
+        if (ta == null) {
+            return new ResponseEntity(new MessageResponse("Tugas Akhir Not Found"), HttpStatus.NOT_FOUND);
         }
         List<TugasAkhirResponse> taGetResponse =
                 ta.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
