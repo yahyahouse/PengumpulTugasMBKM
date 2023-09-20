@@ -82,8 +82,8 @@ public class AdminController {
             @Parameter(description = "ID dosen yang akan di hapus", example = "123")
             @RequestParam("dosenId") Integer dosenId) {
         try {
-            if (!dosenService.existsDosenByDosenId(dosenId)){
-                return new ResponseEntity(new MessageResponse("Not Found"),HttpStatus.BAD_REQUEST);
+            if (!dosenService.existsDosenByDosenId(dosenId)) {
+                return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.BAD_REQUEST);
             }
             if (tugasAkhirService.getTugasAkhirByDosenId(dosenId).isEmpty() || laporanService.findLaporanByDosenId(dosenId).isEmpty()) {
                 dosenService.deletDosenByDosenId(dosenId);

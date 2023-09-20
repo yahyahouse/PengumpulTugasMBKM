@@ -95,11 +95,11 @@ public class UsersController {
     })
     @PostMapping("/update-users-profile")
     public ResponseEntity<MessageResponse> updateUsersProfile(
-            @Parameter(description = "masukan nomor handphone",example = "082009296186")
+            @Parameter(description = "masukan nomor handphone", example = "082009296186")
             @RequestParam("noHp") String noHp,
-            @Parameter(description = "masukan nama lengkap",example = "Lena VonRueden")
+            @Parameter(description = "masukan nama lengkap", example = "Lena VonRueden")
             @RequestParam("namaLengkap") String namalengkap,
-            @Parameter(description = "masukan nomor pokok mahasiswa (NPM)",example = "1910631170000")
+            @Parameter(description = "masukan nomor pokok mahasiswa (NPM)", example = "1910631170000")
             @Size(min = 12)
             @RequestParam("npm") String npm,
             @Parameter(description = "masukan password")
@@ -143,7 +143,7 @@ public class UsersController {
     })
     @GetMapping(value = "/detail-profil-dosen/{dosenId}")
     public ResponseEntity<DosenResponse> getDetailDosenByDosenId(
-            @Parameter(description = "ID dosen untuk menampilkan detail",example = "123")
+            @Parameter(description = "ID dosen untuk menampilkan detail", example = "123")
             @PathVariable("dosenId") Integer dosenId) {
         Dosen dosen = dosenService.getDosenByDosenId(dosenId);
         if (dosen == null) {

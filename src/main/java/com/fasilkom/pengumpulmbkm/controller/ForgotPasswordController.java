@@ -81,10 +81,10 @@ public class ForgotPasswordController {
             @RequestParam("passwordRetype") String newPasswordRetype) {
         AccountRecoveryToken accountRecoveryToken = recoveryService.getRecoveryTokenByToken(token);
         if (accountRecoveryToken == null) {
-            return new ResponseEntity(new MessageResponse("Invalid token"),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new MessageResponse("Invalid token"), HttpStatus.BAD_REQUEST);
         }
-        if (recoveryService.validateRecoveryToken(token)){
-            return new ResponseEntity(new MessageResponse("Token Expired"),HttpStatus.BAD_REQUEST);
+        if (recoveryService.validateRecoveryToken(token)) {
+            return new ResponseEntity(new MessageResponse("Token Expired"), HttpStatus.BAD_REQUEST);
         }
         if (newPassword.equals(newPasswordRetype)) {
             Users users = recoveryService.getRecoveryTokenByToken(token).getUser();
@@ -93,7 +93,7 @@ public class ForgotPasswordController {
             usersService.savePassword(users);
             recoveryService.saveToken(accountRecoveryToken);
 
-            return new ResponseEntity(new MessageResponse("Password reset successful"),HttpStatus.OK);
+            return new ResponseEntity(new MessageResponse("Password reset successful"), HttpStatus.OK);
         } else {
             return new ResponseEntity(PASSWORD_SAMA, HttpStatus.BAD_REQUEST);
         }

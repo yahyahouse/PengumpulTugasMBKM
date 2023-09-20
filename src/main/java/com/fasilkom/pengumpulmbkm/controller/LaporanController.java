@@ -79,12 +79,12 @@ public class LaporanController {
             Laporan laporan = new Laporan();
             Users users = usersService.findByUserId(user.getUserId());
             Dosen dosen = dosenService.getDosenByDosenId(dosenId);
-            if (dosen==null){
-                return new ResponseEntity(new MessageResponse("Dosen Not Found"),HttpStatus.NOT_FOUND);
+            if (dosen == null) {
+                return new ResponseEntity(new MessageResponse("Dosen Not Found"), HttpStatus.NOT_FOUND);
             }
             Program program = programService.findByProgramid(programId);
-            if (program==null){
-                return new ResponseEntity(new MessageResponse("Program MBKM Not Found"),HttpStatus.NOT_FOUND);
+            if (program == null) {
+                return new ResponseEntity(new MessageResponse("Program MBKM Not Found"), HttpStatus.NOT_FOUND);
             }
             LocalDateTime currentTime = LocalDateTime.now();
             laporan.setUserId(users);
@@ -96,9 +96,9 @@ public class LaporanController {
             laporanService.saveLaporan(laporan);
 
             return new ResponseEntity(new LaporanResponse(laporan), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             LOG.error(String.valueOf(e));
-            return new ResponseEntity(new MessageResponse("Internal Server Error"),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(new MessageResponse("Internal Server Error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -121,21 +121,21 @@ public class LaporanController {
             @Parameter(description = "Isi laporan", example = "consetetur elit sed ubique ferri")
             @RequestParam("laporan") String laporan,
             @Parameter(description = "ID Program MBKM", example = "123")
-            @RequestParam("program_id")Integer programId,
+            @RequestParam("program_id") Integer programId,
             Authentication authentication
     ) {
         LocalDateTime currentTime = LocalDateTime.now();
         Laporan laporanSave = laporanService.findByLaporanId(laporanId);
-        if (laporanSave==null){
-            return new ResponseEntity(new MessageResponse("Laporan Not Found"),HttpStatus.NOT_FOUND);
+        if (laporanSave == null) {
+            return new ResponseEntity(new MessageResponse("Laporan Not Found"), HttpStatus.NOT_FOUND);
         }
-        Program program =programService.findByProgramid(programId);
-        if (program== null){
-            return new ResponseEntity(new MessageResponse("Program MBKM Not Found"),HttpStatus.NOT_FOUND);
+        Program program = programService.findByProgramid(programId);
+        if (program == null) {
+            return new ResponseEntity(new MessageResponse("Program MBKM Not Found"), HttpStatus.NOT_FOUND);
         }
         Users users = usersService.findByUsername(authentication.getName());
         if (laporanSave.getUserId().getUserId().equals(users.getUserId())) {
-            if (programId !=null){
+            if (programId != null) {
                 laporanSave.setProgramId(program);
             }
             laporanSave.setLaporan(laporan);
@@ -192,8 +192,8 @@ public class LaporanController {
                 return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
             } else
                 return new ResponseEntity(new MessageResponse(AKSES_DITOLAK), HttpStatus.FORBIDDEN);
-        }catch (Exception e){
-            return new ResponseEntity(new MessageResponse("internal server error "+e),HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity(new MessageResponse("internal server error " + e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -87,11 +87,11 @@ public class AuthController {
                     "}")
             @RequestBody Map<String, Object> login) {
         try {
-        Users users = usersRepository.findUsersByEmail(login.get("email").toString());
-        if (users == null) {
-            MessageResponse messageResponse = new MessageResponse("Account Not Found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageResponse);
-        }
+            Users users = usersRepository.findUsersByEmail(login.get("email").toString());
+            if (users == null) {
+                MessageResponse messageResponse = new MessageResponse("Account Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageResponse);
+            }
 
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(users.getUsername(), login.get("password")));
@@ -109,7 +109,7 @@ public class AuthController {
                     roles);
 
             return ResponseEntity.ok(jwtResponse);
-        }catch (BadCredentialsException e) {
+        } catch (BadCredentialsException e) {
             MessageResponse messageResponse = new MessageResponse("Invalid password");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(messageResponse);
         } catch (Exception e) {
@@ -160,7 +160,7 @@ public class AuthController {
         Set<String> strRoles = signupRequest.getRole();
         Set<Roles> roles = new HashSet<>();
 
-        if (strRoles == null|| strRoles.isEmpty()) {
+        if (strRoles == null || strRoles.isEmpty()) {
             Roles role = roleRepository.findByName(ERole.MAHASISWA)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
             roles.add(role);
@@ -176,7 +176,7 @@ public class AuthController {
         Set<String> strProdi = signupRequest.getProdi();
         Set<Prodi> enumProdi = new HashSet<>();
 
-        if (strProdi == null||strProdi.isEmpty()) {
+        if (strProdi == null || strProdi.isEmpty()) {
             Prodi prodi = prodiRepository.findByName(EProdi.TI)
                     .orElseThrow(() -> new RuntimeException("Error: Program Studi is not found"));
             enumProdi.add(prodi);

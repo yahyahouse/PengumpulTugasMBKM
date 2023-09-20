@@ -67,7 +67,7 @@ public class DosenController {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
-        if (laporan==null){
+        if (laporan == null) {
             return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
         }
         if (laporan.getDosenId().getDosenId().equals(dosen.getDosenId())) {
@@ -103,7 +103,7 @@ public class DosenController {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
-        if (laporan==null){
+        if (laporan == null) {
             return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
         }
         if (laporan.getDosenId().getDosenId().equals(dosen.getDosenId())) {
@@ -140,7 +140,7 @@ public class DosenController {
         TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
-        if (ta==null){
+        if (ta == null) {
             return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
         }
         if (ta.getDosenId().getDosenId().equals(dosen.getDosenId())) {
@@ -177,7 +177,7 @@ public class DosenController {
         TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
         Users users = usersService.findByUsername(authentication.getName());
         Dosen dosen = dosenService.getDosenByUserId(users.getUserId());
-        if (ta==null){
+        if (ta == null) {
             return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
         }
         if (ta.getDosenId().getDosenId().equals(dosen.getDosenId())) {
