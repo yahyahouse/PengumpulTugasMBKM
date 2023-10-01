@@ -93,7 +93,6 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Internal Server Error"));
         }
-
     }
 
     @Operation(summary = "Menampilkan semua users yang terdaftar pasa sistem")
