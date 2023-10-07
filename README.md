@@ -1,4 +1,4 @@
-﻿# Pengunpul Tugas MBKM
+﻿# Pengumpul Tugas MBKM
 ## Configuration
 
 Untuk menjalankan API ini perlu menginstal MySQL dan buat database baru
