@@ -1,20 +1,18 @@
 package com.fasilkom.pengumpulmbkm.model.response;
 
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
-import com.fasilkom.pengumpulmbkm.model.users.Dosen;
-import com.fasilkom.pengumpulmbkm.model.users.Users;
 import lombok.Data;
 
-import javax.persistence.*;
-import java.sql.Time;
+import jakarta.persistence.*;
+
 import java.sql.Timestamp;
 
 @Data
 public class TugasAkhirResponse {
 
     private Integer tugasAkhirId;
-    private Integer userId;
-    private Integer dosenId;
+    private String userId;
+    private String dosenId;
     private Integer programId;
     private byte[] sertifikat;
     private byte[] lembarPengesahan;

@@ -1,14 +1,12 @@
 package com.fasilkom.pengumpulmbkm.model.users;
 
 
-import com.fasilkom.pengumpulmbkm.model.SignupRequest;
 import com.fasilkom.pengumpulmbkm.model.roles.Prodi;
-import com.fasilkom.pengumpulmbkm.model.roles.Program;
 import com.fasilkom.pengumpulmbkm.model.roles.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,9 +16,9 @@ import java.util.Set;
 public class Users implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id")
-    private Integer userId;
+    private String userId;
 
     @JsonIgnore
     @Column(name = "password")
@@ -61,8 +59,5 @@ public class Users implements Serializable {
     }
 
     public Users() {
-    }
-
-    public Users(SignupRequest request) {
     }
 }

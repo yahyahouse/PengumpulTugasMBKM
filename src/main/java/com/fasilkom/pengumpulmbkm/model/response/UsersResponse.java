@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Data
 public class UsersResponse {
-    private Integer userId;
+    private String userId;
     private String username;
     private String namaLengkap;
     private String email;

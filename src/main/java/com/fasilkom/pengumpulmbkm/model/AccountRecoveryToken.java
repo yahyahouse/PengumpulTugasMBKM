@@ -2,14 +2,19 @@ package com.fasilkom.pengumpulmbkm.model;
 
 
 import com.fasilkom.pengumpulmbkm.model.users.Users;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccountRecoveryToken implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +30,4 @@ public class AccountRecoveryToken implements Serializable {
 
     private LocalDateTime expirationDate;
 
-    public AccountRecoveryToken() {
-    }
 }

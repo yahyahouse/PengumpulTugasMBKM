@@ -6,8 +6,8 @@ import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import lombok.Data;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -21,30 +21,26 @@ public class TugasAkhir implements Serializable {
     private Integer tugasAkhirId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", columnDefinition = "varchar(255)")
     private Users userId;
 
     @ManyToOne
-    @JoinColumn(name = "dosen_id")
+    @JoinColumn(name = "dosen_id", columnDefinition = "varchar(255)")
     private Dosen dosenId;
 
     @ManyToOne
     @JoinColumn(name = "program_id")
     private Program programId;
 
-    @Lob
     @Column(name = "sertifikat")
     private byte[] sertifikat;
 
-    @Lob
     @Column(name = "lembar_pengesahan")
     private byte[] lembarPengesahan;
 
-    @Lob
     @Column(name = "nilai")
     private byte[] nilai;
 
-    @Lob
     @Column(name = "laporan_tugas_akhir")
     private byte[] laporanTugasAkhir;
 

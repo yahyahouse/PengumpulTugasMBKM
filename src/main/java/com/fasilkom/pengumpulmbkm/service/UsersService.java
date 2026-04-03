@@ -10,13 +10,13 @@ import java.util.List;
 @Service
 public interface UsersService {
 
-    Users findByUserId(Integer userId);
+    Users findByUserId(String userId);
 
     Users findByUsername(String username);
 
     Users findByEmail(String email);
 
-    void updateUsersPassword(String password, Integer userId);
+    void updateUsersPassword(String password, String userId);
 
     void updateProfile(Users users);
 

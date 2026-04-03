@@ -4,22 +4,23 @@ package com.fasilkom.pengumpulmbkm.service;
 
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.repository.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
 
-    @Autowired
-    UsersRepository usersRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+
+    private final UsersRepository usersRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Users findByUserId(Integer userId) {
+    public Users findByUserId(String userId) {
 
         return usersRepository.findByUserId(userId);
     }
@@ -35,7 +36,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void updateUsersPassword(String password, Integer userId) {
+    public void updateUsersPassword(String password, String userId) {
         usersRepository.updatePassword(passwordEncoder.encode(password), userId);
     }
 

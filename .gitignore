@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+\n# Environment variables\n.env
+sonar.sh

@@ -5,8 +5,8 @@ import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import lombok.Data;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -19,11 +19,11 @@ public class Laporan implements Serializable {
     private Integer laporanId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", columnDefinition = "varchar(255)")
     private Users userId;
 
     @ManyToOne
-    @JoinColumn(name = "dosen_id")
+    @JoinColumn(name = "dosen_id", columnDefinition = "varchar(255)")
     private Dosen dosenId;
 
     @ManyToOne

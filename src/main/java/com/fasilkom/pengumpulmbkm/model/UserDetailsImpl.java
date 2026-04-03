@@ -2,6 +2,7 @@ package com.fasilkom.pengumpulmbkm.model;
 
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,10 +15,12 @@ import java.util.stream.Collectors;
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    private Integer userId;
+    @Getter
+    private String userId;
 
     private String username;
 
+    @Getter
     private String email;
 
     @JsonIgnore
@@ -25,16 +28,13 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Integer userId, String username, String email,
+    public UserDetailsImpl(String userId, String username, String email,
                            String password, List<GrantedAuthority> authorities) {
         this.userId = userId;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
-    }
-
-    public UserDetailsImpl(Users users) {
     }
 
 
@@ -54,14 +54,6 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @Override

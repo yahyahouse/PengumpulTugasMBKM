@@ -3,7 +3,7 @@ package com.fasilkom.pengumpulmbkm.service;
 import com.fasilkom.pengumpulmbkm.model.AccountRecoveryToken;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.repository.AccountRecoveryTokenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,15 +13,14 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AccountRecoveryServiceImpl implements AccountRecoveryService {
 
     @Value("${tokenExpiredHours}")
     private int tokenExpirationHours;
 
-    @Autowired
-    private AccountRecoveryTokenRepository recoveryTokenRepository;
-    @Autowired
-    private JavaMailSender emailSender;
+    private final AccountRecoveryTokenRepository recoveryTokenRepository;
+    private final JavaMailSender emailSender;
 
     @Override
     public void createRecoveryToken(Users user) {

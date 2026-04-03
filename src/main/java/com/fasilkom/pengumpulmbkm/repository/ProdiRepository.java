@@ -1,7 +1,4 @@
 package com.fasilkom.pengumpulmbkm.repository;
-
-
-
 import com.fasilkom.pengumpulmbkm.model.enumeration.EProdi;
 import com.fasilkom.pengumpulmbkm.model.roles.Prodi;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -12,15 +12,15 @@ public interface DosenService {
 
     void saveDosen(Dosen dosen);
 
-    Dosen getDosenByDosenId(Integer dosenId);
+    Dosen getDosenByDosenId(String dosenId);
 
-    Dosen getDosenByUserId(Integer userId);
+    Dosen getDosenByUserId(String userId);
 
-    void deletDosenByDosenId(Integer dosenId);
+    void deletDosenByDosenId(String dosenId);
 
     List<Dosen> getAllDosen();
 
-    boolean existsDosenByDosenId(Integer dosenId);
+    boolean existsDosenByDosenId(String dosenId);
 
-    boolean existsDosenByUserId(Integer userId);
+    boolean existsDosenByUserId(String userId);
 }

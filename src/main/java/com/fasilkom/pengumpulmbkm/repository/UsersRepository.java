@@ -2,7 +2,7 @@ package com.fasilkom.pengumpulmbkm.repository;
 
 
 import com.fasilkom.pengumpulmbkm.model.users.Users;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,14 +14,14 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface UsersRepository extends JpaRepository<Users, Integer> {
+public interface UsersRepository extends JpaRepository<Users, String> {
     @Modifying
     @Query(value = "update users set password=:password where user_id=:user_id", nativeQuery = true)
     void updatePassword(
             @Param("password") String password,
-            @Param("user_id") Integer userId
+            @Param("user_id") String userId
     );
-    Users findByUserId(Integer userId);
+    Users findByUserId(String userId);
 
     @Query(value = "SELECT * FROM users", nativeQuery = true)
     List<Users> getAllUsers();

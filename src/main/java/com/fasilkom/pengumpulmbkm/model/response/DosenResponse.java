@@ -1,7 +1,6 @@
 package com.fasilkom.pengumpulmbkm.model.response;
 
 import com.fasilkom.pengumpulmbkm.model.roles.Prodi;
-import com.fasilkom.pengumpulmbkm.model.roles.Program;
 import com.fasilkom.pengumpulmbkm.model.roles.Roles;
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import lombok.Data;
@@ -11,8 +10,8 @@ import java.util.Set;
 @Data
 public class DosenResponse {
 
-    private Integer dosenId;
-    private Integer userId;
+    private String dosenId;
+    private String userId;
     private String namaLengkap;
     private String email;
     private Set<Roles> role;

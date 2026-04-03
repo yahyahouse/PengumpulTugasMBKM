@@ -10,6 +10,8 @@ import com.fasilkom.pengumpulmbkm.service.DosenService;
 import com.fasilkom.pengumpulmbkm.service.LaporanService;
 import com.fasilkom.pengumpulmbkm.service.TugasAkhirService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
+import com.fasilkom.pengumpulmbkm.util.CommonConstant;
+import com.fasilkom.pengumpulmbkm.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,159 +19,148 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Tag(name = "7. Admin", description = "API yang dapat digunakan oleh role ADMIN")
+@Tag(name = "4. Admin", description = "API yang digunakan oleh role ADMIN untuk dapat melakukan CRUD data Master ")
 @RestController
-@RequestMapping("/admin")
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/admin")
 public class AdminController {
-    @Autowired
-    private DosenService dosenService;
-    @Autowired
-    private UsersService usersService;
-    @Autowired
-    private LaporanService laporanService;
-    @Autowired
-    private TugasAkhirService tugasAkhirService;
 
+    private final DosenService dosenService;
 
-    @Operation(summary = "menambahkan dosen dengan cara memasukan user id")
+    private final UsersService usersService;
+
+    private final LaporanService laporanService;
+
+    private final TugasAkhirService tugasAkhirService;
+
+    @Operation(summary = "Melakukan add Dosen ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully Added Lecturer",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = BaseResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
-            @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = BaseResponse.class)))
     })
-    @PostMapping(value = "/add-dosen")
-    public ResponseEntity<MessageResponse> addDosen(
-            @Parameter(description = "ID user yang akan di tambah menjadi dosen", example = "123")
-            @RequestParam("userId") Integer userId) {
-        if (usersService.findByUserId(userId) == null) {
-            return ResponseEntity.badRequest()
-                    .body(new MessageResponse("cannot find user!!"));
-        }
-        if (dosenService.getDosenByUserId(userId) != null) {
-            return ResponseEntity.badRequest()
-                    .body(new MessageResponse("the lecturer already exists in the database!!"));
-        }
-        Dosen dosenAdd = new Dosen();
+    @PostMapping("/lecturers/{userId}")
+    public ResponseEntity<BaseResponse> addDosen(@PathVariable @Parameter(description = "User Id yang akan dijadikan dosen", example = "123") String userId) {
         Users users = usersService.findByUserId(userId);
-        dosenAdd.setUserId(users);
-        dosenService.saveDosen(dosenAdd);
-        return ResponseEntity.ok(new MessageResponse("Successfully Added Lecturer"));
+        if (users == null) {
+            return ResponseUtil.error(HttpStatus.BAD_REQUEST, "cannot find user!!");
+        }
+        Dosen isDosenExist = dosenService.getDosenByUserId(userId);
+        if (isDosenExist != null) {
+            return ResponseUtil.error(HttpStatus.BAD_REQUEST, "the lecturer already exists in the database!!");
+        }
+        Dosen dosen = new Dosen();
+        dosen.setUserId(users);
+        dosenService.saveDosen(dosen);
+        return ResponseUtil.ok("Successfully Added Lecturer", null);
     }
 
-    @Operation(summary = "menghapus dosen sesuai id dosen")
+    @Operation(summary = "Melakukan Delete Dosen ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully delete Lecturer",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = BaseResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class))),
-            @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = BaseResponse.class)))
     })
-    @DeleteMapping(value = "/delete-dosen")
-    public ResponseEntity<MessageResponse> deleteDosen(
-            @Parameter(description = "ID dosen yang akan di hapus", example = "123")
-            @RequestParam("dosenId") Integer dosenId) {
+    @DeleteMapping("/lecturers/{dosenId}")
+    public ResponseEntity<BaseResponse> deleteDosen(@PathVariable @Parameter(description = "Dosen Id yang akan dihapus", example = "123") String dosenId) {
         try {
-            if (!dosenService.existsDosenByDosenId(dosenId)) {
-                return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.BAD_REQUEST);
+            boolean existDosen = dosenService.existsDosenByDosenId(dosenId);
+            if (existDosen) {
+                List<TugasAkhir> tugasAkhir = tugasAkhirService.getTugasAkhirByDosenId(dosenId);
+                List<Laporan> laporan = laporanService.findLaporanByDosenId(dosenId);
+                if (tugasAkhir.isEmpty() && laporan.isEmpty()) {
+                    dosenService.deletDosenByDosenId(dosenId);
+                    return ResponseUtil.ok("Successfully delete Lecturer", null);
+                }
+                return ResponseUtil.error(HttpStatus.BAD_REQUEST, "Lecturer cannot be deleted because they are assigned to a Final Project or Report");
             }
-            if (tugasAkhirService.getTugasAkhirByDosenId(dosenId).isEmpty() || laporanService.findLaporanByDosenId(dosenId).isEmpty()) {
-                dosenService.deletDosenByDosenId(dosenId);
-                return ResponseEntity.ok(new MessageResponse("Successfully delete Lecturer"));
-            }
-            return new ResponseEntity(new MessageResponse("Cannot delete lecturer with id " + dosenId), HttpStatus.BAD_REQUEST);
+            return ResponseUtil.error(HttpStatus.BAD_REQUEST, CommonConstant.NOT_FOUND);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Internal Server Error"));
+            return ResponseUtil.error(HttpStatus.BAD_REQUEST, CommonConstant.NOT_FOUND);
         }
     }
 
-    @Operation(summary = "Menampilkan semua users yang terdaftar pasa sistem")
+    @Operation(summary = "Menampilkan Seluruh User yang Terdaftar ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User List",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UsersResponse.class)))
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = BaseResponse.class))),
     })
-    @GetMapping(value = "/all-users")
-    public ResponseEntity<List<UsersResponse>> getAllUsers() {
+    @GetMapping("/users")
+    public ResponseEntity<BaseResponse> getAllUsers() {
         List<Users> users = usersService.getAllUsers();
-        List<UsersResponse> allUsers =
-                users.stream().map(UsersResponse::new).collect(Collectors.toList());
-        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+        List<UsersResponse> allUsers = users.stream().map(UsersResponse::new).toList();
+        return ResponseUtil.ok(allUsers);
     }
 
-    @Operation(summary = "Menampilkan semua laporan yang di unggal oleh mahasiswa")
+    @Operation(summary = "Menampilkan Seluruh Laporan Mahasiswa ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List Laporan",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = LaporanResponse.class)))
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = BaseResponse.class))),
     })
-    @GetMapping(value = "/all-laporan")
-    public ResponseEntity<List<LaporanResponse>> getAllLaporan() {
-        List<Laporan> laporans = laporanService.getAllLaporan();
-        List<LaporanResponse> laporan =
-                laporans.stream().map(LaporanResponse::new).collect(Collectors.toList());
-        return new ResponseEntity<>(laporan, HttpStatus.OK);
+    @GetMapping("/reports")
+    public ResponseEntity<BaseResponse> getAllLaporan() {
+        List<LaporanResponse> laporan = laporanService.getAllLaporan().stream().map(LaporanResponse::new).toList();
+        return ResponseUtil.ok(laporan);
     }
 
-    @Operation(summary = "Menampilkan semua Tugas Akhir yang di unggal oleh mahasiswa")
+    @Operation(summary = "Menampilkan Seluruh Tugas Akhir Mahasiswa ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List Tugas Akhir",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TugasAkhirResponse.class)))
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = BaseResponse.class))),
     })
-    @GetMapping(value = "/all-tugas-akhir")
-    public ResponseEntity<List<TugasAkhirResponse>> getAllTugasAkhir() {
-        List<TugasAkhir> tas = tugasAkhirService.getAllTugasAkhir();
-        List<TugasAkhirResponse> ta =
-                tas.stream().map(TugasAkhirResponse::new).collect(Collectors.toList());
-        return new ResponseEntity<>(ta, HttpStatus.OK);
+    @GetMapping("/final-projects")
+    public ResponseEntity<BaseResponse> getAllTugasAkhir() {
+        List<TugasAkhirResponse> ta = tugasAkhirService.getAllTugasAkhir().stream().map(TugasAkhirResponse::new).toList();
+        return ResponseUtil.ok(ta);
     }
 
-    @Operation(summary = "Menampilkan detail Tugas Akhir")
+    @Operation(summary = "menampilkan detail Laporan Tugas Akhir berdasarkan tugasAkhirId")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully delete Lecturer",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TugasAkhirResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class)))
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = BaseResponse.class))),
+            @ApiResponse(responseCode = "404", description = CommonConstant.NOT_FOUND,
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = BaseResponse.class))),
     })
-    @GetMapping(value = "/detail-tugas-akhir/{tugasAkhirId}")
-    public ResponseEntity<TugasAkhirResponse> getDetailTugasAkhirById(
-            @Parameter(description = "ID Tugas Akhir yang ingin ditampilkan", example = "123")
-            @PathVariable("tugasAkhirId") Integer tugasAkhirId) {
-        TugasAkhir tugasAkhir = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
-        if (tugasAkhir == null) {
-            return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
+    @GetMapping("/final-projects/{tugasAkhirId}")
+    public ResponseEntity<BaseResponse> getDetailTugasAkhirById(
+            @PathVariable @Parameter(description = "ID tugas akhir ") Integer tugasAkhirId) {
+        TugasAkhir ta = tugasAkhirService.findByTugasAkhirId(tugasAkhirId);
+        if (ta == null) {
+            return ResponseUtil.error(HttpStatus.NOT_FOUND, CommonConstant.NOT_FOUND);
         } else {
-            TugasAkhirResponse response = new TugasAkhirResponse(tugasAkhir);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return ResponseUtil.ok(new TugasAkhirResponse(ta));
         }
     }
 
-    @Operation(summary = "Menampilkan detail Laporan")
+    @Operation(summary = "menampilkan detail Laporan berdasarkan laporanId")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully delete Lecturer",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = LaporanResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MessageResponse.class)))
+            @ApiResponse(responseCode = "200", description = "Successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = BaseResponse.class))),
+            @ApiResponse(responseCode = "404", description = CommonConstant.NOT_FOUND,
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = BaseResponse.class))),
     })
-    @GetMapping(value = "/detail-laporan/{laporanId}")
-    public ResponseEntity<LaporanResponse> getDetailLaporanById(
-            @Parameter(description = "ID Laporan yang ingin ditampilkan", example = "123")
-            @PathVariable("laporanId") Integer laporanId) {
+    @GetMapping("/reports/{laporanId}")
+    public ResponseEntity<BaseResponse> getDetailLaporanById(
+            @PathVariable @Parameter(description = "ID Laporan ") Integer laporanId) {
         Laporan laporan = laporanService.findByLaporanId(laporanId);
         if (laporan == null) {
-            return new ResponseEntity(new MessageResponse("Not Found"), HttpStatus.NOT_FOUND);
+            return ResponseUtil.error(HttpStatus.NOT_FOUND, CommonConstant.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(new LaporanResponse(laporan), HttpStatus.OK);
+            return ResponseUtil.ok(new LaporanResponse(laporan));
         }
     }
 

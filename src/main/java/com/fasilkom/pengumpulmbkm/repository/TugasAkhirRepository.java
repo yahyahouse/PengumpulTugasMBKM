@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -21,10 +21,10 @@ public interface TugasAkhirRepository extends JpaRepository<TugasAkhir, Integer>
     TugasAkhir findByTugasAkhirId(Integer TugasAkhirId);
 
     @Query(value = "SELECT * FROM tugas_akhir t WHERE t.user_id =:userId", nativeQuery = true)
-    List<TugasAkhir> getTugasAkhirByUserId (Integer userId);
+    List<TugasAkhir> getTugasAkhirByUserId (String userId);
 
     @Query(value = "SELECT * FROM tugas_akhir t WHERE t.dosen_id =:dosenId", nativeQuery = true)
-    List<TugasAkhir> getTugasAkhirByDosenId (Integer dosenId);
+    List<TugasAkhir> getTugasAkhirByDosenId (String dosenId);
 
     @Query(value = "SELECT * FROM tugas_akhir", nativeQuery = true)
     List<TugasAkhir> getAllTugasAkhir();
@@ -49,4 +49,3 @@ public interface TugasAkhirRepository extends JpaRepository<TugasAkhir, Integer>
             @Param("waktu_update")Timestamp waktuUpdate);
 
 }
-

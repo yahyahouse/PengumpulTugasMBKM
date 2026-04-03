@@ -18,9 +18,9 @@ public interface TugasAkhirService {
 
     void updateCatatanInTugasAkhir(TugasAkhir tugasAkhir);
 
-    List<TugasAkhir> getTugasAkhirByUserId(Integer dosenId);
+    List<TugasAkhir> getTugasAkhirByUserId(String userId);
 
-    List<TugasAkhir> getTugasAkhirByDosenId(Integer dosenId);
+    List<TugasAkhir> getTugasAkhirByDosenId(String dosenId);
 
     List<TugasAkhir> getAllTugasAkhir();
 }

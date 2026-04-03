@@ -9,8 +9,8 @@ import java.sql.Timestamp;
 public class TugasAkhirGetDetailResponse {
 
     private Integer tugasAkhirId;
-    private Integer userId;
-    private Integer dosenId;
+    private String userId;
+    private String dosenId;
     private Integer programId;
     private byte[] sertifikat;
     private byte[] lembarPengesahan;

@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Data
 public class ProfileResponse {
-    private Integer userId;
+    private String userId;
     private String namaLengkap;
     private String email;
     private String npm;

@@ -2,16 +2,16 @@ package com.fasilkom.pengumpulmbkm.service;
 
 import com.fasilkom.pengumpulmbkm.model.users.Dosen;
 import com.fasilkom.pengumpulmbkm.repository.DosenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class DosenServiceImpl implements DosenService {
 
-    @Autowired
-    private DosenRepository dosenRepository;
+    private final DosenRepository dosenRepository;
 
     @Override
     public void saveDosen(Dosen dosen) {
@@ -19,17 +19,17 @@ public class DosenServiceImpl implements DosenService {
     }
 
     @Override
-    public Dosen getDosenByUserId(Integer userId) {
+    public Dosen getDosenByUserId(String userId) {
         return dosenRepository.findDosenByUserId(userId);
     }
 
     @Override
-    public Dosen getDosenByDosenId(Integer dosenId) {
+    public Dosen getDosenByDosenId(String dosenId) {
         return dosenRepository.findDosenByDosenId(dosenId);
     }
 
     @Override
-    public void deletDosenByDosenId(Integer dosenId) {
+    public void deletDosenByDosenId(String dosenId) {
         dosenRepository.deleteDosenByDosenId(dosenId);
     }
 
@@ -39,12 +39,12 @@ public class DosenServiceImpl implements DosenService {
     }
 
     @Override
-    public boolean existsDosenByDosenId(Integer dosenId) {
+    public boolean existsDosenByDosenId(String dosenId) {
         return dosenRepository.existsDosenByDosenId(dosenId);
     }
 
     @Override
-    public boolean existsDosenByUserId(Integer userId) {
+    public boolean existsDosenByUserId(String userId) {
         return dosenRepository.existsDosenByUserId(userId);
     }
 }

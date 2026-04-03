@@ -3,7 +3,7 @@ package com.fasilkom.pengumpulmbkm.model.users;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 
@@ -12,9 +12,9 @@ import java.io.Serializable;
 public class Dosen implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "dosen_id")
-    private Integer dosenId;
+    private String dosenId;
 
     @OneToOne
     @JoinColumn(name = "user_id")

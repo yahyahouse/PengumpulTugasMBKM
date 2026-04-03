@@ -1,4 +1,4 @@
-package com.fasilkom.pengumpulmbkm.config.enumConfig;
+package com.fasilkom.pengumpulmbkm.model.configenum;
 
 
 import com.fasilkom.pengumpulmbkm.model.enumeration.*;

@@ -9,8 +9,8 @@ import java.sql.Timestamp;
 public class LaporanResponse {
 
     private Integer laporanId;
-    private Integer userId;
-    private Integer dosenId;
+    private String userId;
+    private String dosenId;
     private Integer programId;
     private String laporan;
     private Boolean verifikasi;

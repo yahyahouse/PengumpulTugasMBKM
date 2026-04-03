@@ -3,7 +3,7 @@ package com.fasilkom.pengumpulmbkm.model.roles;
 import com.fasilkom.pengumpulmbkm.model.enumeration.EProdi;
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 
 @Data

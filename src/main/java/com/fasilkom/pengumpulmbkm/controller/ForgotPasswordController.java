@@ -1,10 +1,13 @@
 package com.fasilkom.pengumpulmbkm.controller;
 
+import com.fasilkom.pengumpulmbkm.util.CommonConstant;
 import com.fasilkom.pengumpulmbkm.model.AccountRecoveryToken;
+import com.fasilkom.pengumpulmbkm.model.response.BaseResponse;
 import com.fasilkom.pengumpulmbkm.model.response.MessageResponse;
 import com.fasilkom.pengumpulmbkm.model.users.Users;
 import com.fasilkom.pengumpulmbkm.service.AccountRecoveryService;
 import com.fasilkom.pengumpulmbkm.service.UsersService;
+import com.fasilkom.pengumpulmbkm.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,42 +15,41 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
-import static com.fasilkom.pengumpulmbkm.model.Info.*;
+import static com.fasilkom.pengumpulmbkm.util.CommonConstant.*;
 
 @Tag(name = "2. Reset Password", description = "API untuk melakukan reset password")
-@Controller
-@RequestMapping("/account-recovery")
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/auth/password")
 public class ForgotPasswordController {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    private UsersService usersService;
 
-    @Autowired
-    private AccountRecoveryService recoveryService;
+    private final PasswordEncoder passwordEncoder;
+
+    private final UsersService usersService;
+
+    private final AccountRecoveryService recoveryService;
 
     @Operation(summary = "membuat token yang dikirimkan ke email untuk melakukan reset password")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = MessageResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Not Found",
+                            schema = @Schema(implementation = BaseResponse.class))),
+            @ApiResponse(responseCode = "404", description = CommonConstant.NOT_FOUND,
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = MessageResponse.class)))
+                            schema = @Schema(implementation = BaseResponse.class)))
     })
-    @PostMapping("/create-token")
-    public ResponseEntity<String> createRecoveryToken(
+    @PostMapping("/forgot")
+    public ResponseEntity<BaseResponse> createRecoveryToken(
             @Parameter(description = "Email untuk mengirimkan recoverty token", example = "user@email.com")
             @RequestParam String email, Model model) {
         Users user = usersService.findByEmail(email);
@@ -55,9 +57,9 @@ public class ForgotPasswordController {
             recoveryService.createRecoveryToken(user);
             model.addAttribute("message", "Email reset password telah dikirim ke " + email);
 
-            return new ResponseEntity(new MessageResponse(RECOVERY_SUCCESS), HttpStatus.OK);
+            return ResponseUtil.ok(RECOVERY_SUCCESS, null);
         } else {
-            return new ResponseEntity(new MessageResponse(EMAIL_NOT_FOUND), HttpStatus.NOT_FOUND);
+            return ResponseUtil.error(HttpStatus.NOT_FOUND, EMAIL_NOT_FOUND);
         }
     }
 
@@ -66,13 +68,13 @@ public class ForgotPasswordController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = MessageResponse.class))),
+                            schema = @Schema(implementation = BaseResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = MessageResponse.class)))
+                            schema = @Schema(implementation = BaseResponse.class)))
     })
-    @PostMapping("/reset-password/{token}")
-    public ResponseEntity<String> resetPassword(
+    @PostMapping("/reset/{token}")
+    public ResponseEntity<BaseResponse> resetPassword(
             @Parameter(description = "Token yang berasal dari email")
             @PathVariable("token") String token,
             @Parameter(description = "masukan password baru")
@@ -81,10 +83,10 @@ public class ForgotPasswordController {
             @RequestParam("passwordRetype") String newPasswordRetype) {
         AccountRecoveryToken accountRecoveryToken = recoveryService.getRecoveryTokenByToken(token);
         if (accountRecoveryToken == null) {
-            return new ResponseEntity(new MessageResponse("Invalid token"), HttpStatus.BAD_REQUEST);
+            return ResponseUtil.error(HttpStatus.BAD_REQUEST, "Invalid token");
         }
         if (recoveryService.validateRecoveryToken(token)) {
-            return new ResponseEntity(new MessageResponse("Token Expired"), HttpStatus.BAD_REQUEST);
+            return ResponseUtil.error(HttpStatus.BAD_REQUEST, "Token Expired");
         }
         if (newPassword.equals(newPasswordRetype)) {
             Users users = recoveryService.getRecoveryTokenByToken(token).getUser();
@@ -93,9 +95,9 @@ public class ForgotPasswordController {
             usersService.savePassword(users);
             recoveryService.saveToken(accountRecoveryToken);
 
-            return new ResponseEntity(new MessageResponse("Password reset successful"), HttpStatus.OK);
+            return ResponseUtil.ok("Password reset successful", null);
         } else {
-            return new ResponseEntity(PASSWORD_SAMA, HttpStatus.BAD_REQUEST);
+            return ResponseUtil.error(HttpStatus.BAD_REQUEST, PASSWORD_SAMA);
         }
 
 

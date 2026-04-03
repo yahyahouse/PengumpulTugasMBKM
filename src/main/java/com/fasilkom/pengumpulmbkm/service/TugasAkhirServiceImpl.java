@@ -2,16 +2,17 @@ package com.fasilkom.pengumpulmbkm.service;
 
 import com.fasilkom.pengumpulmbkm.model.tugas.TugasAkhir;
 import com.fasilkom.pengumpulmbkm.repository.TugasAkhirRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TugasAkhirServiceImpl implements TugasAkhirService {
-    @Autowired
-    TugasAkhirRepository tugasAkhirRepository;
+
+    private final TugasAkhirRepository tugasAkhirRepository;
 
     @Override
     public TugasAkhir findByTugasAkhirId(Integer tugasAkhirId) {
@@ -39,12 +40,12 @@ public class TugasAkhirServiceImpl implements TugasAkhirService {
     }
 
     @Override
-    public List<TugasAkhir> getTugasAkhirByUserId(Integer dosenId) {
-        return tugasAkhirRepository.getTugasAkhirByUserId(dosenId);
+    public List<TugasAkhir> getTugasAkhirByUserId(String userId) {
+        return tugasAkhirRepository.getTugasAkhirByUserId(userId);
     }
 
     @Override
-    public List<TugasAkhir> getTugasAkhirByDosenId(Integer dosenId) {
+    public List<TugasAkhir> getTugasAkhirByDosenId(String dosenId) {
         return tugasAkhirRepository.getTugasAkhirByDosenId(dosenId);
     }
 
